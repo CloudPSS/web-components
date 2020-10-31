@@ -1,0 +1,10 @@
+
+/dist
+/*.config.js
+/tools
+.*.{js,ts}
+
+# packages
+/node_modules/
+/.pnp.js
+/.pnp/
