@@ -1,7 +1,7 @@
 /// <reference types="prismjs" />
 
 import { resolve, theme } from './config';
-import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
+import { css, customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { Subscription } from 'rxjs';
 
 const languageNameReplacement: Record<string, string> = {
@@ -109,18 +109,24 @@ export class HighlightElement extends UpdatingElement {
     constructor() {
         super();
         void init();
-        this.renderRoot = this.attachShadow({ mode: 'open' });
-        this.renderRoot.innerHTML = `<pre><code></code></pre><link rel="stylesheet" />
-        <style>:host{display: block;}</style>`;
-        this.elCode = this.renderRoot.querySelector('code') as HTMLElement;
-        this.elStyle = this.renderRoot.querySelector('link') as HTMLLinkElement;
+        const renderRoot = this.attachShadow({ mode: 'open' });
+        renderRoot.innerHTML = `<pre><code></code></pre><link rel="stylesheet" />
+        <style></style>`;
+        this.elCode = renderRoot.querySelector('code') as HTMLElement;
+        this.elStyle = renderRoot.querySelector('link') as HTMLLinkElement;
+        this.elBaseStyle = renderRoot.querySelector('style') as HTMLStyleElement;
+        this.elBaseStyle.textContent = css`
+            :host {
+                display: block;
+            }
+        `.cssText;
     }
-    /** 渲染元素 */
-    private readonly renderRoot: ShadowRoot;
     /** 代码元素 */
     private readonly elCode: HTMLElement;
     /** 样式元素 */
     private readonly elStyle: HTMLLinkElement;
+    /** 样式元素 */
+    private readonly elBaseStyle: HTMLStyleElement;
 
     /** 语言 */
     @property({

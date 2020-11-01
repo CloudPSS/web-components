@@ -1,6 +1,6 @@
 import * as katex from 'katex';
 import { escapeHtml } from 'markdown-it/lib/common/utils';
-import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
+import { css, customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { resolve } from './config';
 
 /** asciimathToLatex */
@@ -28,16 +28,17 @@ function style(el: HTMLElement): void {
     link.rel = 'stylesheet';
     link.href = resolve('katex', '^0.12', 'dist/katex.css');
     const style = document.createElement('style');
-    link.innerText = `
-cwe-math {
-    display: inline;
-    user-select: all;
-}
-cwe-math[mode=display] {
-    display:inline-block;
-    overflow: auto;
-    margin: 0.8em 0;
-}`;
+    style.textContent = css`
+        cwe-math {
+            display: inline;
+            user-select: all;
+        }
+        cwe-math[mode='display'] {
+            display: inline-block;
+            overflow: auto;
+            margin: 0.8em 0;
+        }
+    `.cssText;
     el.appendChild(link);
     el.appendChild(style);
 }

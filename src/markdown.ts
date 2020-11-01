@@ -29,10 +29,21 @@ md.validateLink = () => true;
 export class MarkdownElement extends UpdatingElement {
     constructor() {
         super();
-        this.renderRoot = this.attachShadow({ mode: 'open' });
+        const root = this.attachShadow({ mode: 'open' });
+        this.elBaseStyle = document.createElement('style');
+        this.elUserStyle = document.createElement('style');
+        this.elArticle = document.createElement('article');
+        root.append(this.elBaseStyle, this.elUserStyle, this.elArticle);
+
+        this.elBaseStyle.textContent = styles.cssText;
     }
-    /** 渲染元素 */
-    private readonly renderRoot: ShadowRoot;
+
+    /** 基础样式 */
+    private readonly elBaseStyle: HTMLStyleElement;
+    /** 用户样式 */
+    private readonly elUserStyle: HTMLStyleElement;
+    /** 渲染结果 */
+    private readonly elArticle: HTMLElementTagNameMap['article'];
     /** 文档路径，用于解析文档中的相对路径链接 */
     @property({
         reflect: true,
@@ -52,39 +63,40 @@ export class MarkdownElement extends UpdatingElement {
      */
     update(changedProperties: PropertyValues): void {
         super.update(changedProperties);
-        this.renderRoot.innerHTML = '';
 
-        src = new URL(this.src ?? document.location.href, document.baseURI);
-        const doc = this.srcdoc ?? '';
-        const rendered = md.renderFragment(doc);
-        src = undefined;
-        const frontMatter = fm;
-        fm = undefined;
-        this.renderRoot.appendChild(rendered.content);
+        if (changedProperties.has('srcdoc') || changedProperties.has('src') || changedProperties.size === 0) {
+            src = new URL(this.src ?? document.location.href, document.baseURI);
+            const doc = this.srcdoc ?? '';
+            const rendered = md.renderFragment(doc);
+            src = undefined;
+            const frontMatter = fm;
+            fm = undefined;
 
-        const style = styles + (this.docStyle ?? '');
-        const elStyle = document.createElement('style');
-        elStyle.innerText = style;
-        this.renderRoot.appendChild(elStyle);
+            this.elArticle.innerHTML = '';
+            this.elArticle.appendChild(rendered.content);
+            const headers = Array.from(this.elArticle.children)
+                .filter((i): i is HTMLHeadingElement => i instanceof HTMLHeadingElement)
+                .map((h) => {
+                    return {
+                        id: h.id,
+                        title: h.innerText,
+                        level: Number.parseInt(h.tagName.slice(1)),
+                        element: h,
+                    };
+                });
+            this.dispatchEvent(
+                new CustomEvent('render', {
+                    detail: {
+                        frontMatter,
+                        headers,
+                    },
+                }),
+            );
+        }
 
-        const headers = Array.from(this.renderRoot.children)
-            .filter((i): i is HTMLHeadingElement => i instanceof HTMLHeadingElement)
-            .map((h) => {
-                return {
-                    id: h.id,
-                    title: h.innerText,
-                    level: Number.parseInt(h.tagName.slice(1)),
-                    element: h,
-                };
-            });
-        this.dispatchEvent(
-            new CustomEvent('render', {
-                detail: {
-                    frontMatter,
-                    headers,
-                },
-            }),
-        );
+        if (changedProperties.has('docStyle') || changedProperties.size === 0) {
+            this.elUserStyle.textContent = this.docStyle ?? null;
+        }
     }
 }
 
