@@ -76,7 +76,7 @@ const languages: Record<string, Language | { aliasOf: string }> = {
 function replaceMathText(fragment: DocumentFragment): void {
     const math = fragment.querySelectorAll<MathElement>(`cwe-math[language]`);
     math.forEach((el) => {
-        const source = el.dataset.source ?? '';
+        const source = el.srcdoc ?? '';
         if (!source) return;
         const lang = el.language;
         const mode = el.mode;
