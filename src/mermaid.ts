@@ -2,9 +2,9 @@ import { Subscription, merge } from 'rxjs';
 import { tap, share, map, distinctUntilChanged } from 'rxjs/operators';
 import { resizing } from './private/utils';
 import mermaid from 'mermaid';
+import type mermaidAPI from 'mermaid/mermaidAPI';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { theme } from './config';
-import mermaidAPI from 'mermaid/mermaidAPI';
 
 let t: mermaidAPI.Theme = 'default';
 

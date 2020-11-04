@@ -3,7 +3,7 @@
 
 'use strict';
 
-var parseImageSize = require('./helpers/parse_image_size');
+import parseImageSize from './parse_image_size';
 
 function image_with_size(md) {
     return function (state, silent) {
@@ -217,6 +217,6 @@ function image_with_size(md) {
     };
 }
 
-module.exports = function imsize_plugin(md, options) {
+export default function imsize_plugin(md, options) {
     md.inline.ruler.before('emphasis', 'image', image_with_size(md, options));
-};
+}

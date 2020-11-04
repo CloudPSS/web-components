@@ -24,7 +24,7 @@ function parseNextNumber(str, pos, max) {
     return result;
 }
 
-module.exports = function parseImageSize(str, pos, max) {
+export default function parseImageSize(str, pos, max) {
     var code,
         result = {
             ok: false,
@@ -75,4 +75,4 @@ module.exports = function parseImageSize(str, pos, max) {
     result.pos = pos;
     result.ok = true;
     return result;
-};
+}

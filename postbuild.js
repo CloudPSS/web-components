@@ -10,14 +10,14 @@ async function main() {
     const sourceObj = JSON.parse(source);
     sourceObj.scripts = undefined;
     sourceObj.devDependencies = undefined;
-    await fs.writeFile(path.resolve(__dirname, './dist/package.json'), JSON.stringify(sourceObj, null, 2), 'utf-8');
+    await fs.writeFile(path.resolve(__dirname, './publish/package.json'), JSON.stringify(sourceObj, null, 2), 'utf-8');
     await copy('./src');
     await copy('./README.md');
     await copy('./LICENSE');
 }
 
 async function copy(file) {
-    await fs.copy(path.resolve(__dirname, file), path.resolve(__dirname, './dist/', file));
+    await fs.copy(path.resolve(__dirname, file), path.resolve(__dirname, './publish/', file));
 }
 
 main();

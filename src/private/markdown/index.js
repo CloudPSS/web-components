@@ -1,13 +1,33 @@
-const markdownIt = require('markdown-it');
-const { escapeHtml } = require('markdown-it/lib/common/utils');
-const VideoServiceBase = require('markdown-it-block-embed/lib/services/VideoServiceBase');
-const { extend, loadPlugin, slugify, sourceLine } = require('./utils');
-require('./post-render');
+import markdownIt from 'markdown-it';
+import { escapeHtml } from 'markdown-it/lib/common/utils';
+import VideoServiceBase from 'markdown-it-block-embed/lib/services/VideoServiceBase';
+import { extend, loadPlugin, slugify, sourceLine } from './utils';
+import './post-render';
 
-require('../../chart');
-require('../../mermaid');
-require('../../highlight');
-require('../../math');
+import '../../chart';
+import '../../mermaid';
+import '../../highlight';
+import '../../math';
+
+import * as markdownItEmoji from 'markdown-it-emoji';
+import * as markdownItSub from 'markdown-it-sub';
+import * as markdownItSup from 'markdown-it-sup';
+import * as markdownItFootnote from 'markdown-it-footnote';
+import * as markdownItMath from 'markdown-it-math';
+import * as markdownItDeflist from 'markdown-it-deflist';
+import * as markdownItAbbr from 'markdown-it-abbr';
+import * as markdownItIns from 'markdown-it-ins';
+import * as markdownItMark from 'markdown-it-mark';
+import * as markdownItImsize from './imsize';
+import * as markdownItMultimdTable from 'markdown-it-multimd-table';
+import * as markdownItCenterText from 'markdown-it-center-text';
+import * as markdownItKbd from 'markdown-it-kbd';
+import * as markdownItAnchor from 'markdown-it-anchor';
+import * as markdownItFrontMatter from 'markdown-it-front-matter';
+import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
+import * as markdownItBlockEmbed from 'markdown-it-block-embed';
+import * as markdownItContainer from 'markdown-it-container';
+import * as markdownItSourceMap from 'markdown-it-source-map';
 
 /**
  *
@@ -35,7 +55,7 @@ function loadCustomHighlights() {
  *
  * @returns {markdownIt.MarkdownItExt}
  */
-module.exports = function (options) {
+export default function (options) {
     options = Object.assign(
         {
             html: true,
@@ -119,11 +139,11 @@ module.exports = function (options) {
     ];
     /** @type {[import('markdown-it').PluginWithParams, ...any][]} */
     const plugins = [
-        [require('markdown-it-emoji')],
-        [require('markdown-it-sub')],
-        [require('markdown-it-sup')],
+        [markdownItEmoji],
+        [markdownItSub],
+        [markdownItSup],
         [
-            extend(require('markdown-it-footnote'), (md, use) => {
+            extend(markdownItFootnote, (md, use) => {
                 use();
                 md.renderer.rules.footnote_block_open = function render_footnote_block_open() {
                     return `<footer class="footnotes" aria-label="Footnotes">\n<ol class="footnotes-list">\n`;
@@ -188,7 +208,7 @@ module.exports = function (options) {
             }),
         ],
         [
-            require('markdown-it-math'),
+            markdownItMath,
             {
                 inlineOpen: '$',
                 inlineClose: '$',
@@ -206,23 +226,23 @@ module.exports = function (options) {
                 },
             },
         ],
-        [require('markdown-it-deflist')],
-        [require('markdown-it-abbr')],
-        [require('markdown-it-ins')],
-        [require('markdown-it-mark')],
-        [require('./imsize')],
+        [markdownItDeflist],
+        [markdownItAbbr],
+        [markdownItIns],
+        [markdownItMark],
+        [markdownItImsize],
         [
-            require('markdown-it-multimd-table'),
+            markdownItMultimdTable,
             {
                 multiline: true,
                 rowspan: true,
                 headerless: true,
             },
         ],
-        [require('markdown-it-center-text')],
-        [require('markdown-it-kbd')],
+        [markdownItCenterText],
+        [markdownItKbd],
         [
-            require('markdown-it-anchor'),
+            markdownItAnchor,
             {
                 slugify: slugify,
                 permalink: true,
@@ -232,10 +252,10 @@ module.exports = function (options) {
                 permalinkAttrs: (slug) => ({ 'aria-label': slug }),
             },
         ],
-        [require('markdown-it-front-matter'), options.frontMatter],
-        [require('markdown-it-implicit-figures'), { figcaption: true }],
+        [markdownItFrontMatter, options.frontMatter],
+        [markdownItImplicitFigures, { figcaption: true }],
         [
-            extend(require('markdown-it-block-embed'), (md, use) => {
+            extend(markdownItBlockEmbed, (md, use) => {
                 use();
                 const original = md.renderer.rules['video'];
                 md.renderer.rules['video'] = (tokens, idx, opt, env, slf) => {
@@ -297,12 +317,12 @@ module.exports = function (options) {
                 },
             },
         ],
-        ...containers.map((v) => [require('markdown-it-container'), ...v]),
-        [require('markdown-it-source-map')],
+        ...containers.map((v) => [markdownItContainer, ...v]),
+        [markdownItSourceMap],
     ];
     md = plugins.reduce((i, [plugin, ...options]) => {
         return i.use(loadPlugin(plugin), ...options);
     }, md);
 
     return md;
-};
+}

@@ -1,6 +1,6 @@
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import markdownIt from './private/markdown';
-import styles from './markdown.css';
+import styles from './markdown.styles';
 
 let fm: string | undefined;
 let src: URL | undefined;

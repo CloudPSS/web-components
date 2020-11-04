@@ -173,6 +173,7 @@ export class HighlightElement extends UpdatingElement {
      * @inheritdoc
      */
     async performUpdate(): Promise<unknown> {
+        this.elCode.textContent = this.srcdoc ?? '';
         await init();
         return super.performUpdate();
     }
@@ -195,6 +196,7 @@ export class HighlightElement extends UpdatingElement {
             if (highlighter) {
                 this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
             } else {
+                this.elCode.textContent = code;
                 const autoloader = Prism.plugins.autoloader as {
                     loadLanguages: (name: string, callback: () => void) => void;
                 };
