@@ -1,8 +1,14 @@
 import { css } from 'lit-element';
 
 export default css`
+    :host {
+        --cwe-markdown-link-default-color: blue;
+    }
     img {
         max-width: 100%;
+    }
+    a {
+        color: var(--cwe-markdown-link-default-color);
     }
     figure {
         margin: 1em auto 0.75em;

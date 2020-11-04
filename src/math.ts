@@ -33,7 +33,7 @@ function style(el: HTMLElement, inElement: boolean): void {
             :host {
                 display: inline;
                 user-select: all;
-                --error-color: red;
+                --cwe-math-error-color: red;
             }
             :host([mode='display']) {
                 display: block;
@@ -47,7 +47,7 @@ function style(el: HTMLElement, inElement: boolean): void {
                 display: contents;
             }
             .error {
-                color: var(--error-color);
+                color: var(--cwe-math-error-color);
             }
         `.cssText;
         el.appendChild(style);
