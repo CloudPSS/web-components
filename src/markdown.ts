@@ -1,6 +1,7 @@
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import markdownIt from './private/markdown';
 import styles from './markdown.styles';
+import { style } from './config';
 
 let fm: string | undefined;
 let src: URL | undefined;
@@ -36,7 +37,7 @@ export class MarkdownElement extends UpdatingElement {
         this.elArticle = document.createElement('article');
         root.append(this.elBaseStyle, this.elUserStyle, this.elArticle);
 
-        this.elBaseStyle.textContent = styles.cssText;
+        this.elBaseStyle.textContent = style(this) + '\n' + styles.cssText;
         this.elArticle.addEventListener('click', this.onClick.bind(this));
     }
 

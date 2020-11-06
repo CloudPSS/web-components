@@ -1,6 +1,6 @@
 /// <reference types="prismjs" />
 
-import { resolve, theme } from './config';
+import { resolve, style, theme } from './config';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { Subscription } from 'rxjs';
 import styles from './highlight.styles';
@@ -116,7 +116,7 @@ export class HighlightElement extends UpdatingElement {
         this.elCode = renderRoot.querySelector('code') as HTMLElement;
         this.elStyle = renderRoot.querySelector('link') as HTMLLinkElement;
         this.elBaseStyle = renderRoot.querySelector('style') as HTMLStyleElement;
-        this.elBaseStyle.textContent = styles.cssText;
+        this.elBaseStyle.textContent = style(this) + '\n' + styles.cssText;
     }
     /** 代码元素 */
     private readonly elCode: HTMLElement;
