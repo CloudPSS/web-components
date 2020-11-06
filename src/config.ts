@@ -27,7 +27,7 @@ export function setResolver(resolver: (pkg: string, version: string, file: strin
 /**
  * 设置样式
  */
-export function setStyle(styler: (el: HTMLElement) => string): void {
+export function setStyler(styler: (el: HTMLElement) => string): void {
     _styler = styler;
 }
 
