@@ -290,11 +290,14 @@ export default css`
     }
     #sub-frame-error {
         -webkit-align-items: center;
+        align-items: center;
         background-color: #ddd;
         display: -webkit-flex;
         -webkit-flex-flow: column;
+        flex-flow: column;
         height: 100%;
         -webkit-justify-content: center;
+        justify-content: center;
         left: 0;
         position: absolute;
         text-align: center;
