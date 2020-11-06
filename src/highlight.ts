@@ -119,6 +119,39 @@ export class HighlightElement extends UpdatingElement {
             :host {
                 display: block;
             }
+            pre {
+                padding: 2em 0.5em 1em;
+                margin: 1.2em 0;
+                border-radius: 4px;
+                position: relative;
+                font-size: 1em;
+                overflow: auto;
+                contain: content;
+            }
+
+            code,
+            kbd,
+            pre,
+            samp {
+                font-family: Menlo, Consolas, Roboto Mono, 'Ubuntu Monospace', Noto Mono, Oxygen Mono, Liberation Mono,
+                    monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+            }
+            code:before {
+                content: attr(language);
+                font-size: 0.8em;
+                position: -webkit-sticky;
+                position: absolute;
+                display: block;
+                right: 2em;
+                top: 2em;
+                height: 0;
+                -webkit-transform: translateY(-2em);
+                transform: translateY(-2em);
+                color: #1a237e;
+            }
+            code[language='markdown'] {
+                font-size: 15px;
+            }
         `.cssText;
     }
     /** 代码元素 */
