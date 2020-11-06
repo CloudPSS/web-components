@@ -6,7 +6,7 @@ export default css`
         position: relative;
         font-family: Menlo, Consolas, Roboto Mono, 'Ubuntu Monospace', Noto Mono, Oxygen Mono, Liberation Mono,
             monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
-        font-size: 1.05em;
+        font-size: 1em;
         line-height: 1.5;
         margin: 1.2em 0;
         border-radius: 4px;
@@ -17,6 +17,10 @@ export default css`
         margin: 0;
         overflow: auto;
         padding: 2em 0.5em 1em;
+    }
+    pre,
+    code {
+        font-family: inherit;
     }
     :host::before,
     :host::after {

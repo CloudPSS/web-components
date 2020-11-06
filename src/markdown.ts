@@ -24,6 +24,7 @@ md.validateLink = () => true;
  * Markdown 组件
  *
  * @event render
+ * @event navigate
  */
 @customElement('cwe-markdown')
 export class MarkdownElement extends UpdatingElement {
@@ -36,6 +37,7 @@ export class MarkdownElement extends UpdatingElement {
         root.append(this.elBaseStyle, this.elUserStyle, this.elArticle);
 
         this.elBaseStyle.textContent = styles.cssText;
+        this.elArticle.addEventListener('click', this.onClick.bind(this));
     }
 
     /** 基础样式 */
@@ -96,6 +98,50 @@ export class MarkdownElement extends UpdatingElement {
 
         if (changedProperties.has('docStyle') || changedProperties.size === 0) {
             this.elUserStyle.textContent = this.docStyle ?? null;
+        }
+    }
+
+    /**
+     * 监听点击事件
+     */
+    onClick(ev: Event): void {
+        const target = ev.target as HTMLElement;
+        const link = target.closest<HTMLAnchorElement>('a[href]');
+        if (link) {
+            const event = new CustomEvent('navigate', {
+                detail: link.href,
+                bubbles: true,
+                composed: true,
+                cancelable: true,
+            });
+            ev.preventDefault();
+            if (!this.dispatchEvent(event)) return;
+            const target = new URL(link.href);
+            const source = new URL(this.src ?? '', document.baseURI);
+            if (source.origin !== target.origin) {
+                window.open(target.href, '_blank', 'noopener');
+                return;
+            }
+            if (source.pathname !== target.pathname || source.search !== target.search) {
+                location.assign(target.href);
+                return;
+            }
+            const targetHash = target.hash;
+            if (targetHash.length <= 1) {
+                location.assign(target.href);
+                return;
+            }
+            const targetItem = this.elArticle.querySelector(
+                '#' +
+                    [...decodeURIComponent(targetHash).slice(1)]
+                        .map((c) => '\\' + (c.codePointAt(0) ?? 0).toString(16).padStart(6, '0'))
+                        .join(''),
+            );
+            if (!targetItem) {
+                location.assign(target.href);
+                return;
+            }
+            targetItem.scrollIntoView({ behavior: 'smooth' });
         }
     }
 }

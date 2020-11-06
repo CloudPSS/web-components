@@ -6,16 +6,12 @@ export default css`
         --p-cwe-markdown-link-hover-color: var(--cwe-markdown-link-hover-color, #606794);
         --p-cwe-markdown-link-active-color: var(--cwe-markdown-link-active-color, #37438d);
         --p-cwe-markdown-header-color: var(--cwe-markdown-header-color, #1b215f);
+        --p-cwe-markdown-pre-border-color: var(--cwe-markdown-pre-border-color, #c8c8c8);
         --p-cwe-markdown-pre-background-color: var(--cwe-markdown-pre-background-color, #f2f2f2);
         --p-cwe-markdown-code-color: var(--cwe-markdown-code-color, #f50057);
         --p-cwe-markdown-code-border-color: var(--cwe-markdown-code-border-color, #c8c8c8);
         --p-cwe-markdown-code-background-color: var(--cwe-markdown-code-background-color, #f2f2f2);
-        --p-cwe-markdown-blockquote-background-color: var(
-            --cwe-markdown-blockquote-background-color,
-            rgba(140, 158, 255, 0.05)
-        );
-        --p-cwe-markdown-blockquote-border-left-color: var(--cwe-markdown-blockquote-border-left-color, #5c6bc0);
-        --p-cwe-markdown-blockquote-border-color: var(--cwe-markdown-blockquote-border-color, rgba(83, 109, 254, 0.2));
+        --p-cwe-markdown-blockquote-theme-color: var(--cwe-markdown-blockquote-theme-color, #5587c0);
         --p-cwe-markdown-mark-background-color: var(--cwe-markdown-mark-background-color, rgba(255, 214, 0, 0.4));
         --p-cwe-markdown-table-header-background-color: var(--cwe-markdown-table-header-background-color, #eee);
         --p-cwe-markdown-table-border-color: var(--cwe-markdown-table-border-color, #c8c8c8);
@@ -231,9 +227,25 @@ export default css`
     blockquote,
     dl,
     details {
-        background-color: var(--p-cwe-markdown-blockquote-background-color);
-        border: 0.02em solid var(--p-cwe-markdown-blockquote-border-color);
-        border-left: 0.25em solid var(--p-cwe-markdown-blockquote-border-left-color);
+        position: relative;
+        border: 0.02em solid var(--p-cwe-markdown-blockquote-theme-color);
+        border-left: 0.25em solid var(--p-cwe-markdown-blockquote-theme-color);
+        background: none;
+    }
+    @media screen {
+        blockquote::before,
+        dl::before,
+        details::before {
+            content: '';
+            position: absolute;
+            z-index: -1;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--p-cwe-markdown-blockquote-theme-color);
+            opacity: 0.05;
+        }
     }
 
     dt,
@@ -320,16 +332,21 @@ export default css`
         content: '';
     }
     pre {
-        padding: 2em 0.5em 1em;
+        padding: 1em 0.5em;
         margin: 1.2em 0;
         border-radius: 4px;
         position: relative;
         font-size: 1em;
         overflow: auto;
         contain: content;
+        border: solid 1px var(--p-cwe-markdown-pre-border-color);
         background-color: var(--p-cwe-markdown-pre-background-color);
     }
+    pre > code {
+        border: none;
+    }
     cwe-highlight {
+        border: solid 1px var(--p-cwe-markdown-pre-border-color);
         background-color: var(--p-cwe-markdown-pre-background-color);
     }
     code,
