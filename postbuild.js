@@ -10,11 +10,11 @@ async function main() {
     const sourceObj = JSON.parse(source);
     sourceObj.scripts = undefined;
     sourceObj.devDependencies = undefined;
-    await fs.writeFile(path.resolve(__dirname, './publish/package.json'), JSON.stringify(sourceObj, null, 2), 'utf-8');
     await copy('./src');
     await copy('./README.md');
     await copy('./LICENSE');
-    await fs.remove('./publish/tsconfig.tsbuildinfo');
+    await fs.remove(path.resolve(__dirname, './publish/tsconfig.tsbuildinfo'));
+    await fs.writeFile(path.resolve(__dirname, './publish/package.json'), JSON.stringify(sourceObj, null, 2), 'utf-8');
 }
 
 async function copy(file) {
