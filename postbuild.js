@@ -14,6 +14,7 @@ async function main() {
     await copy('./src');
     await copy('./README.md');
     await copy('./LICENSE');
+    await fs.remove('./publish/tsconfig.tsbuildinfo');
 }
 
 async function copy(file) {

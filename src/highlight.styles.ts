@@ -1,11 +1,11 @@
 import { css } from 'lit-element';
+import { codeFont } from './fonts';
 
 export default css`
     :host {
         display: block;
         position: relative;
-        font-family: Menlo, Consolas, Roboto Mono, 'Ubuntu Monospace', Noto Mono, Oxygen Mono, Liberation Mono,
-            monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+        font-family: ${codeFont};
         font-size: 1em;
         line-height: 1.5;
         margin: 1.2em 0;

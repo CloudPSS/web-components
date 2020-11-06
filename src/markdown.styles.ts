@@ -1,4 +1,5 @@
 import { css } from 'lit-element';
+import { codeFont } from './fonts';
 
 export default css`
     :host {
@@ -16,6 +17,7 @@ export default css`
         --p-cwe-markdown-table-header-background-color: var(--cwe-markdown-table-header-background-color, #eee);
         --p-cwe-markdown-table-border-color: var(--cwe-markdown-table-border-color, #c8c8c8);
         --p-cwe-markdown-divider-color: var(--cwe-markdown-divider-color, #888888);
+        line-height: 1.6;
     }
     img {
         max-width: 100%;
@@ -353,8 +355,7 @@ export default css`
     kbd,
     pre,
     samp {
-        font-family: Menlo, Consolas, Roboto Mono, 'Ubuntu Monospace', Noto Mono, Oxygen Mono, Liberation Mono,
-            monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+        font-family: ${codeFont};
     }
     pre:before {
         font-size: 0.8em;
@@ -392,8 +393,10 @@ export default css`
     }
 
     hr {
-        margin: 0.5em auto;
-        border: 1px inset var(--p-cwe-markdown-divider-color);
+        margin: 0.5em -2px;
+        padding: 0 2px;
+        border: none;
+        border-bottom: 1px solid var(--p-cwe-markdown-divider-color);
     }
 
     a.footnote-ref {
