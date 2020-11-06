@@ -118,39 +118,39 @@ export class HighlightElement extends UpdatingElement {
         this.elBaseStyle.textContent = css`
             :host {
                 display: block;
-            }
-            pre {
-                padding: 2em 0.5em 1em;
-                margin: 1.2em 0;
-                border-radius: 4px;
                 position: relative;
-                font-size: 1em;
-                overflow: auto;
-                contain: content;
-            }
-
-            code,
-            kbd,
-            pre,
-            samp {
                 font-family: Menlo, Consolas, Roboto Mono, 'Ubuntu Monospace', Noto Mono, Oxygen Mono, Liberation Mono,
                     monospace, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+                font-size: 1.05em;
+                line-height: 1.5;
+                margin: 1.2em 0;
+                border-radius: 4px;
+                contain: content;
+                --cwe-hint-color: #888;
             }
-            code:before {
-                content: attr(language);
+            pre {
+                margin: 0;
+                overflow: auto;
+                padding: 2em 0.5em 1em;
+            }
+            :host::before,
+            :host::after {
                 font-size: 0.8em;
-                position: -webkit-sticky;
                 position: absolute;
+                margin: 0.5em;
                 display: block;
-                right: 2em;
-                top: 2em;
-                height: 0;
-                -webkit-transform: translateY(-2em);
-                transform: translateY(-2em);
-                color: #1a237e;
+                top: 0;
+                color: var(--cwe-hint-color);
             }
-            code[language='markdown'] {
-                font-size: 15px;
+            :host([aria-label])::before {
+                content: attr(aria-label);
+                left: 0;
+            }
+            :host([language])::after {
+                content: attr(language);
+                text-transform: uppercase;
+                right: 0;
+                top: 0;
             }
         `.cssText;
     }
@@ -162,19 +162,7 @@ export class HighlightElement extends UpdatingElement {
     private readonly elBaseStyle: HTMLStyleElement;
 
     /** 语言 */
-    @property({
-        reflect: true,
-        converter: (value) => {
-            if (!value) value = null;
-            else {
-                value = value.toLowerCase();
-                if (value in languageNameReplacement) {
-                    value = languageNameReplacement[value];
-                }
-            }
-            return value;
-        },
-    })
+    @property({ reflect: true })
     language?: string | null;
     /** 代码段 */
     @property({ reflect: true }) srcdoc?: string;
@@ -216,7 +204,12 @@ export class HighlightElement extends UpdatingElement {
      */
     update(changedProperties: PropertyValues): void {
         super.update(changedProperties);
-        const lang = this.language;
+        let lang = this.language ?? '';
+        lang = lang.toLowerCase();
+        if (lang in languageNameReplacement) {
+            lang = languageNameReplacement[lang];
+        }
+        if (lang) this.language = lang;
         const code = this.srcdoc ?? '';
         const style = this.prismStyle;
         if (style) {

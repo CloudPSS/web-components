@@ -36,7 +36,7 @@ function loadCustomHighlights() {
     return (string, lang, attr) => {
         const code = escapeHtml(string);
         attr = (attr ?? '').trim();
-        const htmlAttr = attr ? `id="${escapeHtml(slugify(attr))}" title="${escapeHtml(attr)}"` : '';
+        const htmlAttr = attr ? `id="${escapeHtml(slugify(attr))}" aria-label="${escapeHtml(attr)}"` : '';
         switch (lang) {
             case 'mermaid':
                 return `<pre remove-it><cwe-mermaid config="${code}" ${htmlAttr}></cwe-mermaid></pre>`;

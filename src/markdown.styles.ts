@@ -2,19 +2,21 @@ import { css } from 'lit-element';
 
 export default css`
     :host {
-        --cwe-markdown-link-default-color: blue;
-        --cwe-markdown-header-default-color: #1a237e;
+        --cwe-markdown-link-color: #3a479b;
+        --cwe-markdown-link-hover-color: #606794;
+        --cwe-markdown-link-active-color: #37438d;
+        --cwe-markdown-header-color: #1b215f;
         --cwe-markdown-pre-background-color: #f2f2f2;
         --cwe-markdown-code-color: #f50057;
         --cwe-markdown-code-border-color: #c8c8c8;
-        --cwe-markdown-code-bg-color: #f2f2f2;
-        --cwe-markdown-blockquote-bg-color: rgba(140, 158, 255, 0.05);
-        --cwe-markdown-blockquote-bd-left-color: #5c6bc0;
-        --cwe-markdown-blockquote-bd-color: rgba(83, 109, 254, 0.2);
-        --cwe-markdown-mark-bg-color: rgba(255, 214, 0, 0.4);
-        --cwe-markdown-table-lastChild-th-color: #e1e1e1;
-        --cwe-markdown-table-th-color: #c8c8c8;
-        --cwe-markdown-a-hover-color: #303f9f;
+        --cwe-markdown-code-background-color: #f2f2f2;
+        --cwe-markdown-blockquote-background-color: rgba(140, 158, 255, 0.05);
+        --cwe-markdown-blockquote-border-left-color: #5c6bc0;
+        --cwe-markdown-blockquote-border-color: rgba(83, 109, 254, 0.2);
+        --cwe-markdown-mark-background-color: rgba(255, 214, 0, 0.4);
+        --cwe-markdown-table-header-background-color: #eee;
+        --cwe-markdown-table-border-color: #c8c8c8;
+        --cwe-markdown-divider-color: #888888;
     }
     img {
         max-width: 100%;
@@ -25,20 +27,55 @@ export default css`
     h4,
     h5,
     h6 {
-        color: var(--cwe-markdown-header-default-color);
+        color: var(--cwe-markdown-header-color);
         font-weight: 600;
     }
-    a {
-        text-decoration: none;
-        color: var(--cwe-markdown-link-default-color);
-    }
-    a:hover {
-        color: var(--cwe-markdown-a-hover-color);
-    }
-    footer.footnotes {
-        border-top: 1px solid var(--theme-foreground-divider);
-        margin: 3em -8px 1em;
-        padding: 0 8px;
+    @media screen {
+        a.header-anchor {
+            position: absolute;
+            left: 0;
+            padding: 0 0.25em;
+            color: var(--cwe-markdown-header-color) !important;
+            transform: translateX(-100%);
+            opacity: 0;
+            transition: all 0.2s;
+        }
+        a.header-anchor::before {
+            content: '¶';
+        }
+        a.header-anchor:focus {
+            opacity: 1;
+        }
+        h1:focus-within a.header-anchor,
+        h1:focus a.header-anchor,
+        h1:hover a.header-anchor,
+        h2:focus-within a.header-anchor,
+        h2:focus a.header-anchor,
+        h2:hover a.header-anchor,
+        h3:focus-within a.header-anchor,
+        h3:focus a.header-anchor,
+        h3:hover a.header-anchor,
+        h4:focus-within a.header-anchor,
+        h4:focus a.header-anchor,
+        h4:hover a.header-anchor,
+        h5:focus-within a.header-anchor,
+        h5:focus a.header-anchor,
+        h5:hover a.header-anchor,
+        h6:focus-within a.header-anchor,
+        h6:focus a.header-anchor,
+        h6:hover a.header-anchor {
+            opacity: 1;
+        }
+        a {
+            text-decoration: none;
+            color: var(--cwe-markdown-link-color);
+        }
+        a:hover {
+            color: var(--cwe-markdown-link-hover-color);
+        }
+        a:active {
+            color: var(--cwe-markdown-link-active-color);
+        }
     }
     p,
     dd,
@@ -56,8 +93,8 @@ export default css`
         vertical-align: text-bottom;
         color: var(--cwe-markdown-code-color);
         font-size: 0.9em;
-        border-color: var(--cwe-markdown-blockquote-bd-color);
-        background-color: var(--cwe-markdown-code-bg-color);
+        border-color: var(--cwe-markdown-code-border-color);
+        background-color: var(--cwe-markdown-code-background-color);
     }
     [is='md-container'][class~='tip'] {
         background-color: rgba(140, 158, 255, 0.05);
@@ -84,10 +121,7 @@ export default css`
             display: none !important;
         }
         cwe-highlight {
-            border: 0.05em solid var(--cwe-markdown-code-bg-color);
-        }
-        cwe-highlight:before {
-            top: 3em !important;
+            border: 0.05em solid var(--cwe-markdown-code-background-color);
         }
         audio,
         canvas,
@@ -181,14 +215,20 @@ export default css`
         font-size: 0.9em;
     }
     mark {
-        background: var(--cwe-markdown-mark-bg-color);
+        background: var(--cwe-markdown-mark-background-color);
+    }
+    @media print {
+        mark {
+            background: none;
+            outline: solid 0.1em var(--cwe-markdown-mark-background-color);
+        }
     }
     blockquote,
     dl,
     details {
-        background-color: var(--cwe-markdown-blockquote-bg-color);
-        border: 0.02em solid var(--cwe-markdown-blockquote-bd-color);
-        border-left: 0.25em solid var(--cwe-markdown-blockquote-bd-left-color);
+        background-color: var(--cwe-markdown-blockquote-background-color);
+        border: 0.02em solid var(--cwe-markdown-blockquote-border-color);
+        border-left: 0.25em solid var(--cwe-markdown-blockquote-border-left-color);
     }
 
     dt,
@@ -212,16 +252,13 @@ export default css`
         margin: 1.2em auto;
         text-align: left;
     }
-    table > thead > tr:nth-last-child(2n) > th {
-        background-color: var(--cwe-markdown-table-lastChild-th-color);
-    }
     table > thead > tr > th {
-        background-color: var(--cwe-markdown-table-th-color);
+        background-color: var(--cwe-markdown-table-header-background-color);
     }
 
     table td,
     table th {
-        border: 1px solid var(--cwe-markdown-table-th-color);
+        border: 1px solid var(--cwe-markdown-table-border-color);
         line-height: 1.5em;
         padding: 0.4em 0.8em;
     }
@@ -286,20 +323,6 @@ export default css`
     }
     cwe-highlight {
         background-color: var(--cwe-markdown-pre-background-color);
-        position: relative;
-    }
-    cwe-highlight:before {
-        content: attr(title);
-        font-size: 0.8em;
-        position: -webkit-sticky;
-        position: absolute;
-        display: block;
-        left: 0.2em;
-        top: 2em;
-        height: 0;
-        -webkit-transform: translateY(-2em);
-        transform: translateY(-2em);
-        color: #1a237e;
     }
     code,
     kbd,
@@ -341,5 +364,64 @@ export default css`
     }
     .text-align-center {
         text-align: center;
+    }
+
+    hr {
+        margin: 0.5em auto;
+        border: 1px inset var(--cwe-markdown-divider-color);
+    }
+
+    a.footnote-ref {
+        user-select: none;
+        display: inline-block;
+        vertical-align: super;
+        font-size: smaller;
+        padding: 1px;
+        text-decoration: none !important;
+    }
+    a.footnote-ref::before {
+        content: '[';
+        vertical-align: initial;
+    }
+    a.footnote-ref::after {
+        content: ']';
+        vertical-align: initial;
+    }
+    footer.footnotes {
+        border-top: 1px solid var(--cwe-markdown-divider-color);
+        margin: 3em -8px 1em;
+        padding: 0 8px;
+    }
+    ol.footnotes-list {
+        margin: 1em 0;
+        counter-reset: footnotes;
+        list-style: none;
+    }
+    li.footnote-item {
+        margin: 0.8em 0;
+        counter-increment: footnotes;
+        position: relative;
+    }
+    li.footnote-item::before {
+        text-align: end;
+        position: absolute;
+        transform: translateX(calc(-100% - 0.5em));
+        content: '[' counter(footnotes) ']';
+    }
+    li.footnote-item p {
+        margin: 0.5em 0;
+    }
+    a.footnote-backref {
+        user-select: none;
+        display: inline-block;
+        margin: 4px;
+    }
+    a.footnote-backref::before {
+        content: '↩\\fe0e';
+    }
+    @media print {
+        a.footnote-backref {
+            display: none;
+        }
     }
 `;
