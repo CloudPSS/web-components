@@ -109,8 +109,8 @@ export default css`
         details,
         [is='md-container'],
         code {
-            background-color: #ffffff !important;
-            color: #000000 !important;
+            background-color: #fff !important;
+            color: #000 !important;
         }
 
         a {
@@ -226,10 +226,25 @@ export default css`
             outline: solid 0.1em var(--p-cwe-markdown-mark-background-color);
         }
     }
+
+    dt,
+    summary {
+        font-size: 1.2em;
+        font-weight: bolder;
+    }
+    blockquote,
+    details,
+    dl,
+    [is='md-container'] {
+        position: relative;
+        margin: 1em 0;
+        padding: 0 0.8em 0 1.2em;
+        page-break-inside: avoid;
+        min-height: 1em;
+    }
     blockquote,
     dl,
     details {
-        position: relative;
         border: 0.02em solid var(--p-cwe-markdown-blockquote-theme-color);
         border-left: 0.25em solid var(--p-cwe-markdown-blockquote-theme-color);
         background: none;
@@ -248,21 +263,6 @@ export default css`
             background-color: var(--p-cwe-markdown-blockquote-theme-color);
             opacity: 0.05;
         }
-    }
-
-    dt,
-    summary {
-        font-size: 1.2em;
-        font-weight: bolder;
-    }
-    blockquote,
-    details,
-    dl,
-    [is='md-container'] {
-        position: relative;
-        margin: 1em 0;
-        padding: 0 0.8em 0 1.2em;
-        page-break-inside: avoid;
     }
     table {
         min-width: 15em;
