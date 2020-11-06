@@ -2,21 +2,24 @@ import { css } from 'lit-element';
 
 export default css`
     :host {
-        --cwe-markdown-link-color: #3a479b;
-        --cwe-markdown-link-hover-color: #606794;
-        --cwe-markdown-link-active-color: #37438d;
-        --cwe-markdown-header-color: #1b215f;
-        --cwe-markdown-pre-background-color: #f2f2f2;
-        --cwe-markdown-code-color: #f50057;
-        --cwe-markdown-code-border-color: #c8c8c8;
-        --cwe-markdown-code-background-color: #f2f2f2;
-        --cwe-markdown-blockquote-background-color: rgba(140, 158, 255, 0.05);
-        --cwe-markdown-blockquote-border-left-color: #5c6bc0;
-        --cwe-markdown-blockquote-border-color: rgba(83, 109, 254, 0.2);
-        --cwe-markdown-mark-background-color: rgba(255, 214, 0, 0.4);
-        --cwe-markdown-table-header-background-color: #eee;
-        --cwe-markdown-table-border-color: #c8c8c8;
-        --cwe-markdown-divider-color: #888888;
+        --p-cwe-markdown-link-color: var(--cwe-markdown-link-color, #3a479b);
+        --p-cwe-markdown-link-hover-color: var(--cwe-markdown-link-hover-color, #606794);
+        --p-cwe-markdown-link-active-color: var(--cwe-markdown-link-active-color, #37438d);
+        --p-cwe-markdown-header-color: var(--cwe-markdown-header-color, #1b215f);
+        --p-cwe-markdown-pre-background-color: var(--cwe-markdown-pre-background-color, #f2f2f2);
+        --p-cwe-markdown-code-color: var(--cwe-markdown-code-color, #f50057);
+        --p-cwe-markdown-code-border-color: var(--cwe-markdown-code-border-color, #c8c8c8);
+        --p-cwe-markdown-code-background-color: var(--cwe-markdown-code-background-color, #f2f2f2);
+        --p-cwe-markdown-blockquote-background-color: var(
+            --cwe-markdown-blockquote-background-color,
+            rgba(140, 158, 255, 0.05)
+        );
+        --p-cwe-markdown-blockquote-border-left-color: var(--cwe-markdown-blockquote-border-left-color, #5c6bc0);
+        --p-cwe-markdown-blockquote-border-color: var(--cwe-markdown-blockquote-border-color, rgba(83, 109, 254, 0.2));
+        --p-cwe-markdown-mark-background-color: var(--cwe-markdown-mark-background-color, rgba(255, 214, 0, 0.4));
+        --p-cwe-markdown-table-header-background-color: var(--cwe-markdown-table-header-background-color, #eee);
+        --p-cwe-markdown-table-border-color: var(--cwe-markdown-table-border-color, #c8c8c8);
+        --p-cwe-markdown-divider-color: var(--cwe-markdown-divider-color, #888888);
     }
     img {
         max-width: 100%;
@@ -27,7 +30,8 @@ export default css`
     h4,
     h5,
     h6 {
-        color: var(--cwe-markdown-header-color);
+        position: relative;
+        color: var(--p-cwe-markdown-header-color);
         font-weight: 600;
     }
     @media screen {
@@ -35,7 +39,7 @@ export default css`
             position: absolute;
             left: 0;
             padding: 0 0.25em;
-            color: var(--cwe-markdown-header-color) !important;
+            color: var(--p-cwe-markdown-header-color) !important;
             transform: translateX(-100%);
             opacity: 0;
             transition: all 0.2s;
@@ -68,13 +72,13 @@ export default css`
         }
         a {
             text-decoration: none;
-            color: var(--cwe-markdown-link-color);
+            color: var(--p-cwe-markdown-link-color);
         }
         a:hover {
-            color: var(--cwe-markdown-link-hover-color);
+            color: var(--p-cwe-markdown-link-hover-color);
         }
         a:active {
-            color: var(--cwe-markdown-link-active-color);
+            color: var(--p-cwe-markdown-link-active-color);
         }
     }
     p,
@@ -91,10 +95,10 @@ export default css`
         border: 0.05em solid;
         border-radius: 0.1em;
         vertical-align: text-bottom;
-        color: var(--cwe-markdown-code-color);
+        color: var(--p-cwe-markdown-code-color);
         font-size: 0.9em;
-        border-color: var(--cwe-markdown-code-border-color);
-        background-color: var(--cwe-markdown-code-background-color);
+        border-color: var(--p-cwe-markdown-code-border-color);
+        background-color: var(--p-cwe-markdown-code-background-color);
     }
     [is='md-container'][class~='tip'] {
         background-color: rgba(140, 158, 255, 0.05);
@@ -121,7 +125,7 @@ export default css`
             display: none !important;
         }
         cwe-highlight {
-            border: 0.05em solid var(--cwe-markdown-code-background-color);
+            border: 0.05em solid var(--p-cwe-markdown-code-background-color);
         }
         audio,
         canvas,
@@ -215,20 +219,21 @@ export default css`
         font-size: 0.9em;
     }
     mark {
-        background: var(--cwe-markdown-mark-background-color);
+        color: inherit;
+        background: var(--p-cwe-markdown-mark-background-color);
     }
     @media print {
         mark {
             background: none;
-            outline: solid 0.1em var(--cwe-markdown-mark-background-color);
+            outline: solid 0.1em var(--p-cwe-markdown-mark-background-color);
         }
     }
     blockquote,
     dl,
     details {
-        background-color: var(--cwe-markdown-blockquote-background-color);
-        border: 0.02em solid var(--cwe-markdown-blockquote-border-color);
-        border-left: 0.25em solid var(--cwe-markdown-blockquote-border-left-color);
+        background-color: var(--p-cwe-markdown-blockquote-background-color);
+        border: 0.02em solid var(--p-cwe-markdown-blockquote-border-color);
+        border-left: 0.25em solid var(--p-cwe-markdown-blockquote-border-left-color);
     }
 
     dt,
@@ -253,12 +258,12 @@ export default css`
         text-align: left;
     }
     table > thead > tr > th {
-        background-color: var(--cwe-markdown-table-header-background-color);
+        background-color: var(--p-cwe-markdown-table-header-background-color);
     }
 
     table td,
     table th {
-        border: 1px solid var(--cwe-markdown-table-border-color);
+        border: 1px solid var(--p-cwe-markdown-table-border-color);
         line-height: 1.5em;
         padding: 0.4em 0.8em;
     }
@@ -322,10 +327,10 @@ export default css`
         font-size: 1em;
         overflow: auto;
         contain: content;
-        background-color: var(--cwe-markdown-pre-background-color);
+        background-color: var(--p-cwe-markdown-pre-background-color);
     }
     cwe-highlight {
-        background-color: var(--cwe-markdown-pre-background-color);
+        background-color: var(--p-cwe-markdown-pre-background-color);
     }
     code,
     kbd,
@@ -371,7 +376,7 @@ export default css`
 
     hr {
         margin: 0.5em auto;
-        border: 1px inset var(--cwe-markdown-divider-color);
+        border: 1px inset var(--p-cwe-markdown-divider-color);
     }
 
     a.footnote-ref {
@@ -391,7 +396,7 @@ export default css`
         vertical-align: initial;
     }
     footer.footnotes {
-        border-top: 1px solid var(--cwe-markdown-divider-color);
+        border-top: 1px solid var(--p-cwe-markdown-divider-color);
         margin: 3em -8px 1em;
         padding: 0 8px;
     }

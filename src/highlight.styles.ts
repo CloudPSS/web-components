@@ -11,7 +11,7 @@ export default css`
         margin: 1.2em 0;
         border-radius: 4px;
         contain: content;
-        --cwe-highlight-hint-color: #888;
+        --p-cwe-highlight-hint-color: var(--cwe-highlight-hint-color, #888);
     }
     pre {
         margin: 0;
@@ -25,7 +25,7 @@ export default css`
         margin: 0.5em;
         display: block;
         top: 0;
-        color: var(--cwe-highlight-hint-color);
+        color: var(--p-cwe-highlight-hint-color);
     }
     :host([aria-label])::before {
         content: attr(aria-label);
