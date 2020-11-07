@@ -46,16 +46,32 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
 
         switch (lang) {
             case 'mermaid':
-                elementVoid('cwe-mermaid', '', [], ...sourceLineIncremental(token), 'config', code, ...htmlAttr);
+                elementVoid(
+                    'cwe-mermaid',
+                    title || code,
+                    [],
+                    ...sourceLineIncremental(token),
+                    'config',
+                    code,
+                    ...htmlAttr,
+                );
                 return;
             case 'chart':
-                elementVoid('cwe-chart', '', [], ...sourceLineIncremental(token), 'config', code, ...htmlAttr);
+                elementVoid(
+                    'cwe-chart',
+                    title || code,
+                    [],
+                    ...sourceLineIncremental(token),
+                    'config',
+                    code,
+                    ...htmlAttr,
+                );
                 return;
             default: {
                 const langAttr = lang ? ['language', lang] : [];
                 elementVoid(
                     'cwe-highlight',
-                    '',
+                    title || code,
                     [],
                     ...sourceLineIncremental(token),
                     'srcdoc',

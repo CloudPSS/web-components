@@ -1,6 +1,5 @@
 import markdownIt from 'markdown-it';
-import VideoServiceBase from 'markdown-it-block-embed/lib/services/VideoServiceBase';
-import { extend, loadPlugin, slugify, sourceLine, sourceLineIncremental } from './utils';
+import { extend, loadPlugin, slugify, sourceLineIncremental } from './utils';
 
 import '../../math';
 
@@ -20,7 +19,7 @@ import * as markdownItKbd from 'markdown-it-kbd';
 import * as markdownItAnchor from 'markdown-it-anchor';
 import * as markdownItFrontMatter from 'markdown-it-front-matter';
 import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
-import * as markdownItBlockEmbed from 'markdown-it-block-embed';
+import * as markdownItBlockEmbed from './block-embed';
 import * as markdownItContainer from 'markdown-it-container';
 import * as incrementalDOM from 'incremental-dom';
 import * as markdownItIncrementalDOM from './incremental-dom';
@@ -122,8 +121,16 @@ export default function (options) {
                 use();
                 md.renderer.rules.footnote_block_open = () => {
                     return () => {
-                        incrementalDOM.elementOpen('footer', '', [], 'class', 'footnotes', 'aria-label', 'Footnotes');
-                        incrementalDOM.elementOpen('ol', '', [], 'class', 'footnotes-list');
+                        incrementalDOM.elementOpen(
+                            'footer',
+                            'footnotes',
+                            [],
+                            'class',
+                            'footnotes',
+                            'aria-label',
+                            'Footnotes',
+                        );
+                        incrementalDOM.elementOpen('ol', 'footnotes-list', [], 'class', 'footnotes-list');
                     };
                 };
                 md.renderer.rules.footnote_block_close = () => {
@@ -219,7 +226,7 @@ export default function (options) {
                     return () => {
                         incrementalDOM.elementVoid(
                             'cwe-math',
-                            '',
+                            content,
                             [],
                             'language',
                             'tex',
@@ -234,7 +241,7 @@ export default function (options) {
                     return () => {
                         incrementalDOM.elementVoid(
                             'cwe-math',
-                            '',
+                            content,
                             [],
                             ...sourceLineIncremental(token),
                             'language',
@@ -277,66 +284,9 @@ export default function (options) {
         [markdownItFrontMatter, options.frontMatter],
         [markdownItImplicitFigures, { figcaption: true }],
         [
-            extend(markdownItBlockEmbed, (md, use) => {
-                use();
-                const original = md.renderer.rules['video'];
-                md.renderer.rules['video'] = (tokens, idx, opt, env, slf) => {
-                    const ret = original(tokens, idx, opt, env, slf);
-                    return `<div ${sourceLine(tokens[idx])} ` + ret.slice('<div'.length);
-                };
-            }),
+            markdownItBlockEmbed,
             {
                 outputPlayerSize: false,
-                services: {
-                    bilibili: class extends VideoServiceBase {
-                        /** @param {string} reference */
-                        extractVideoID(reference) {
-                            let match = reference.match(
-                                /https?:\/\/(?:www\.|player\.)?bilibili.com\/(?:player.html\?aid=|player.html\?bvid=|video\/)([a-z0-9]+)/i,
-                            );
-                            const id = match && typeof match[1] === 'string' ? match[1] : reference;
-                            if (id.match(/^\d+$/)) return `av${id}`;
-                            return id;
-                        }
-                        /** @param {string} videoID */
-                        getVideoUrl(videoID) {
-                            const id = videoID.match(/^(av|bv|)(.*)$/i);
-                            let idArg;
-                            if (id[1] != null && id[1].toLowerCase() === 'bv') {
-                                idArg = 'bvid=' + id[0];
-                            }
-                            if (id[1] != null && id[1].toLowerCase() === 'av') {
-                                idArg = 'aid=' + id[2];
-                            }
-                            if (id[1] == '') {
-                                idArg = 'aid=' + id[2];
-                            }
-                            return `//player.bilibili.com/player.html?${idArg}&as_wide=1&high_quality=1&danmaku=0`;
-                        }
-                    },
-                    youku: class extends VideoServiceBase {
-                        /** @param {string} reference */
-                        extractVideoID(reference) {
-                            let match = reference.match(/id_([a-z0-9+])/i);
-                            return match && typeof match[1] === 'string' ? match[1] : reference;
-                        }
-                        /** @param {string} videoID */
-                        getVideoUrl(videoID) {
-                            return `//player.youku.com/embed/${videoID}`;
-                        }
-                    },
-                    tencent: class extends VideoServiceBase {
-                        /** @param {string} reference */
-                        extractVideoID(reference) {
-                            let match = reference.match(/x\/page\/([a-z0-9+])/i);
-                            return match && typeof match[1] === 'string' ? match[1] : reference;
-                        }
-                        /** @param {string} videoID */
-                        getVideoUrl(videoID) {
-                            return `//v.qq.com/txp/iframe/player.html?vid=${videoID}&auto=0`;
-                        }
-                    },
-                },
             },
         ],
         ...containers.map((v) => [markdownItContainer, ...v]),

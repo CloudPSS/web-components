@@ -821,10 +821,15 @@ info 2
 '
     ></cwe-markdown>
     <script>
-      document.addEventListener('click', () => {
-        console.log('refersh');
-        document.querySelector('cwe-markdown').srcdoc += 'x';
-      });
+      setTimeout(() => {
+        const src = document.querySelector('cwe-markdown').srcdoc;
+        const src2 = src.slice(0, 50) + 'x\n\n' + src.slice(50);
+        document.addEventListener('click', () => {
+          console.log('refersh');
+          const c = document.querySelector('cwe-markdown').srcdoc;
+          document.querySelector('cwe-markdown').srcdoc = c === src ? src2 : src;
+        });
+      }, 1000);
     </script>
   </body>
 </html>

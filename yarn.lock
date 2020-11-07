@@ -2496,11 +2496,6 @@ markdown-it-anchor@^6.0.0:
   resolved "https://registry.npm.taobao.org/markdown-it-anchor/download/markdown-it-anchor-6.0.0.tgz#2ec2554fa4d065f2d1ca2422a50c14c10cf67c2a"
   integrity sha1-LsJVT6TQZfLRyiQipQwUwQz2fCo=
 
-markdown-it-block-embed@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.npm.taobao.org/markdown-it-block-embed/download/markdown-it-block-embed-0.0.3.tgz#5eb08253f35c37b34c07eec2b9e275ee85eea906"
-  integrity sha1-XrCCU/NcN7NMB+7CueJ17oXuqQY=
-
 markdown-it-center-text@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npm.taobao.org/markdown-it-center-text/download/markdown-it-center-text-1.0.4.tgz#4e7f907b6539b62a6200fead50aebed587734b3c"

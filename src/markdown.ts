@@ -62,7 +62,6 @@ export class MarkdownElement extends UpdatingElement {
     @property({ reflect: true }) srcdoc?: string;
     /** 附加样式 */
     @property({ reflect: true }) docStyle?: string;
-
     /**
      * @inheritdoc
      */

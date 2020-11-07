@@ -8,7 +8,7 @@ export default function (incrementalDom: typeof IncrementalDom): IncrementalRend
     return {
         code_inline(tokens, idx, options, env, slf) {
             return () => {
-                elementOpen('code', '', [], ...slf.renderAttrsToArray(tokens[idx]));
+                elementOpen('code', tokens[idx].content, [], ...slf.renderAttrsToArray(tokens[idx]));
                 text(tokens[idx].content);
                 elementClose('code');
             };
