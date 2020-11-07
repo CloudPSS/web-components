@@ -8,7 +8,7 @@ import * as markdownItEmoji from 'markdown-it-emoji';
 import * as markdownItSub from 'markdown-it-sub';
 import * as markdownItSup from 'markdown-it-sup';
 import * as markdownItFootnote from 'markdown-it-footnote';
-import * as markdownItMath from 'markdown-it-math';
+import * as markdownItMath from './math';
 import * as markdownItDeflist from 'markdown-it-deflist';
 import * as markdownItAbbr from 'markdown-it-abbr';
 import * as markdownItIns from 'markdown-it-ins';
@@ -209,9 +209,13 @@ export default function (options) {
             }),
         ],
         [
-            extend(markdownItMath, (md, use) => {
-                use();
-                md.renderer.rules.math_inline = (tokens, idx) => {
+            markdownItMath,
+            {
+                inlineOpen: '$',
+                inlineClose: '$',
+                blockOpen: '$$',
+                blockClose: '$$',
+                inlineRenderer: (content) => {
                     return () => {
                         incrementalDOM.elementVoid(
                             'cwe-math',
@@ -222,32 +226,26 @@ export default function (options) {
                             'mode',
                             'inline',
                             'srcdoc',
-                            tokens[idx].content,
+                            content,
                         );
                     };
-                };
-                md.renderer.rules.math_block = (tokens, idx) => {
+                },
+                blockRenderer: (content, token) => {
                     return () => {
                         incrementalDOM.elementVoid(
                             'cwe-math',
                             '',
                             [],
-                            ...sourceLineIncremental(tokens[idx]),
+                            ...sourceLineIncremental(token),
                             'language',
                             'tex',
                             'mode',
                             'display',
                             'srcdoc',
-                            tokens[idx].content,
+                            content,
                         );
                     };
-                };
-            }),
-            {
-                inlineOpen: '$',
-                inlineClose: '$',
-                blockOpen: '$$',
-                blockClose: '$$',
+                },
             },
         ],
         [markdownItDeflist],

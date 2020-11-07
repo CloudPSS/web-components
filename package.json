@@ -1,6 +1,6 @@
 {
   "name": "@cloudpss/web-components",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "main": "index.js",
   "license": "MIT",
   "author": {
@@ -40,7 +40,6 @@
     "markdown-it-ins": "^3.0.0",
     "markdown-it-kbd": "^2.2.0",
     "markdown-it-mark": "^3.0.0",
-    "markdown-it-math": "^4.1.1",
     "markdown-it-multimd-table": "^4.0.3",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",

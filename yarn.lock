@@ -641,13 +641,6 @@ arrify@^1.0.1:
   resolved "https://registry.npm.taobao.org/arrify/download/arrify-1.0.1.tgz#898508da2226f380df904728456849c1501a4b0d"
   integrity sha1-iYUI2iIm84DfkEcoRWhJwVAaSw0=
 
-ascii2mathml@^0.6.2:
-  version "0.6.2"
-  resolved "https://registry.npm.taobao.org/ascii2mathml/download/ascii2mathml-0.6.2.tgz#e9d85058d3c06655a6100c0f0291a90dca7fcaa1"
-  integrity sha1-6dhQWNPAZlWmEAwPApGpDcp/yqE=
-  dependencies:
-    minimist "^1.2.0"
-
 astral-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/astral-regex/download/astral-regex-1.0.0.tgz#6c8c3fb827dd43ee3918f27b82782ab7658a6fd9"
@@ -2563,24 +2556,12 @@ markdown-it-mark@^3.0.0:
   resolved "https://registry.npm.taobao.org/markdown-it-mark/download/markdown-it-mark-3.0.0.tgz#27c3e39ef3cc310b2dde5375082c9fa912983cda"
   integrity sha1-J8PjnvPMMQst3lN1CCyfqRKYPNo=
 
-markdown-it-math@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.npm.taobao.org/markdown-it-math/download/markdown-it-math-4.1.1.tgz#a63fac36d9ffe4362749749d966a84852f2ca137"
-  integrity sha1-pj+sNtn/5DYnSXSdlmqEhS8soTc=
-  optionalDependencies:
-    ascii2mathml "^0.6.2"
-
 markdown-it-multimd-table@^4.0.3:
   version "4.0.3"
   resolved "https://registry.npm.taobao.org/markdown-it-multimd-table/download/markdown-it-multimd-table-4.0.3.tgz#abd12fa7383677f2ee50545776e9ffcd168a1154"
   integrity sha1-q9Evpzg2d/LuUFRXdun/zRaKEVQ=
   dependencies:
     markdown-it "^11.0.0"
-
-markdown-it-source-map@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.npm.taobao.org/markdown-it-source-map/download/markdown-it-source-map-0.1.1.tgz#8d8c3eab35ed1eb5399ec71814a4b435e275556f"
-  integrity sha1-jYw+qzXtHrU5nscYFKS0NeJ1VW8=
 
 markdown-it-sub@^1.0.0:
   version "1.0.0"
@@ -2728,7 +2709,7 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@^1.2.0, minimist@^1.2.5:
+minimist@^1.2.5:
   version "1.2.5"
   resolved "https://registry.npm.taobao.org/minimist/download/minimist-1.2.5.tgz?cache=0&sync_timestamp=1589682820731&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fminimist%2Fdownload%2Fminimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
