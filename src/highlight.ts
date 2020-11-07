@@ -4,6 +4,7 @@ import { resolve, style, theme } from './config';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { Subscription } from 'rxjs';
 import styles from './highlight.styles';
+import { loadStyle } from './private/utils';
 
 const languageNameReplacement: Record<string, string> = {
     js: 'javascript',
@@ -70,6 +71,14 @@ function resolvePrism(file: string): string {
     return resolve('prismjs', '^1', file);
 }
 
+/**
+ * 加载样式
+ */
+function loadPrismStyle(el: HTMLLinkElement, theme: string): Promise<void> {
+    const src = resolvePrism(`themes/${theme}.css`);
+    return loadStyle(el, src);
+}
+
 let initPromise: Promise<void> | undefined;
 /**
  * 初始化 prismjs
@@ -94,7 +103,7 @@ function init(): Promise<void> {
         });
         document.documentElement.append(plugins);
         await l2;
-        await new Promise((resolve) => setTimeout(resolve, 1));
+        await new Promise((resolve) => setTimeout(resolve, 10));
         script.remove();
         plugins.remove();
         return;
@@ -141,7 +150,7 @@ export class HighlightElement extends UpdatingElement {
         this.watchTheme = theme.subscribe((t) => {
             const style = this.prismStyle;
             if (!style) {
-                this.elStyle.href = resolvePrism(`themes/${t === 'dark' ? 'prism-tomorrow' : 'prism-coy'}.css`);
+                void loadPrismStyle(this.elStyle, t === 'dark' ? 'prism-tomorrow' : 'prism-coy');
             }
         });
     }
@@ -177,7 +186,7 @@ export class HighlightElement extends UpdatingElement {
         const code = this.srcdoc ?? '';
         const style = this.prismStyle;
         if (style) {
-            this.elStyle.href = resolvePrism(`themes/${style}.css`);
+            void loadPrismStyle(this.elStyle, style);
         }
         if (lang) {
             this.elCode.setAttribute('language', lang);

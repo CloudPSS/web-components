@@ -3,6 +3,10 @@ import { escapeHtml } from 'markdown-it/lib/common/utils';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { resolve, style as cfgStyle } from './config';
 import styles from './math.styles';
+import { loadStyle } from './private/utils';
+
+const katexVersion: string = (Reflect.get(katex, 'version') as string) || '^0.12';
+const katexCss = resolve('katex', katexVersion, 'dist/katex.css');
 
 /** asciimathToLatex */
 // let asciimathToLatex: (asciimath: string) => string;
@@ -19,21 +23,6 @@ type Language = {
      */
     render(this: HTMLElement, source: string, mode: MathMode): void | Promise<void>;
 };
-
-/**
- * 注入样式
- */
-function style(el: HTMLElement, inElement: boolean): void {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = resolve('katex', '^0.12', 'dist/katex.css');
-    el.appendChild(link);
-    if (inElement) {
-        const elStyle = document.createElement('style');
-        elStyle.textContent = cfgStyle(el) + '\n' + styles.cssText;
-        el.appendChild(elStyle);
-    }
-}
 
 const languages: Record<string, Language | { aliasOf: string }> = {
     tex: {
@@ -53,7 +42,7 @@ const languages: Record<string, Language | { aliasOf: string }> = {
     // },
 };
 
-style(document.head, false);
+void loadStyle(undefined, katexCss, false);
 
 /**
  * 公式模式
@@ -73,7 +62,12 @@ export class MathElement extends UpdatingElement {
         this.elContent = document.createElement('div');
         this.elContent.id = 'content';
         root.append(this.elStyles, this.elContent);
-        style(this.elStyles, true);
+        const link = document.createElement('link');
+        this.elStyles.appendChild(link);
+        void loadStyle(link, katexCss);
+        const elStyle = document.createElement('style');
+        elStyle.textContent = cfgStyle(this) + '\n' + styles.cssText;
+        this.elStyles.appendChild(elStyle);
     }
 
     /** 样式 */
