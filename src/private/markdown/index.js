@@ -25,7 +25,7 @@ import * as markdownItBlockEmbed from 'markdown-it-block-embed';
 import * as markdownItContainer from 'markdown-it-container';
 import * as markdownItSourceMap from 'markdown-it-source-map';
 import * as incrementalDOM from 'incremental-dom';
-import * as markdownItIncrementalDOM from 'markdown-it-incremental-dom';
+import * as markdownItIncrementalDOM from './incremental-dom';
 import { markdownCustomElementHighlight } from './custom-element-highlight';
 
 /**
@@ -298,15 +298,9 @@ export default function (options) {
             },
         ],
         ...containers.map((v) => [markdownItContainer, ...v]),
-        [markdownCustomElementHighlight],
         [markdownItSourceMap],
-        [
-            markdownItIncrementalDOM,
-            incrementalDOM,
-            {
-                incrementalizeDefaultRules: false,
-            },
-        ],
+        [markdownItIncrementalDOM, incrementalDOM],
+        [markdownCustomElementHighlight],
     ];
     md = plugins.reduce((i, [plugin, ...options]) => {
         return i.use(loadPlugin(plugin), ...options);
