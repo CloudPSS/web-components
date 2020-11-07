@@ -37,3 +37,11 @@ export function sourceLine(token: import('markdown-it/lib/token')): string {
     if (token.map) return ` data-source-line="${token.map[0] + 1}"`;
     return '';
 }
+
+/**
+ * 生成 data-source-line 属性
+ */
+export function sourceLineIncremental(token: import('markdown-it/lib/token')): unknown[] {
+    if (token.map) return ['data-source-line', token.map[0] + 1];
+    return [];
+}

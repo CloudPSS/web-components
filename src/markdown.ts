@@ -22,6 +22,7 @@ md.normalizeLink = (url: string): string => {
     return normalizeLink(u.href);
 };
 md.validateLink = () => true;
+
 /**
  * Markdown 组件
  *

@@ -1,10 +1,14 @@
-export default function (incrementalDom) {
+/* eslint-disable */
+import type * as IncrementalDom from 'incremental-dom';
+import type { IncrementalRenderRuleRecord } from '..';
+
+export default function (incrementalDom: typeof IncrementalDom): IncrementalRenderRuleRecord {
     const { elementClose, elementOpen, elementVoid, text } = incrementalDom;
 
     return {
         code_inline(tokens, idx, options, env, slf) {
             return () => {
-                elementOpen.apply(this, ['code', '', []].concat(slf.renderAttrsToArray(tokens[idx])));
+                elementOpen('code', '', [], ...slf.renderAttrsToArray(tokens[idx]));
                 text(tokens[idx].content);
                 elementClose('code');
             };
@@ -19,6 +23,10 @@ export default function (incrementalDom) {
         },
 
         text(tokens, idx) {
+            return () => text(tokens[idx].content);
+        },
+
+        emoji(tokens, idx) {
             return () => text(tokens[idx].content);
         },
     };

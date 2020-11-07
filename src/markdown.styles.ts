@@ -33,6 +33,9 @@ export default css`
         color: var(--p-cwe-markdown-header-color);
         font-weight: 600;
     }
+    abbr[title] {
+        text-decoration: underline dotted;
+    }
     @media screen {
         a.header-anchor {
             position: absolute;

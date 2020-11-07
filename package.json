@@ -1,6 +1,6 @@
 {
   "name": "@cloudpss/web-components",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "main": "index.js",
   "license": "MIT",
   "author": {
@@ -42,7 +42,6 @@
     "markdown-it-mark": "^3.0.0",
     "markdown-it-math": "^4.1.1",
     "markdown-it-multimd-table": "^4.0.3",
-    "markdown-it-source-map": "^0.1.1",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
     "mermaid": "^8.8.3",
@@ -53,7 +52,6 @@
     "@commitlint/cli": "^11.0.0",
     "@snowpack/plugin-typescript": "^1.1.0",
     "@types/chart.js": "^2.9.27",
-    "@types/htmlparser2": "^3.10.2",
     "@types/katex": "^0.11.0",
     "@types/linkify-it": "^2.1.0",
     "@types/markdown-it": "^10.0.2",

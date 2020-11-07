@@ -1,7 +1,6 @@
 import markdownIt from 'markdown-it';
-import { escapeHtml } from 'markdown-it/lib/common/utils';
 import VideoServiceBase from 'markdown-it-block-embed/lib/services/VideoServiceBase';
-import { extend, loadPlugin, slugify, sourceLine } from './utils';
+import { extend, loadPlugin, slugify, sourceLine, sourceLineIncremental } from './utils';
 
 import '../../math';
 
@@ -23,20 +22,12 @@ import * as markdownItFrontMatter from 'markdown-it-front-matter';
 import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
 import * as markdownItBlockEmbed from 'markdown-it-block-embed';
 import * as markdownItContainer from 'markdown-it-container';
-import * as markdownItSourceMap from 'markdown-it-source-map';
 import * as incrementalDOM from 'incremental-dom';
 import * as markdownItIncrementalDOM from './incremental-dom';
 import { markdownCustomElementHighlight } from './custom-element-highlight';
 
 /**
  * @param {markdownIt.Options & {frontMatter: (fm:string)=>void}} options
- *
- * @returns { markdownIt & {
- *     renderToIncrementalDOM(src: string, env?: unknown): (a: unknown) => void;
- *     renderInlineToIncrementalDOM(src: string, env?: unknown): (a: unknown) => void;
- *     IncrementalDOMRenderer: markdownIt['renderer'];
- *   }
- * }
  */
 export default function (options) {
     options = Object.assign(
@@ -47,75 +38,79 @@ export default function (options) {
         },
         options,
     );
+    /** @type { markdownItIncrementalDOM.IncrementalMarkdownIt } */
     let md = markdownIt(options);
 
     /** @type {Array<[string, {
      *      validate?(params:string): boolean;
-     *      render?(tokens: import('markdown-it/lib/token')[], idx: number, opt: markdownIt.Options, env: object): string;
+     *      render?: markdownItIncrementalDOM.IncrementalRenderRule;
      *      marker?: string;
      * }]>} */
     const containers = [
         [
             'summary',
             {
-                render(tokens, idx, opt, env /*, slf*/) {
-                    const token = tokens[idx];
-                    const m = token.info.trim().match(/^\S+\s+(.*)$/);
-                    const summary = m?.[1];
-
-                    if (token.nesting === 1) {
-                        const detailsOpen = `<details ${sourceLine(token)}>\n`;
-                        if (summary) {
-                            return `${detailsOpen}<summary>${md.renderInline(summary, {
-                                ...env,
-                                footnotes: null,
-                            })}</summary>\n`;
-                        } else {
-                            return detailsOpen;
-                        }
-                    } else {
-                        return '</details>\n';
-                    }
-                },
-            },
-        ],
-        ...['tip', 'question', 'error', 'warning', 'info', 'success', 'fail'].map(
-            /**
-             * @returns {[string, {
-             *      validate?(params:string): boolean;
-             *      render?(tokens: import('markdown-it/lib/token')[], idx: number, opt: markdownIt.Options, env: object): string;
-             *      marker?: string;
-             * }]}
-             * */ (name) => [
-                name,
-                {
-                    /**
-                     * @param {import('markdown-it/lib/token')[]} tokens
-                     */
-                    render(tokens, idx, opt, env /*, slf*/) {
+                render: (tokens, idx, opt, env /*, slf*/) => {
+                    return () => {
                         const token = tokens[idx];
                         const m = token.info.trim().match(/^\S+\s+(.*)$/);
                         const summary = m?.[1];
 
                         if (token.nesting === 1) {
-                            const divOpen = `<div is="md-container" class="${escapeHtml(name)}" ${sourceLine(
-                                token,
-                            )}>\n`;
+                            incrementalDOM.elementOpen('details', '', [], ...sourceLineIncremental(token));
                             if (summary) {
-                                return `${divOpen}<summary>${md.renderInline(summary, {
+                                incrementalDOM.elementOpen('summary', '', []);
+                                md.renderInlineToIncrementalDOM(summary, {
                                     ...env,
                                     footnotes: null,
-                                })}</summary>\n`;
-                            } else {
-                                return divOpen;
+                                })();
+                                incrementalDOM.elementClose('summary');
                             }
                         } else {
-                            return '</div>\n';
+                            incrementalDOM.elementClose('details');
                         }
-                    },
+                    };
                 },
-            ],
-        ),
+            },
+        ],
+        ...['tip', 'question', 'error', 'warning', 'info', 'success', 'fail'].map((name) => [
+            name,
+            {
+                /**
+                 * @type {markdownItIncrementalDOM.IncrementalRenderRule}
+                 */
+                render: (tokens, idx, opt, env /*, slf*/) => {
+                    return () => {
+                        const token = tokens[idx];
+                        const m = token.info.trim().match(/^\S+\s+(.*)$/);
+                        const summary = m?.[1];
+
+                        if (token.nesting === 1) {
+                            incrementalDOM.elementOpen(
+                                'div',
+                                '',
+                                [],
+                                'is',
+                                'md-container',
+                                'class',
+                                name,
+                                ...sourceLineIncremental(token),
+                            );
+                            if (summary) {
+                                incrementalDOM.elementOpen('summary', '', []);
+                                md.renderInlineToIncrementalDOM(summary, {
+                                    ...env,
+                                    footnotes: null,
+                                })();
+                                incrementalDOM.elementClose('summary');
+                            }
+                        } else {
+                            incrementalDOM.elementClose('div');
+                        }
+                    };
+                },
+            },
+        ]),
     ];
     /** @type {[import('markdown-it').PluginWithParams, ...any][]} */
     const plugins = [
@@ -125,85 +120,134 @@ export default function (options) {
         [
             extend(markdownItFootnote, (md, use) => {
                 use();
-                md.renderer.rules.footnote_block_open = function render_footnote_block_open() {
-                    return `<footer class="footnotes" aria-label="Footnotes">\n<ol class="footnotes-list">\n`;
+                md.renderer.rules.footnote_block_open = () => {
+                    return () => {
+                        incrementalDOM.elementOpen('footer', '', [], 'class', 'footnotes', 'aria-label', 'Footnotes');
+                        incrementalDOM.elementOpen('ol', '', [], 'class', 'footnotes-list');
+                    };
                 };
-                md.renderer.rules.footnote_block_close = function render_footnote_block_close() {
-                    return '</ol>\n</footer>\n';
+                md.renderer.rules.footnote_block_close = () => {
+                    return () => {
+                        incrementalDOM.elementClose('ol');
+                        incrementalDOM.elementClose('footer');
+                    };
                 };
-                md.renderer.rules.footnote_anchor_name = function render_footnote_anchor_name(
-                    tokens,
-                    idx,
-                    options,
-                    env /*, slf*/,
-                ) {
+                md.renderer.rules.footnote_anchor_name = (tokens, idx, options, env /*, slf*/) => {
                     var label = slugify(tokens[idx].meta.label ?? Number(tokens[idx].meta.id + 1).toString());
                     var prefix = '';
-
                     if (typeof env.docId === 'string') {
                         prefix = env.docId + '-';
                     }
-
                     return prefix + label;
                 };
-                md.renderer.rules.footnote_caption = function render_footnote_caption(
-                    tokens,
-                    idx /*, options, env, slf*/,
-                ) {
+                md.renderer.rules.footnote_caption = (tokens, idx /*, options, env, slf*/) => {
                     return Number(tokens[idx].meta.id + 1).toString();
                 };
-                md.renderer.rules.footnote_ref = function render_footnote_ref(tokens, idx, options, env, slf) {
-                    const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
-                    const caption = slf.rules.footnote_caption(tokens, idx, options, env, slf);
-                    let refid = id;
+                md.renderer.rules.footnote_ref = (tokens, idx, options, env, slf) => {
+                    return () => {
+                        const id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+                        const caption = slf.rules.footnote_caption(tokens, idx, options, env, slf);
+                        let refid = id;
 
-                    if (tokens[idx].meta.subId > 0) {
-                        refid += '::' + (tokens[idx].meta.subId + 1);
-                    }
-                    const href = md.normalizeLink(`#fn-${id}`);
-                    const linkId = escapeHtml(`fnref-${refid}`);
-                    return (
-                        `<a id="${linkId}" href="${href}" class="footnote-ref" ` +
-                        `aria-label="Go to footnote" aria-describedby="fn-${escapeHtml(id)}">${caption}</a>`
-                    );
+                        if (tokens[idx].meta.subId > 0) {
+                            refid += '::' + (tokens[idx].meta.subId + 1);
+                        }
+                        const href = md.normalizeLink(`#fn-${id}`);
+                        incrementalDOM.elementOpen(
+                            'a',
+                            '',
+                            [],
+                            'id',
+                            `fnref-${refid}`,
+                            'href',
+                            href,
+                            'class',
+                            'footnote-ref',
+                            'aria-label',
+                            'Go to footnote',
+                            'aria-describedby',
+                            `fn-${id}`,
+                        );
+                        incrementalDOM.text(caption);
+                        incrementalDOM.elementClose('a');
+                    };
                 };
-                md.renderer.rules.footnote_open = function render_footnote_open(tokens, idx, options, env, slf) {
-                    var id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
-
-                    if (tokens[idx].meta.subId > 0) {
-                        id += '::' + tokens[idx].meta.subId;
-                    }
-
-                    return `<li id="fn-${escapeHtml(id)}"" class="footnote-item">`;
+                md.renderer.rules.footnote_open = (tokens, idx, options, env, slf) => {
+                    return () => {
+                        let id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+                        if (tokens[idx].meta.subId > 0) {
+                            id += '::' + tokens[idx].meta.subId;
+                        }
+                        incrementalDOM.elementOpen('li', '', [], 'id', `fn-${id}`, 'class', 'footnote-item');
+                    };
                 };
-                md.renderer.rules.footnote_anchor = function render_footnote_anchor(tokens, idx, options, env, slf) {
-                    var id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
-
-                    if (tokens[idx].meta.subId > 0) {
-                        id += '::' + (tokens[idx].meta.subId + 1);
-                    }
-                    const href = md.normalizeLink(`#fnref-${id}`);
-                    return `<a href="${href}" class="footnote-backref" aria-label="Back to article"></a>`;
+                md.renderer.rules.footnote_close = () => {
+                    return () => {
+                        incrementalDOM.elementClose('li');
+                    };
+                };
+                md.renderer.rules.footnote_anchor = (tokens, idx, options, env, slf) => {
+                    return () => {
+                        let id = slf.rules.footnote_anchor_name(tokens, idx, options, env, slf);
+                        if (tokens[idx].meta.subId > 0) {
+                            id += '::' + (tokens[idx].meta.subId + 1);
+                        }
+                        const href = md.normalizeLink(`#fnref-${id}`);
+                        incrementalDOM.elementVoid(
+                            'a',
+                            '',
+                            [],
+                            'href',
+                            href,
+                            'class',
+                            'footnote-backref',
+                            'aria-label',
+                            'Back to article',
+                        );
+                    };
                 };
             }),
         ],
         [
-            markdownItMath,
+            extend(markdownItMath, (md, use) => {
+                use();
+                md.renderer.rules.math_inline = (tokens, idx) => {
+                    return () => {
+                        incrementalDOM.elementVoid(
+                            'cwe-math',
+                            '',
+                            [],
+                            'language',
+                            'tex',
+                            'mode',
+                            'inline',
+                            'srcdoc',
+                            tokens[idx].content,
+                        );
+                    };
+                };
+                md.renderer.rules.math_block = (tokens, idx) => {
+                    return () => {
+                        incrementalDOM.elementVoid(
+                            'cwe-math',
+                            '',
+                            [],
+                            ...sourceLineIncremental(tokens[idx]),
+                            'language',
+                            'tex',
+                            'mode',
+                            'display',
+                            'srcdoc',
+                            tokens[idx].content,
+                        );
+                    };
+                };
+            }),
             {
                 inlineOpen: '$',
                 inlineClose: '$',
                 blockOpen: '$$',
                 blockClose: '$$',
-                inlineRenderer: (content, token) => {
-                    return `<cwe-math ${sourceLine(token)} language="tex" mode="inline" srcdoc="${escapeHtml(
-                        content,
-                    )}"></cwe-math>`;
-                },
-                blockRenderer: (content, token) => {
-                    return `<cwe-math ${sourceLine(token)} language="tex" mode="display" srcdoc="${escapeHtml(
-                        content,
-                    )}"></cwe-math>`;
-                },
             },
         ],
         [markdownItDeflist],
@@ -298,9 +342,8 @@ export default function (options) {
             },
         ],
         ...containers.map((v) => [markdownItContainer, ...v]),
-        [markdownItSourceMap],
-        [markdownItIncrementalDOM, incrementalDOM],
         [markdownCustomElementHighlight],
+        [markdownItIncrementalDOM, incrementalDOM],
     ];
     md = plugins.reduce((i, [plugin, ...options]) => {
         return i.use(loadPlugin(plugin), ...options);
