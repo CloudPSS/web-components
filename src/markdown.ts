@@ -72,30 +72,13 @@ export class MarkdownElement extends UpdatingElement {
             src = new URL(this.src ?? document.location.href, document.baseURI);
             const doc = this.srcdoc ?? '';
             const rendered = md.renderToIncrementalDOM(doc);
+            this.__frontMatter = fm;
             src = undefined;
-            const frontMatter = fm;
             fm = undefined;
 
             IncrementalDOM.patch(this.elArticle, rendered);
             postRender(this.elArticle);
-            const headers = Array.from(this.elArticle.children)
-                .filter((i): i is HTMLHeadingElement => i instanceof HTMLHeadingElement)
-                .map((h) => {
-                    return {
-                        id: h.id,
-                        title: h.innerText,
-                        level: Number.parseInt(h.tagName.slice(1)),
-                        element: h,
-                    };
-                });
-            this.dispatchEvent(
-                new CustomEvent('render', {
-                    detail: {
-                        frontMatter,
-                        headers,
-                    },
-                }),
-            );
+            this.dispatchEvent(new CustomEvent('render'));
         }
 
         if (changedProperties.has('docStyle') || changedProperties.size === 0) {
@@ -145,6 +128,49 @@ export class MarkdownElement extends UpdatingElement {
             }
             targetItem.scrollIntoView({ behavior: 'smooth' });
         }
+    }
+
+    /**
+     * 标题
+     */
+    get headers(): Array<{
+        id: string;
+        title: string;
+        level: number;
+        element: HTMLHeadingElement;
+    }> {
+        return Array.from(this.elArticle.children)
+            .filter((i): i is HTMLHeadingElement => i instanceof HTMLHeadingElement)
+            .map((h) => {
+                return {
+                    id: h.id,
+                    title: h.innerText,
+                    level: Number.parseInt(h.tagName.slice(1)),
+                    element: h,
+                };
+            });
+    }
+    /** frontMatter */
+    __frontMatter?: string;
+    /**
+     * frontMatter
+     */
+    get frontMatter(): string | undefined {
+        return this.__frontMatter;
+    }
+
+    /**
+     * 文本内容
+     */
+    get text(): string {
+        return this.elArticle.innerText;
+    }
+
+    /**
+     * HTML 内容
+     */
+    get html(): string {
+        return this.elArticle.outerHTML;
     }
 }
 
