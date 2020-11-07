@@ -1,7 +1,8 @@
 import katex from 'katex';
 import { escapeHtml } from 'markdown-it/lib/common/utils';
-import { css, customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
+import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { resolve, style as cfgStyle } from './config';
+import styles from './math.styles';
 
 /** asciimathToLatex */
 // let asciimathToLatex: (asciimath: string) => string;
@@ -29,30 +30,7 @@ function style(el: HTMLElement, inElement: boolean): void {
     el.appendChild(link);
     if (inElement) {
         const elStyle = document.createElement('style');
-        elStyle.textContent =
-            cfgStyle(el) +
-            '\n' +
-            css`
-                :host {
-                    display: inline;
-                    user-select: all;
-                    --cwe-math-error-color: red;
-                }
-                :host([mode='display']) {
-                    display: block;
-                    overflow: auto;
-                    margin: 0.8em 0;
-                }
-                #styles {
-                    display: none;
-                }
-                #content {
-                    display: contents;
-                }
-                .error {
-                    color: var(--cwe-math-error-color);
-                }
-            `.cssText;
+        elStyle.textContent = cfgStyle(el) + '\n' + styles.cssText;
         el.appendChild(elStyle);
     }
 }

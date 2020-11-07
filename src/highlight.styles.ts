@@ -12,6 +12,7 @@ export default css`
         border-radius: 4px;
         contain: content;
         --p-cwe-highlight-hint-color: var(--cwe-highlight-hint-color, #888);
+        --p-cwe-highlight-hint-font-family: var(--cwe-highlight-hint-font-family, system-ui, sans-serif);
     }
     pre {
         margin: 0;
@@ -25,11 +26,13 @@ export default css`
     :host::before,
     :host::after {
         font-size: 0.8em;
+        font-family: var(--p-cwe-highlight-hint-font-family);
+        color: var(--p-cwe-highlight-hint-color);
         position: absolute;
+        z-index: -1;
         margin: 0.5em;
         display: block;
         top: 0;
-        color: var(--p-cwe-highlight-hint-color);
     }
     :host([aria-label])::before {
         content: attr(aria-label);
@@ -39,6 +42,5 @@ export default css`
         content: attr(language);
         text-transform: uppercase;
         right: 0;
-        top: 0;
     }
 `;
