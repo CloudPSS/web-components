@@ -87,44 +87,58 @@ export default css`
         word-spacing: 0.05em;
         margin: 0.8em 0;
     }
-    code {
+    cwe-highlight {
+        border: solid 1px var(--p-cwe-markdown-pre-border-color);
+        background-color: var(--p-cwe-markdown-pre-background-color);
+    }
+    code,
+    kbd,
+    pre,
+    samp {
+        font-family: ${codeFont};
+        line-height: 1;
+    }
+    code,
+    kbd,
+    pre,
+    samp {
         display: inline-block;
-        padding: 0 0.1em;
+        padding: 0.2em;
         margin: 0 0.1em;
-        border: 0.05em solid;
-        border-radius: 0.1em;
+        font-size: 0.95em;
+        border-radius: 0.25em;
+    }
+    code {
         color: var(--p-cwe-markdown-code-color);
-        font-size: 0.9em;
+        border: 0.05em solid;
         border-color: var(--p-cwe-markdown-code-border-color);
         background-color: var(--p-cwe-markdown-code-background-color);
+    }
+    kbd {
+        box-shadow: 0 2px 2px 1px var(--p-cwe-markdown-code-border-color);
+        transition: box-shadow 0.2s, transform 0.2s;
+    }
+    kbd:hover {
+        box-shadow: 0 1px 2px 0px var(--p-cwe-markdown-code-border-color);
+        transform: translateY(1px);
     }
     @media print {
         dl,
         blockquote,
         details,
         [is='md-container'],
-        code {
+        code,
+        kbd,
+        pre,
+        samp {
             background-color: #fff !important;
             color: #000 !important;
         }
         [is='md-container']:before {
             display: none;
         }
-        .block-embed:before {
-            display: none !important;
-        }
         cwe-highlight {
             border: 0.05em solid var(--p-cwe-markdown-code-background-color);
-        }
-        audio,
-        canvas,
-        iframe,
-        img,
-        video {
-            display: none !important;
-        }
-        .block-embed-hint {
-            display: block !important ;
         }
     }
     [is='md-container'][class~='tip'] {
@@ -219,7 +233,7 @@ export default css`
     @media print {
         mark {
             background: none;
-            outline: solid 0.1em var(--p-cwe-markdown-mark-background-color);
+            outline: solid 2px var(--p-cwe-markdown-mark-background-color);
         }
     }
 
@@ -281,16 +295,36 @@ export default css`
         min-width: 4em;
     }
     .block-embed {
-        display: -webkit-box;
-        display: flex;
-        width: 100%;
-        max-width: 720px;
         margin: 1em auto;
-        page-break-inside: avoid;
     }
-    .block-embed > * {
-        -webkit-box-flex: 1;
-        flex: auto;
+    @media screen {
+        .block-embed {
+            display: -webkit-box;
+            display: flex;
+            width: 100%;
+            max-width: 720px;
+        }
+        .block-embed > * {
+            -webkit-box-flex: 1;
+            flex: auto;
+        }
+        .block-embed::before {
+            display: block;
+            padding-bottom: 60%;
+            content: '';
+        }
+    }
+    @media print {
+        .block-embed::before {
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='18' viewBox='0 0 18 18' width='18'%3E%3Cdefs%3E%3Cstyle%3E .a %7B fill: %236E6E6E; %7D %3C/style%3E%3C/defs%3E%3Ctitle%3ES VideoOutline 18 N%3C/title%3E%3Crect id='Canvas' fill='%23ff13dc' opacity='0' width='18' height='18' /%3E%3Cpath class='a' d='M15.5,2H2.5a.5.5,0,0,0-.5.5v13a.5.5,0,0,0,.5.5h13a.5.5,0,0,0,.5-.5V2.5A.5.5,0,0,0,15.5,2ZM5,14.75a.25.25,0,0,1-.25.25H3.25A.25.25,0,0,1,3,14.75v-1.5A.25.25,0,0,1,3.25,13h1.5a.25.25,0,0,1,.25.25Zm0-3.353a.25.25,0,0,1-.25.25H3.25a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25ZM5,8.103a.25.25,0,0,1-.25.25H3.25A.25.25,0,0,1,3,8.103v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25ZM5,4.75A.25.25,0,0,1,4.75,5H3.25A.25.25,0,0,1,3,4.75V3.25A.25.25,0,0,1,3.25,3h1.5A.25.25,0,0,1,5,3.25ZM12,15H6V10h6Zm0-7H6V3h6Zm3,6.75a.25.25,0,0,1-.25.25h-1.5a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25Zm0-3.353a.25.25,0,0,1-.25.25h-1.5a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25Zm0-3.294a.25.25,0,0,1-.25.25h-1.5a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25ZM15,4.75a.25.25,0,0,1-.25.25h-1.5A.25.25,0,0,1,13,4.75V3.25A.25.25,0,0,1,13.25,3h1.5a.25.25,0,0,1,.25.25Z' /%3E%3C/svg%3E")
+                no-repeat 0% 50% / contain;
+            content: attr(data-src);
+            text-decoration: underline;
+            padding-left: 1.5em;
+        }
+        .block-embed > * {
+            display: none !important;
+        }
     }
     audio,
     canvas,
@@ -300,57 +334,9 @@ export default css`
     video {
         vertical-align: middle;
     }
-    .block-embed-hint {
-        display: none;
-    }
     iframe,
     img {
         border-style: none;
-    }
-    .block-embed:before {
-        display: block;
-        padding-bottom: 60%;
-        content: '';
-    }
-    pre {
-        padding: 1em 0.5em;
-        margin: 1.2em 0;
-        border-radius: 4px;
-        position: relative;
-        font-size: 1em;
-        overflow: auto;
-        contain: content;
-        border: solid 1px var(--p-cwe-markdown-pre-border-color);
-        background-color: var(--p-cwe-markdown-pre-background-color);
-    }
-    pre > code {
-        display: inline;
-        border: none;
-        padding: 0;
-        margin: 0;
-        color: inherit;
-        font-size: 1em;
-        background: none;
-    }
-    cwe-highlight {
-        border: solid 1px var(--p-cwe-markdown-pre-border-color);
-        background-color: var(--p-cwe-markdown-pre-background-color);
-    }
-    code,
-    kbd,
-    pre,
-    samp {
-        font-family: ${codeFont};
-    }
-    pre:before {
-        font-size: 0.8em;
-        position: -webkit-sticky;
-        position: sticky;
-        display: block;
-        left: 0;
-        height: 0;
-        -webkit-transform: translateY(-2em);
-        transform: translateY(-2em);
     }
     figure {
         margin: 1em auto 0.75em;

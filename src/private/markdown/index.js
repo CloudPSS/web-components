@@ -2,11 +2,7 @@ import markdownIt from 'markdown-it';
 import { escapeHtml } from 'markdown-it/lib/common/utils';
 import VideoServiceBase from 'markdown-it-block-embed/lib/services/VideoServiceBase';
 import { extend, loadPlugin, slugify, sourceLine } from './utils';
-import './post-render';
 
-import '../../chart';
-import '../../mermaid';
-import '../../highlight';
 import '../../math';
 
 import * as markdownItEmoji from 'markdown-it-emoji';
@@ -28,32 +24,19 @@ import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
 import * as markdownItBlockEmbed from 'markdown-it-block-embed';
 import * as markdownItContainer from 'markdown-it-container';
 import * as markdownItSourceMap from 'markdown-it-source-map';
-
-/**
- *
- */
-function loadCustomHighlights() {
-    return (string, lang, attr) => {
-        const code = escapeHtml(string);
-        attr = (attr ?? '').trim();
-        const htmlAttr = attr ? `id="${escapeHtml(slugify(attr))}" aria-label="${escapeHtml(attr)}"` : '';
-        switch (lang) {
-            case 'mermaid':
-                return `<pre remove-it><cwe-mermaid config="${code}" ${htmlAttr}></cwe-mermaid></pre>`;
-            case 'chart':
-                return `<pre remove-it><cwe-chart ${htmlAttr} config="${code}"></cwe-chart></pre>`;
-            default: {
-                const langAttr = lang ? `language="${escapeHtml(lang)}"` : '';
-                return `<pre remove-it><cwe-highlight ${htmlAttr} ${langAttr} srcdoc="${code}"></cwe-highlight></pre>`;
-            }
-        }
-    };
-}
+import * as incrementalDOM from 'incremental-dom';
+import * as markdownItIncrementalDOM from 'markdown-it-incremental-dom';
+import { markdownCustomElementHighlight } from './custom-element-highlight';
 
 /**
  * @param {markdownIt.Options & {frontMatter: (fm:string)=>void}} options
  *
- * @returns {markdownIt.MarkdownItExt}
+ * @returns { markdownIt & {
+ *     renderToIncrementalDOM(src: string, env?: unknown): (a: unknown) => void;
+ *     renderInlineToIncrementalDOM(src: string, env?: unknown): (a: unknown) => void;
+ *     IncrementalDOMRenderer: markdownIt['renderer'];
+ *   }
+ * }
  */
 export default function (options) {
     options = Object.assign(
@@ -64,9 +47,6 @@ export default function (options) {
         },
         options,
     );
-    if (options.highlight == null && customElements) {
-        options.highlight = loadCustomHighlights();
-    }
     let md = markdownIt(options);
 
     /** @type {Array<[string, {
@@ -318,7 +298,15 @@ export default function (options) {
             },
         ],
         ...containers.map((v) => [markdownItContainer, ...v]),
+        [markdownCustomElementHighlight],
         [markdownItSourceMap],
+        [
+            markdownItIncrementalDOM,
+            incrementalDOM,
+            {
+                incrementalizeDefaultRules: false,
+            },
+        ],
     ];
     md = plugins.reduce((i, [plugin, ...options]) => {
         return i.use(loadPlugin(plugin), ...options);

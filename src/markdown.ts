@@ -2,6 +2,8 @@ import { customElement, property, PropertyValues, UpdatingElement } from 'lit-el
 import markdownIt from './private/markdown';
 import styles from './markdown.styles';
 import { style } from './config';
+import * as IncrementalDOM from 'incremental-dom';
+import { postRender } from './private/markdown/post-render';
 
 let fm: string | undefined;
 let src: URL | undefined;
@@ -20,7 +22,6 @@ md.normalizeLink = (url: string): string => {
     return normalizeLink(u.href);
 };
 md.validateLink = () => true;
-
 /**
  * Markdown 组件
  *
@@ -70,13 +71,13 @@ export class MarkdownElement extends UpdatingElement {
         if (changedProperties.has('srcdoc') || changedProperties.has('src') || changedProperties.size === 0) {
             src = new URL(this.src ?? document.location.href, document.baseURI);
             const doc = this.srcdoc ?? '';
-            const rendered = md.renderFragment(doc);
+            const rendered = md.renderToIncrementalDOM(doc);
             src = undefined;
             const frontMatter = fm;
             fm = undefined;
 
-            this.elArticle.innerHTML = '';
-            this.elArticle.appendChild(rendered.content);
+            IncrementalDOM.patch(this.elArticle, rendered);
+            postRender(this.elArticle);
             const headers = Array.from(this.elArticle.children)
                 .filter((i): i is HTMLHeadingElement => i instanceof HTMLHeadingElement)
                 .map((h) => {

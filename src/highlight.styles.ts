@@ -17,11 +17,15 @@ export default css`
     pre {
         margin: 0;
         overflow: auto;
-        padding: 2em 0.5em 1em;
+        padding: 1em 0.5em;
     }
     pre,
     code {
         font-family: inherit;
+    }
+    :host([aria-label]) pre,
+    :host([language]) pre {
+        padding-top: 2em;
     }
     :host::before,
     :host::after {
