@@ -19,7 +19,7 @@ import * as markdownItKbd from 'markdown-it-kbd';
 import * as markdownItAnchor from 'markdown-it-anchor';
 import * as markdownItFrontMatter from 'markdown-it-front-matter';
 import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
-import * as markdownItBlockEmbed from './block-embed';
+import * as markdownItEmbedMedia from './embed-media';
 import * as markdownItContainer from 'markdown-it-container';
 import * as incrementalDOM from 'incremental-dom';
 import * as markdownItIncrementalDOM from './incremental-dom';
@@ -283,12 +283,7 @@ export default function (options) {
         ],
         [markdownItFrontMatter, options.frontMatter],
         [markdownItImplicitFigures, { figcaption: true }],
-        [
-            markdownItBlockEmbed,
-            {
-                outputPlayerSize: false,
-            },
-        ],
+        [markdownItEmbedMedia],
         ...containers.map((v) => [markdownItContainer, ...v]),
         [markdownCustomElementHighlight],
         [markdownItIncrementalDOM, incrementalDOM],

@@ -20,6 +20,12 @@ export default css`
         line-height: 1.6;
         display: block;
     }
+    @media print {
+        :host {
+            background: white;
+            color: black;
+        }
+    }
     img {
         max-width: 100%;
     }
@@ -297,37 +303,8 @@ export default css`
     table th {
         min-width: 4em;
     }
-    .block-embed {
+    cwe-embed-media {
         margin: 1em auto;
-    }
-    @media screen {
-        .block-embed {
-            display: -webkit-box;
-            display: flex;
-            width: 100%;
-            max-width: 720px;
-        }
-        .block-embed > * {
-            -webkit-box-flex: 1;
-            flex: auto;
-        }
-        .block-embed::before {
-            display: block;
-            padding-bottom: 60%;
-            content: '';
-        }
-    }
-    @media print {
-        .block-embed::before {
-            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='18' viewBox='0 0 18 18' width='18'%3E%3Cdefs%3E%3Cstyle%3E .a %7B fill: %236E6E6E; %7D %3C/style%3E%3C/defs%3E%3Ctitle%3ES VideoOutline 18 N%3C/title%3E%3Crect id='Canvas' fill='%23ff13dc' opacity='0' width='18' height='18' /%3E%3Cpath class='a' d='M15.5,2H2.5a.5.5,0,0,0-.5.5v13a.5.5,0,0,0,.5.5h13a.5.5,0,0,0,.5-.5V2.5A.5.5,0,0,0,15.5,2ZM5,14.75a.25.25,0,0,1-.25.25H3.25A.25.25,0,0,1,3,14.75v-1.5A.25.25,0,0,1,3.25,13h1.5a.25.25,0,0,1,.25.25Zm0-3.353a.25.25,0,0,1-.25.25H3.25a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25ZM5,8.103a.25.25,0,0,1-.25.25H3.25A.25.25,0,0,1,3,8.103v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25ZM5,4.75A.25.25,0,0,1,4.75,5H3.25A.25.25,0,0,1,3,4.75V3.25A.25.25,0,0,1,3.25,3h1.5A.25.25,0,0,1,5,3.25ZM12,15H6V10h6Zm0-7H6V3h6Zm3,6.75a.25.25,0,0,1-.25.25h-1.5a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25Zm0-3.353a.25.25,0,0,1-.25.25h-1.5a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25Zm0-3.294a.25.25,0,0,1-.25.25h-1.5a.25.25,0,0,1-.25-.25v-1.5a.25.25,0,0,1,.25-.25h1.5a.25.25,0,0,1,.25.25ZM15,4.75a.25.25,0,0,1-.25.25h-1.5A.25.25,0,0,1,13,4.75V3.25A.25.25,0,0,1,13.25,3h1.5a.25.25,0,0,1,.25.25Z' /%3E%3C/svg%3E")
-                no-repeat 0% 50% / contain;
-            content: attr(data-src);
-            text-decoration: underline;
-            padding-left: 1.5em;
-        }
-        .block-embed > * {
-            display: none !important;
-        }
     }
     audio,
     canvas,

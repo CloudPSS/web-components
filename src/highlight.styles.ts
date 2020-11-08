@@ -16,8 +16,14 @@ export default css`
     }
     pre {
         margin: 0;
+        white-space: pre;
         overflow: auto;
         padding: 1em 0.5em;
+    }
+    @media print {
+        pre {
+            white-space: pre-wrap;
+        }
     }
     pre,
     code {

@@ -3,17 +3,14 @@
 
 'use strict';
 
-import PluginEnvironment from './PluginEnvironment';
 import renderer from './renderer';
 import tokenizer from './tokenizer';
 
-function setup(md, options) {
-    let env = new PluginEnvironment(md, options);
-
-    md.block.ruler.before('fence', 'video', tokenizer.bind(env), {
+function setup(md) {
+    md.block.ruler.before('fence', 'video', tokenizer, {
         alt: ['paragraph', 'reference', 'blockquote', 'list'],
     });
-    md.renderer.rules['video'] = renderer.bind(env);
+    md.renderer.rules['video'] = renderer;
 }
 
 export default setup;

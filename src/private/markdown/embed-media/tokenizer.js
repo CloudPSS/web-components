@@ -3,6 +3,8 @@
 
 'use strict';
 
+import { EmbedMediaElement } from '../../../embed-media';
+
 const SYNTAX_CHARS = '@[]()'.split('');
 const SYNTAX_CODES = SYNTAX_CHARS.map((char) => char.charCodeAt(0));
 
@@ -27,6 +29,9 @@ function advanceToSymbol(state, endLine, symbol, pointer) {
     return true;
 }
 
+/**
+ * @type {import('markdown-it/lib/parser_block').RuleBlock}
+ */
 function tokenizer(state, startLine, endLine, silent) {
     let startPos = state.bMarks[startLine] + state.tShift[startLine];
     let maxPos = state.eMarks[startLine];
@@ -56,8 +61,7 @@ function tokenizer(state, startLine, endLine, silent) {
     ++pointer.pos;
 
     // Lookup service; if unknown, then this is not a known embed!
-    let service = this.services[serviceName];
-    if (!service) return false;
+    if (!(serviceName in EmbedMediaElement.services)) return false;
 
     // Read embed reference from within parenthesis.
     if (SYNTAX_CODES[3] !== state.src.charCodeAt(pointer.pos++)) return false;
@@ -85,12 +89,7 @@ function tokenizer(state, startLine, endLine, silent) {
         let token = state.push('video', 'div', 0);
         token.markup = state.src.slice(startPos, pointer.pos);
         token.block = true;
-        token.info = {
-            serviceName: serviceName,
-            service: service,
-            videoReference: videoReference,
-            videoID: service.extractVideoID(videoReference),
-        };
+        token.info = `${serviceName}\0${videoReference}`;
         token.map = [startLine, pointer.line + 1];
 
         state.line = pointer.line + 1;
