@@ -84,14 +84,32 @@ export class EmbedMediaElement extends LitElement {
             const service = EmbedMediaElement.services[this.service];
             if (service) {
                 this.srcid = service.extractVideoID(this.srcid);
-                this.__src = new URL(service.getVideoUrl(this.srcid), this.baseURI).href;
-                this.setAttribute('src', this.__src);
-                return this.load ? service.getEmbedCode(this.srcid) : html``;
+                return this.load
+                    ? this.renderTemplate(
+                          new URL(service.getVideoUrl(this.srcid), this.baseURI).href,
+                          service.getEmbedCode(this.srcid),
+                      )
+                    : this.renderTemplate();
             }
         }
-        this.__src = undefined;
-        this.removeAttribute('src');
-        return html``;
+        return this.renderTemplate();
+    }
+
+    /**
+     * 骨架
+     */
+    private renderTemplate(src?: string, data?: unknown): TemplateResult {
+        this.__src = src ? src : undefined;
+        if (src) {
+            this.setAttribute('src', src);
+            this.__src = src;
+        } else {
+            this.removeAttribute('src');
+            this.__src = undefined;
+            src = '';
+        }
+        return html`<div id="container" aria-labelledby="info">${data}</div>
+            <div id="info">${src}</div>`;
     }
 
     /** 注册的服务 */
