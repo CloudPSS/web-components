@@ -5,12 +5,12 @@ export default css`
     :host {
         display: block;
         position: relative;
-        font-family: ${codeFont};
         font-size: 1em;
         line-height: 1.5;
         margin: 1.2em 0;
         border-radius: 4px;
         contain: content;
+        font-family: var(--cwe-highlight-font-family, ${codeFont});
         --p-cwe-highlight-hint-color: var(--cwe-highlight-hint-color, #888);
         --p-cwe-highlight-hint-font-family: var(--cwe-highlight-hint-font-family, system-ui, sans-serif);
     }

@@ -16,6 +16,9 @@ export default css`
     #container > * {
         flex: auto;
     }
+    iframe {
+        border: none;
+    }
     #info {
         text-indent: -2em;
         padding-left: 2em;

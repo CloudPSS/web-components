@@ -78,7 +78,10 @@ export default function (
 
     const wrapIncrementalDOM = (html: string | (() => void)) => {
         if (typeof html === 'function') return html();
-        if (typeof html === 'string') return iDOMParser.write(html);
+        if (typeof html === 'string') {
+            if (!html) return;
+            return iDOMParser.write(html);
+        }
         throw new Error('Invalid html, neither string or render function');
     };
 

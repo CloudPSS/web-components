@@ -21,6 +21,7 @@ export default class VideoServiceBase<T extends object = object> {
 
         return html`<iframe
             frameborder="0"
+            msallowfullscreen
             webkitallowfullscreen
             mozallowfullscreen
             allowfullscreen

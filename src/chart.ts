@@ -1,60 +1,79 @@
-import { Subscription } from 'rxjs';
-import { resizing } from './private/utils';
-import { customElement, UpdatingElement, property, PropertyValues } from 'lit-element';
+import {
+    customElement,
+    property,
+    PropertyValues,
+    LitElement,
+    query,
+    CSSResultArray,
+    css,
+    TemplateResult,
+    html,
+} from 'lit-element';
+import { nothing } from 'lit-html';
 import ChartJs from 'chart.js';
+import { style } from './config';
 
 /**
  * chartJs 组件
  */
 @customElement('cwe-chart')
-export class ChartElement extends UpdatingElement {
+export class ChartElement extends LitElement {
+    /**
+     * @inheritdoc
+     */
+    static get styles(): CSSResultArray {
+        return [
+            css`
+                :host {
+                    display: block;
+                    margin: 1em 0;
+                }
+                canvas {
+                    max-width: 800px;
+                    width: 100%;
+                    height: auto;
+                    margin: auto;
+                }
+            `,
+        ];
+    }
     constructor() {
         super();
-        this.renderRoot = this.attachShadow({ mode: 'open' });
     }
     /** 渲染元素 */
-    private readonly renderRoot: ShadowRoot | this;
-    /** 渲染 */
-    private rerender?: Subscription;
+    @query('canvas') private readonly elCanvas!: HTMLCanvasElement;
     /** 图表配置 */
     @property({ reflect: true, type: Object }) config?: ChartJs.ChartConfiguration;
     /**
      * @inheritdoc
      */
-    update(changedProperties: PropertyValues): void {
-        super.update(changedProperties);
-        this.renderRoot.innerHTML = '';
-        this.rerender?.unsubscribe();
-        this.rerender = undefined;
+    render(): TemplateResult {
+        const customStyle = style(this);
+        return html`<div id="container">
+                <canvas></canvas>
+            </div>
+            ${customStyle
+                ? html`<style>
+                      ${customStyle}
+                  </style>`
+                : nothing}`;
+    }
+    /**
+     * @inheritdoc
+     */
+    updated(changedProperties: PropertyValues): void {
+        super.updated(changedProperties);
+        const canvas = this.elCanvas;
         try {
             const config: ChartJs.ChartConfiguration = { ...this.config };
-            config.options = { ...config.options, responsive: false };
-            this.style.display = 'block';
-            const canvas = document.createElement('canvas');
+            config.options = { ...config.options };
             this.renderRoot.appendChild(canvas);
-            canvas.style.maxWidth = '800px';
-            const chart = new ChartJs(canvas, config);
-            const render = (): void => {
-                canvas.style.width = '100%';
-                canvas.style.height = '';
-                chart.resize();
-                canvas.style.width = '100%';
-                canvas.style.height = '';
-            };
-            render();
-            this.rerender = resizing(this).subscribe(render);
+            new ChartJs(canvas, config);
         } catch (ex) {
             const p = document.createElement('p');
             p.innerText = String(ex);
             this.renderRoot.appendChild(p);
         }
-    }
-    /**
-     * @inheritdoc
-     */
-    disconnectedCallback(): void {
-        this.rerender?.unsubscribe();
-        this.rerender = undefined;
     }
 }
 
