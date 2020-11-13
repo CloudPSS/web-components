@@ -27,9 +27,9 @@ const tSub = theme.pipe(
 /**
  * 元素大小变化
  */
-const resizeStart: Observable<void> = fromEvent(window, 'resize').pipe(throttleTime(100), mapTo(undefined), share());
-const resizeAction = resizeStart.pipe(delay(200));
-const resizeEnd = resizeStart.pipe(delay(300));
+const resizeStart: Observable<void> = fromEvent(window, 'resize').pipe(mapTo(undefined), share());
+const resizeAction = resizeStart.pipe(throttleTime(300, undefined, { leading: true, trailing: true }));
+const resizeEnd = resizeAction.pipe(delay(200));
 
 /**
  * mermaid 流程图组件
@@ -103,11 +103,21 @@ export class MermaidElement extends LitElement {
         this.subs[0]?.unsubscribe();
         const render = (): void => {
             const theme = this.theme ?? t;
+            const container = document.createElement('div');
+            container.style.width = `${this.clientWidth}px`;
+            container.id = `mermaid_${Math.floor(Math.random() * 10000000000)}`;
+            document.body.append(container);
             mermaid.initialize({ theme });
-            mermaid.render(`mermaid_${Math.floor(Math.random() * 10000000000)}`, this.config ?? '', (svg, func) => {
-                this.elContainer.innerHTML = svg;
-                func?.(this.renderRoot as Element);
-            });
+            mermaid.render(
+                `mermaid_${Math.floor(Math.random() * 10000000000)}`,
+                this.config ?? '',
+                (svg, func) => {
+                    this.elContainer.innerHTML = svg;
+                    func?.(this.elContainer);
+                    container.remove();
+                },
+                (container as unknown) as string,
+            );
         };
         this.subs[0] = merge(resizeAction, tSub).subscribe(render);
         render();
