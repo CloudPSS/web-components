@@ -15,7 +15,6 @@ import * as markdownItMark from 'markdown-it-mark';
 import * as markdownItImsize from './imsize';
 import * as markdownItMultimdTable from 'markdown-it-multimd-table';
 import * as markdownItCenterText from 'markdown-it-center-text';
-import * as markdownItKbd from 'markdown-it-kbd';
 import * as markdownItAnchor from 'markdown-it-anchor';
 import * as markdownItFrontMatter from 'markdown-it-front-matter';
 import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
@@ -269,7 +268,6 @@ export default function (options) {
             },
         ],
         [markdownItCenterText],
-        [markdownItKbd],
         [
             markdownItAnchor,
             {

@@ -46,6 +46,7 @@ export class MermaidElement extends LitElement {
                     display: block;
                     margin: 1em 0;
                     overflow: auto;
+                    white-space: pre-line;
                 }
                 :host(.resizing) {
                     overflow: hidden;
@@ -55,6 +56,7 @@ export class MermaidElement extends LitElement {
                     height: auto;
                     display: block;
                     margin: auto;
+                    white-space: initial;
                 }
             `,
         ];
@@ -102,12 +104,22 @@ export class MermaidElement extends LitElement {
         super.updated(changedProperties);
         this.subs[0]?.unsubscribe();
         const render = (): void => {
+            const config = this.config ?? '';
             const theme = this.theme ?? t;
+            mermaid.initialize({ theme });
+            try {
+                this.elContainer.classList.remove('error');
+                mermaid.parse(config);
+            } catch (ex) {
+                const e = ex as Error & { str: string };
+                this.elContainer.textContent = e.str || e.message || String(e);
+                this.elContainer.classList.add('error');
+                return;
+            }
             const container = document.createElement('div');
             container.style.width = `${this.clientWidth}px`;
-            container.id = `mermaid_${Math.floor(Math.random() * 10000000000)}`;
+            container.id = `mermaid_temp_${Math.floor(Math.random() * 10000000000)}`;
             document.body.append(container);
-            mermaid.initialize({ theme });
             mermaid.render(
                 `mermaid_${Math.floor(Math.random() * 10000000000)}`,
                 this.config ?? '',
@@ -119,7 +131,7 @@ export class MermaidElement extends LitElement {
                 (container as unknown) as string,
             );
         };
-        this.subs[0] = merge(resizeAction, tSub).subscribe(render);
+        this.subs[0] = merge(resizeAction, tSub).subscribe(() => requestAnimationFrame(render));
         render();
     }
     /**

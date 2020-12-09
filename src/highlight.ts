@@ -167,8 +167,11 @@ export class HighlightElement extends UpdatingElement {
      * @inheritdoc
      */
     async performUpdate(): Promise<unknown> {
-        this.elCode.textContent = this.srcdoc ?? '';
+        const l = setTimeout(() => {
+            this.elCode.textContent = this.srcdoc ?? '';
+        }, 50);
         await init();
+        clearTimeout(l);
         return super.performUpdate();
     }
 
@@ -177,35 +180,39 @@ export class HighlightElement extends UpdatingElement {
      */
     update(changedProperties: PropertyValues): void {
         super.update(changedProperties);
-        let lang = this.language ?? '';
-        lang = lang.toLowerCase();
-        if (lang in languageNameReplacement) {
-            lang = languageNameReplacement[lang];
-        }
-        if (lang) this.language = lang;
-        const code = this.srcdoc ?? '';
-        const style = this.prismStyle;
-        if (style) {
-            void loadPrismStyle(this.elStyle, style);
-        }
-        if (lang) {
-            this.elCode.setAttribute('language', lang);
-            const Prism = window.Prism;
-            const highlighter = Prism.languages[lang];
-            if (highlighter) {
-                this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
-            } else {
-                this.elCode.textContent = code;
-                const autoloader = Prism.plugins.autoloader as {
-                    loadLanguages: (name: string, callback: () => void) => void;
-                };
-                autoloader.loadLanguages(lang, () => {
-                    this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
-                });
+        if (changedProperties.has('prismStyle')) {
+            const style = this.prismStyle;
+            if (style) {
+                void loadPrismStyle(this.elStyle, style);
             }
-        } else {
-            this.elCode.removeAttribute('language');
-            this.elCode.textContent = code;
+        }
+        if (changedProperties.has('language') || changedProperties.has('srcdoc')) {
+            let lang = this.language ?? '';
+            lang = lang.toLowerCase();
+            if (lang in languageNameReplacement) {
+                lang = languageNameReplacement[lang];
+            }
+            if (lang) this.language = lang;
+            const code = this.srcdoc ?? '';
+            if (lang) {
+                this.elCode.setAttribute('language', lang);
+                const Prism = window.Prism;
+                const highlighter = Prism.languages[lang];
+                if (highlighter) {
+                    this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
+                } else {
+                    this.elCode.textContent = code;
+                    const autoloader = Prism.plugins.autoloader as {
+                        loadLanguages: (name: string, callback: () => void) => void;
+                    };
+                    autoloader.loadLanguages(lang, () => {
+                        this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
+                    });
+                }
+            } else {
+                this.elCode.removeAttribute('language');
+                this.elCode.textContent = code;
+            }
         }
     }
 }

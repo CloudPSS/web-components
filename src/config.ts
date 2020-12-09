@@ -1,7 +1,7 @@
 import { BehaviorSubject } from 'rxjs';
 
-let _styler: (el: HTMLElement) => string;
-let _resolver: (pkg: string, version: string, file: string) => string;
+let _styler: ((el: HTMLElement) => string) | undefined;
+let _resolver: ((pkg: string, version: string, file: string) => string) | undefined;
 
 /**
  * 解析包地址
@@ -21,13 +21,13 @@ export function style(el: HTMLElement): string {
 /**
  * 设置包解析
  */
-export function setResolver(resolver: (pkg: string, version: string, file: string) => string): void {
+export function setResolver(resolver?: (pkg: string, version: string, file: string) => string): void {
     _resolver = resolver;
 }
 /**
  * 设置样式
  */
-export function setStyler(styler: (el: HTMLElement) => string): void {
+export function setStyler(styler?: (el: HTMLElement) => string): void {
     _styler = styler;
 }
 

@@ -42,8 +42,12 @@ export class ChartElement extends LitElement {
     }
     /** 渲染元素 */
     @query('canvas') private readonly elCanvas!: HTMLCanvasElement;
+    /** 渲染元素 */
+    @query('#error') private readonly elError!: HTMLParagraphElement;
     /** 图表配置 */
     @property({ reflect: true, type: Object }) config?: ChartJs.ChartConfiguration;
+    /** 表格 */
+    private __chart?: ChartJs;
     /**
      * @inheritdoc
      */
@@ -51,6 +55,7 @@ export class ChartElement extends LitElement {
         const customStyle = style(this);
         return html`<div id="container">
                 <canvas></canvas>
+                <p id="error"></p>
             </div>
             ${customStyle
                 ? html`<style>
@@ -58,22 +63,47 @@ export class ChartElement extends LitElement {
                   </style>`
                 : nothing}`;
     }
+
+    /**
+     * 创建图表
+     */
+    private createChart(): void {
+        const canvas = this.elCanvas;
+        if (!canvas) return;
+        try {
+            this.elError.textContent = null;
+            const config: ChartJs.ChartConfiguration = { ...this.config };
+            config.options = { ...config.options };
+            this.__chart?.destroy();
+            this.__chart = new ChartJs(canvas, config);
+        } catch (ex) {
+            this.elError.textContent = String(ex);
+        }
+    }
+
     /**
      * @inheritdoc
      */
     updated(changedProperties: PropertyValues): void {
         super.updated(changedProperties);
-        const canvas = this.elCanvas;
-        try {
-            const config: ChartJs.ChartConfiguration = { ...this.config };
-            config.options = { ...config.options };
-            this.renderRoot.appendChild(canvas);
-            new ChartJs(canvas, config);
-        } catch (ex) {
-            const p = document.createElement('p');
-            p.innerText = String(ex);
-            this.renderRoot.appendChild(p);
-        }
+        this.createChart();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    connectedCallback(): void {
+        super.connectedCallback();
+        this.createChart();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+        this.__chart?.destroy();
+        delete this.__chart;
     }
 }
 
