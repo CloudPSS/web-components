@@ -119,7 +119,7 @@ export default css`
     }
     code {
         color: var(--p-cwe-markdown-code-color);
-        border: 0.05em solid;
+        border: 0.5px solid;
         border-color: var(--p-cwe-markdown-code-border-color);
         background-color: var(--p-cwe-markdown-code-background-color);
     }
@@ -147,42 +147,49 @@ export default css`
             display: none;
         }
         cwe-highlight {
-            border: 0.05em solid var(--p-cwe-markdown-code-background-color);
+            border: 1px solid var(--p-cwe-markdown-code-background-color);
         }
+    }
+    blockquote,
+    dl,
+    details {
+        background: none;
+        border: 0.5px solid var(--p-cwe-markdown-blockquote-theme-color);
+        border-left: 4px solid var(--p-cwe-markdown-blockquote-theme-color);
     }
     [is='md-container'][class~='tip'] {
         background-color: rgba(140, 158, 255, 0.05);
-        border: 0.02px solid rgba(83, 109, 254, 0.2);
+        border: 0.5px solid rgba(83, 109, 254, 0.2);
         border-left: 4px solid #5c6bc0;
     }
     [is='md-container'][class~='info'] {
         background-color: rgba(130, 177, 255, 0.05);
-        border: 0.02px solid rgba(68, 138, 255, 0.2);
+        border: 0.5px solid rgba(68, 138, 255, 0.2);
         border-left: 4px solid #42a5f5;
     }
     [is='md-container'][class~='question'] {
         background-color: rgba(255, 229, 127, 0.05);
-        border: 0.02px solid rgba(255, 215, 64, 0.2);
+        border: 0.5px solid rgba(255, 215, 64, 0.2);
         border-left: 4px solid #ffca28;
     }
     [is='md-container'][class~='success'] {
         background-color: rgba(204, 255, 144, 0.05);
-        border: 0.02px solid rgba(178, 255, 89, 0.2);
+        border: 0.5px solid rgba(178, 255, 89, 0.2);
         border-left: 4px solid #9ccc65;
     }
     [is='md-container'][class~='fail'] {
         background-color: rgba(255, 138, 128, 0.05);
-        border: 0.02px solid rgba(255, 82, 82, 0.2);
+        border: 0.5px solid rgba(255, 82, 82, 0.2);
         border-left: 4px solid #ef5350;
     }
     [is='md-container'][class~='warning'] {
         background-color: rgba(255, 209, 128, 0.05);
-        border: 0.02px solid rgba(255, 171, 64, 0.2);
+        border: 0.5px solid rgba(255, 171, 64, 0.2);
         border-left: 4px solid #ffa726;
     }
     [is='md-container'][class~='error'] {
         background-color: rgba(255, 138, 128, 0.05);
-        border: 0.02px solid rgba(255, 82, 82, 0.2);
+        border: 0.5px solid rgba(255, 82, 82, 0.2);
         border-left: 4px solid #ef5350;
     }
     [is='md-container'][class~='info']:before {
@@ -260,13 +267,6 @@ export default css`
         padding: 0 0.8em 0 1.2em;
         page-break-inside: avoid;
         min-height: 1em;
-    }
-    blockquote,
-    dl,
-    details {
-        border: 0.02em solid var(--p-cwe-markdown-blockquote-theme-color);
-        border-left: 0.25em solid var(--p-cwe-markdown-blockquote-theme-color);
-        background: none;
     }
     @media screen {
         blockquote::before,
