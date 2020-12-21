@@ -1,6 +1,6 @@
 {
   "name": "@cloudpss/web-components",
-  "version": "0.0.32",
+  "version": "0.0.33",
   "main": "index.js",
   "license": "MIT",
   "author": {
@@ -10,6 +10,10 @@
   "homepage": "https://github.com/CloudPSS/web-components",
   "bugs": {
     "url": "https://github.com/CloudPSS/web-components/issues"
+  },
+  "repository": {
+    "type": "GIT",
+    "url": "https://github.com/CloudPSS/web-components.git"
   },
   "scripts": {
     "start": "snowpack dev",
