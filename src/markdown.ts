@@ -62,16 +62,25 @@ export class MarkdownElement extends UpdatingElement {
     @property({ reflect: true }) srcdoc?: string;
     /** 附加样式 */
     @property({ reflect: true }) docStyle?: string;
+    /** 附加样式 */
+    @property({ reflect: true }) mode?: 'inline' | 'block';
     /**
      * @inheritdoc
      */
     update(changedProperties: PropertyValues): void {
         super.update(changedProperties);
 
-        if (changedProperties.has('srcdoc') || changedProperties.has('src') || changedProperties.size === 0) {
+        if (
+            changedProperties.has('srcdoc') ||
+            changedProperties.has('src') ||
+            changedProperties.has('mode') ||
+            changedProperties.size === 0
+        ) {
             src = new URL(this.src ?? document.location.href, document.baseURI);
             const doc = this.srcdoc ?? '';
-            const rendered = md.renderToIncrementalDOM(doc);
+            const rendered = md[this.mode === 'inline' ? 'renderInlineToIncrementalDOM' : 'renderToIncrementalDOM'](
+                doc,
+            );
             this.__frontMatter = fm;
             src = undefined;
             fm = undefined;

@@ -3,6 +3,17 @@ import { codeFont } from './fonts';
 
 export default css`
     :host {
+        line-height: 1.6;
+        display: block;
+    }
+
+    :host([mode='inline']) {
+        display: inline;
+    }
+
+    :host > article {
+        display: contents;
+
         --p-cwe-markdown-link-color: var(--cwe-markdown-link-color, #3a479b);
         --p-cwe-markdown-link-hover-color: var(--cwe-markdown-link-hover-color, #606794);
         --p-cwe-markdown-link-active-color: var(--cwe-markdown-link-active-color, #37438d);
@@ -17,9 +28,8 @@ export default css`
         --p-cwe-markdown-table-header-background-color: var(--cwe-markdown-table-header-background-color, #eee);
         --p-cwe-markdown-table-border-color: var(--cwe-markdown-table-border-color, #c8c8c8);
         --p-cwe-markdown-divider-color: var(--cwe-markdown-divider-color, #888888);
-        line-height: 1.6;
-        display: block;
     }
+
     @media print {
         :host {
             background: white;
@@ -337,7 +347,7 @@ export default css`
         text-align: center;
         margin: 0.3em auto;
         font-weight: bolder;
-        font-size: 0.8rem;
+        font-size: 0.8em;
     }
     .text-align-center {
         text-align: center;

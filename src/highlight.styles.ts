@@ -11,14 +11,15 @@ export default css`
         border-radius: 4px;
         contain: content;
         font-family: var(--cwe-highlight-font-family, ${codeFont});
-        --p-cwe-highlight-hint-color: var(--cwe-highlight-hint-color, #888);
-        --p-cwe-highlight-hint-font-family: var(--cwe-highlight-hint-font-family, system-ui, sans-serif);
     }
     pre {
         margin: 0;
         white-space: pre;
         overflow: auto;
         padding: 1em 0.5em;
+
+        --p-cwe-highlight-hint-color: var(--cwe-highlight-hint-color, #888);
+        --p-cwe-highlight-hint-font-family: var(--cwe-highlight-hint-font-family, system-ui, sans-serif);
     }
     @media print {
         pre {
