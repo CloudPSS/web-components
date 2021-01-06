@@ -89,8 +89,10 @@ function init(): Promise<void> {
         if ('Prism' in window && 'autoloader' in window.Prism.plugins) return;
         const script = document.createElement('script');
         script.src = resolvePrism('components/prism-core.min.js');
+        script.crossOrigin = 'anonymous';
         const plugins = document.createElement('script');
         plugins.src = resolvePrism('plugins/autoloader/prism-autoloader.min.js');
+        plugins.crossOrigin = 'anonymous';
         const l1 = new Promise((resolve, reject) => {
             script.addEventListener('load', resolve);
             script.addEventListener('error', reject);

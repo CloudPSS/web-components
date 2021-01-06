@@ -9,6 +9,7 @@ export async function loadStyle(el: HTMLLinkElement | undefined, src: string, us
         document.head.appendChild(el);
     }
     el.rel = 'stylesheet';
+    el.crossOrigin = 'anonymous';
     if (!useBlob) {
         el.href = src;
         return;
