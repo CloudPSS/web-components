@@ -20,7 +20,7 @@ export async function loadStyle(el: HTMLLinkElement | undefined, src: string, us
         return;
     }
     try {
-        const res = await fetch(src);
+        const res = await fetch(src, { mode: 'cors' });
         if (res.ok) {
             const styleData = await res.blob();
             const url = URL.createObjectURL(styleData);
