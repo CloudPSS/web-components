@@ -1,6 +1,6 @@
 {
   "name": "@cloudpss/web-components",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "license": "MIT",
   "author": {
@@ -18,7 +18,8 @@
   "scripts": {
     "start": "snowpack dev",
     "clean": "rimraf publish",
-    "build": "yarn clean && tsc",
+    "prebuild": "yarn clean && node prebuild.js",
+    "build": "tsc",
     "postbuild": "node postbuild.js",
     "format": "prettier --write --ignore-path .gitignore .",
     "lint": "eslint ."
