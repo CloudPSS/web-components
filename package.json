@@ -20,7 +20,7 @@
     "start": "snowpack dev",
     "clean": "rimraf publish",
     "prebuild": "yarn clean && node prebuild.js",
-    "build": "tsc",
+    "build": "tsc --project publish",
     "postbuild": "node postbuild.js",
     "format": "prettier --write --ignore-path .gitignore .",
     "lint": "eslint ."

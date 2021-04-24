@@ -7,6 +7,8 @@ const path = require('path');
 
 async function main() {
     await fs.remove(path.resolve(__dirname, './publish/tsconfig.tsbuildinfo'));
+    await fs.remove(path.resolve(__dirname, './publish/tsconfig.json'));
+    await fs.remove(path.resolve(__dirname, './publish/tsconfig.check.json'));
 }
 
 main();

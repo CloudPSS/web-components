@@ -5,12 +5,8 @@ import styles from './highlight.styles';
 import { loadStyle } from './private/utils';
 import Prism from 'prismjs';
 import PrismComponents from 'prismjs/components';
-import './private/prism-autoloader';
+import autoloader from './private/prism-autoloader';
 
-const autoloader = Prism.plugins['autoloader'] as {
-    languages_path: string;
-    use_minified: boolean;
-};
 autoloader.languages_path = resolvePrism('components/');
 
 /** 语言 */
@@ -147,9 +143,7 @@ export class HighlightElement extends UpdatingElement {
                     this.elCode.innerHTML = Prism.highlight(code, Prism.languages[k], lang);
                 } else {
                     this.elCode.textContent = code;
-                    const autoloader = Prism.plugins['autoloader'] as {
-                        loadLanguages: (name: string, callback: () => void) => void;
-                    };
+
                     autoloader.loadLanguages(lang, () => {
                         this.elCode.innerHTML = Prism.highlight(code, Prism.languages[k], lang);
                     });

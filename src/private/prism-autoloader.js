@@ -283,3 +283,5 @@ Prism.hooks.add('complete', function (env) {
         });
     }
 });
+
+export default config;

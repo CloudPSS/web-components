@@ -128,7 +128,7 @@ export class MermaidElement extends LitElement {
                     func?.(this.elContainer);
                     container.remove();
                 },
-                (container as unknown) as string,
+                container,
             );
         };
         this.subs[0] = merge(resizeAction, tSub).subscribe(() => requestAnimationFrame(render));

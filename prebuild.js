@@ -11,6 +11,8 @@ async function main() {
     sourceObj.scripts = undefined;
     sourceObj.devDependencies = undefined;
     await copy('./src');
+    await copy('./tsconfig.json');
+    await copy('./tsconfig.check.json');
     await copy('./README.md');
     await copy('./LICENSE');
     await fs.remove(path.resolve(__dirname, './publish/tsconfig.tsbuildinfo'));
