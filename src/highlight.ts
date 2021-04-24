@@ -1,68 +1,29 @@
-/// <reference types="prismjs" />
-
 import { resolve, style, theme } from './config';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { Subscription } from 'rxjs';
 import styles from './highlight.styles';
 import { loadStyle } from './private/utils';
+import Prism from 'prismjs';
+import PrismComponents from 'prismjs/components';
+import './private/prism-autoloader';
 
-const languageNameReplacement: Record<string, string> = {
-    js: 'javascript',
-    g4: 'antlr4',
-    adoc: 'asciidoc',
-    shell: 'bash',
-    shortcode: 'bbcode',
-    cs: 'csharp',
-    dotnet: 'csharp',
-    coffee: 'coffeescript',
-    conc: 'concurnas',
-    jinja2: 'django',
-    'dns-zone': 'dns-zone-file',
-    dockerfile: 'docker',
-    eta: 'ejs',
-    xlsx: 'excel-formula',
-    xls: 'excel-formula',
-    gamemakerlanguage: 'gml',
-    hs: 'haskell',
-    kt: 'kotlin',
-    kts: 'kotlin',
-    tex: 'latex',
-    ly: 'lilypond',
-    emacs: 'lisp',
-    elisp: 'lisp',
-    'emacs-lisp': 'lisp',
-    md: 'markdown',
-    moon: 'moonscript',
-    n4jsd: 'n4js',
-    nani: 'naniscript',
-    objc: 'objectivec',
-    px: 'pcaxis',
-    pcode: 'peoplecode',
-    pq: 'powerquery',
-    pbfasm: 'purebasic',
-    purs: 'purescript',
-    py: 'python',
-    rkt: 'racket',
-    rpy: 'renpy',
-    robot: 'robotframework',
-    rb: 'ruby',
-    'sh-session': 'shell-session',
-    shellsession: 'shell-session',
-    smlnj: 'sml',
-    sol: 'solidity',
-    sln: 'solution-file',
-    rq: 'sparql',
-    t4: 't4-cs',
-    trig: 'turtle',
-    ts: 'typescript',
-    tsconfig: 'typoscript',
-    uscript: 'unrealscript',
-    uc: 'unrealscript',
-    vb: 'visual-basic',
-    vba: 'visual-basic',
-    xeoracube: 'xeora',
-    yml: 'yaml',
+const autoloader = Prism.plugins['autoloader'] as {
+    languages_path: string;
+    use_minified: boolean;
 };
+autoloader.languages_path = resolvePrism('components/');
+
+/** 语言 */
+interface Language {
+    /** 名字 */
+    title: string;
+    /** 别名 */
+    alias?: string[] | string;
+    /** 映射到每个别名对应名字 */
+    aliasTitles?: Record<string, string>;
+    /** 依赖 */
+    require?: string | string[];
+}
 
 /**
  * 解析 prismjs 中的文件
@@ -79,40 +40,6 @@ function loadPrismStyle(el: HTMLLinkElement, theme: string): Promise<void> {
     return loadStyle(el, src);
 }
 
-let initPromise: Promise<void> | undefined;
-/**
- * 初始化 prismjs
- */
-function init(): Promise<void> {
-    if (initPromise) return initPromise;
-    initPromise = (async () => {
-        if ('Prism' in window && 'autoloader' in window.Prism.plugins) return;
-        const script = document.createElement('script');
-        script.src = resolvePrism('components/prism-core.min.js');
-        script.crossOrigin = 'anonymous';
-        const plugins = document.createElement('script');
-        plugins.src = resolvePrism('plugins/autoloader/prism-autoloader.min.js');
-        plugins.crossOrigin = 'anonymous';
-        const l1 = new Promise((resolve, reject) => {
-            script.addEventListener('load', resolve);
-            script.addEventListener('error', reject);
-        });
-        document.documentElement.append(script);
-        await l1;
-        const l2 = new Promise((resolve, reject) => {
-            plugins.addEventListener('load', resolve);
-            plugins.addEventListener('error', reject);
-        });
-        document.documentElement.append(plugins);
-        await l2;
-        await new Promise((resolve) => setTimeout(resolve, 10));
-        script.remove();
-        plugins.remove();
-        return;
-    })();
-    return initPromise;
-}
-
 /**
  * 高亮组件
  */
@@ -120,7 +47,6 @@ function init(): Promise<void> {
 export class HighlightElement extends UpdatingElement {
     constructor() {
         super();
-        void init();
         const renderRoot = this.attachShadow({ mode: 'open' });
         renderRoot.innerHTML = `<pre><code></code></pre><link rel="stylesheet" />
         <style></style>`;
@@ -172,7 +98,6 @@ export class HighlightElement extends UpdatingElement {
         const l = setTimeout(() => {
             this.elCode.textContent = this.srcdoc ?? '';
         }, 50);
-        await init();
         clearTimeout(l);
         return super.performUpdate();
     }
@@ -191,24 +116,42 @@ export class HighlightElement extends UpdatingElement {
         if (changedProperties.has('language') || changedProperties.has('srcdoc')) {
             let lang = this.language ?? '';
             lang = lang.toLowerCase();
-            if (lang in languageNameReplacement) {
-                lang = languageNameReplacement[lang];
+
+            let langData: Language | undefined;
+            let langKey: string | undefined;
+            for (const langDef in PrismComponents.languages) {
+                const currentData = PrismComponents.languages[langDef] as Language;
+                if (!currentData?.title) continue;
+                if (lang === langDef) {
+                    langKey = langDef;
+                    langData = currentData;
+                    break;
+                }
+                if (
+                    currentData.alias &&
+                    (Array.isArray(currentData.alias) ? currentData.alias.includes(lang) : currentData.alias === lang)
+                ) {
+                    langKey = langDef;
+                    langData = currentData;
+                    break;
+                }
             }
-            if (lang) this.language = lang;
+            const langTitle = langData?.aliasTitles?.[lang] ?? langData?.title ?? this.language ?? '';
+            if (langTitle) this.language = langTitle;
             const code = this.srcdoc ?? '';
-            if (lang) {
+            if (langKey) {
+                const k = langKey;
                 this.elCode.setAttribute('language', lang);
-                const Prism = window.Prism;
-                const highlighter = Prism.languages[lang];
+                const highlighter = Prism.languages[k];
                 if (highlighter) {
-                    this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
+                    this.elCode.innerHTML = Prism.highlight(code, Prism.languages[k], lang);
                 } else {
                     this.elCode.textContent = code;
                     const autoloader = Prism.plugins['autoloader'] as {
                         loadLanguages: (name: string, callback: () => void) => void;
                     };
                     autoloader.loadLanguages(lang, () => {
-                        this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
+                        this.elCode.innerHTML = Prism.highlight(code, Prism.languages[k], lang);
                     });
                 }
             } else {

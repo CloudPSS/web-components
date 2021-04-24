@@ -10,8 +10,10 @@ import {
     html,
 } from 'lit-element';
 import { nothing } from 'lit-html';
-import { Chart } from 'chart.js';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { style } from './config';
+
+Chart.register(...registerables);
 
 /**
  * chartJs 组件
@@ -45,7 +47,7 @@ export class ChartElement extends LitElement {
     /** 渲染元素 */
     @query('#error') private readonly elError!: HTMLParagraphElement;
     /** 图表配置 */
-    @property({ reflect: true, type: Object }) config?: Chart.ChartConfiguration;
+    @property({ reflect: true, type: Object }) config?: ChartConfiguration;
     /** 表格 */
     private __chart?: Chart;
     /**
@@ -72,7 +74,7 @@ export class ChartElement extends LitElement {
         if (!canvas) return;
         try {
             this.elError.textContent = null;
-            const config: Chart.ChartConfiguration = { ...this.config };
+            const config = { ...this.config } as ChartConfiguration;
             config.options = { ...config.options };
             this.__chart?.destroy();
             this.__chart = new Chart(canvas, config);
