@@ -5,15 +5,12 @@ module.exports = {
         src: '/_dist_',
     },
     plugins: ['@snowpack/plugin-typescript'],
-    install: [],
-    installOptions: {
-        installTypes: true,
+    packageOptions: {
         polyfillNode: true,
     },
     devOptions: {},
     buildOptions: {
         out: 'publish',
     },
-    proxy: {},
     alias: {},
 };

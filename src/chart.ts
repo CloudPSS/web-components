@@ -10,7 +10,7 @@ import {
     html,
 } from 'lit-element';
 import { nothing } from 'lit-html';
-import ChartJs from 'chart.js';
+import { Chart } from 'chart.js';
 import { style } from './config';
 
 /**
@@ -45,9 +45,9 @@ export class ChartElement extends LitElement {
     /** 渲染元素 */
     @query('#error') private readonly elError!: HTMLParagraphElement;
     /** 图表配置 */
-    @property({ reflect: true, type: Object }) config?: ChartJs.ChartConfiguration;
+    @property({ reflect: true, type: Object }) config?: Chart.ChartConfiguration;
     /** 表格 */
-    private __chart?: ChartJs;
+    private __chart?: Chart;
     /**
      * @inheritdoc
      */
@@ -72,10 +72,10 @@ export class ChartElement extends LitElement {
         if (!canvas) return;
         try {
             this.elError.textContent = null;
-            const config: ChartJs.ChartConfiguration = { ...this.config };
+            const config: Chart.ChartConfiguration = { ...this.config };
             config.options = { ...config.options };
             this.__chart?.destroy();
-            this.__chart = new ChartJs(canvas, config);
+            this.__chart = new Chart(canvas, config);
         } catch (ex) {
             this.elError.textContent = String(ex);
         }

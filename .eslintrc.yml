@@ -1,12 +1,8 @@
 root: true
-plugins:
-  - '@typescript-eslint'
-  - lit
-  - prettier
-  - jsdoc
 env:
-  browser: yes
-  commonjs: yes
+  browser: true
+  commonjs: true
+  es2020: true
 overrides:
   - files: ['*.js']
     parserOptions:
@@ -14,8 +10,6 @@ overrides:
       sourceType: module
     extends:
       - eslint:recommended
-      - prettier
-      - plugin:lit/recommended
       - plugin:prettier/recommended
   - files: ['*.ts']
     parser: '@typescript-eslint/parser'
@@ -25,11 +19,9 @@ overrides:
       - eslint:recommended
       - plugin:@typescript-eslint/recommended
       - plugin:@typescript-eslint/recommended-requiring-type-checking
-      - plugin:lit/recommended
-      - prettier
-      - prettier/@typescript-eslint
-      - plugin:prettier/recommended
       - plugin:jsdoc/recommended
+      - plugin:lit/recommended
+      - plugin:prettier/recommended
     rules:
       no-console: [1]
       prettier/prettier: [1]
@@ -82,5 +74,6 @@ overrides:
       jsdoc/require-returns: 0
       jsdoc/require-returns-check: 0
       jsdoc/require-returns-type: 0
+      jsdoc/require-yields: 0
       lit/no-useless-template-literals: 1
       lit/no-value-attribute: 1

@@ -204,7 +204,7 @@ export class HighlightElement extends UpdatingElement {
                     this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
                 } else {
                     this.elCode.textContent = code;
-                    const autoloader = Prism.plugins.autoloader as {
+                    const autoloader = Prism.plugins['autoloader'] as {
                         loadLanguages: (name: string, callback: () => void) => void;
                     };
                     autoloader.loadLanguages(lang, () => {
