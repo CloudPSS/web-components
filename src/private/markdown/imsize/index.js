@@ -5,6 +5,7 @@
 
 import parseImageSize from './parse_image_size';
 
+// eslint-disable-next-line no-undef
 const cors = typeof crossOriginIsolated == 'boolean' && crossOriginIsolated;
 
 function image_with_size(md) {
@@ -199,6 +200,8 @@ function image_with_size(md) {
                 ['src', href],
                 ['alt', ''],
             ];
+            token.children = tokens;
+
             if (cors) {
                 attrs.push(['crossorigin', '']);
             }
