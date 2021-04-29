@@ -5,6 +5,8 @@
 
 import parseImageSize from './parse_image_size';
 
+const cors = typeof crossOriginIsolated == 'boolean' && crossOriginIsolated;
+
 function image_with_size(md) {
     return function (state, silent) {
         var attrs,
@@ -197,7 +199,10 @@ function image_with_size(md) {
                 ['src', href],
                 ['alt', ''],
             ];
-            token.children = tokens;
+            if (cors) {
+                attrs.push(['crossorigin', '']);
+            }
+
             if (title) {
                 attrs.push(['title', title]);
             }
