@@ -77,7 +77,7 @@ export class MarkdownElement extends UpdatingElement {
             changedProperties.size === 0
         ) {
             src = new URL(this.src ?? document.location.href, document.baseURI);
-            const doc = this.srcdoc ?? '';
+            const doc = String(this.srcdoc ?? '');
             const rendered = md[this.mode === 'inline' ? 'renderInlineToIncrementalDOM' : 'renderToIncrementalDOM'](
                 doc,
             );
