@@ -11,10 +11,10 @@ export default css`
         overflow: auto;
         margin: 0.8em 0;
     }
-    #styles {
+    .cwe-styles {
         display: none;
     }
-    #content {
+    .cwe-content {
         display: contents;
     }
     .error {

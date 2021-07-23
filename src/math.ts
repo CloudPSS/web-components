@@ -58,9 +58,9 @@ export class MathElement extends UpdatingElement {
         super();
         const root = this.attachShadow({ mode: 'open' });
         this.elStyles = document.createElement('div');
-        this.elStyles.id = 'styles';
+        this.elStyles.classList.add('cwe-styles');
         this.elContent = document.createElement('div');
-        this.elContent.id = 'content';
+        this.elContent.classList.add('cwe-content');
         root.append(this.elStyles, this.elContent);
         const link = document.createElement('link');
         this.elStyles.appendChild(link);

@@ -1,13 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import {
-    CSSResultArray,
-    customElement,
-    html,
-    internalProperty,
-    LitElement,
-    property,
-    TemplateResult,
-} from 'lit-element';
+import { CSSResultArray, customElement, html, state, LitElement, property, TemplateResult } from 'lit-element';
 import BilibiliService from './private/embed-media/BilibiliService';
 import PreziService from './private/embed-media/PreziService';
 import TencentService from './private/embed-media/TencentService';
@@ -60,9 +52,9 @@ export class EmbedMediaElement extends LitElement {
         this.load = false;
     }
     /** 加载内容 */
-    @internalProperty() private load = false;
+    @state() private load = false;
     /** 显示内容 */
-    @internalProperty() private intersecting = false;
+    @state() private intersecting = false;
     /** 媒体服务名称 */
     @property({ reflect: true }) service?: string;
     /** 媒体 ID */

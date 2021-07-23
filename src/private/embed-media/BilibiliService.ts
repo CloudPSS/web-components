@@ -8,9 +8,10 @@ export default class BilibiliService extends VideoServiceBase {
      * @inheritdoc
      */
     extractVideoID(reference: string): string {
-        const match = /https?:\/\/(?:www\.|player\.)?bilibili.com\/(?:player.html\?aid=|player.html\?bvid=|video\/)([a-z0-9]+)/i.exec(
-            reference,
-        );
+        const match =
+            /https?:\/\/(?:www\.|player\.)?bilibili.com\/(?:player.html\?aid=|player.html\?bvid=|video\/)([a-z0-9]+)/i.exec(
+                reference,
+            );
         const id = match && typeof match[1] === 'string' ? match[1] : reference;
         if (/^\d+$/.test(id)) return `av${id}`;
         return id;

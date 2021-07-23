@@ -8,7 +8,7 @@
   </head>
   <body style="background-color: #fafafa">
     <cwe-markdown
-      style="width: 50%"
+      style="width: 50%; margin: 20px"
       srcdoc='---
 这段应该看不见
 ---
@@ -822,7 +822,7 @@ info 2
 '
     ></cwe-markdown>
     <script>
-      setTimeout(() => {
+      customElements.whenDefined('cwe-markdown').then(() => {
         const src = document.querySelector('cwe-markdown').srcdoc;
         const src2 = src.slice(0, 50) + 'x\n\n' + src.slice(50);
         document.addEventListener('click', () => {

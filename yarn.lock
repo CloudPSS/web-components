@@ -165,12 +165,12 @@
   dependencies:
     chalk "^4.0.0"
 
-"@es-joy/jsdoccomment@^0.9.0-alpha.1":
-  version "0.9.0-alpha.2"
-  resolved "https://registry.nlark.com/@es-joy/jsdoccomment/download/@es-joy/jsdoccomment-0.9.0-alpha.2.tgz#5f9a7fa3ad2c2947cb67fc8646a06f262f08f896"
-  integrity sha1-X5p/o60sKUfLZ/yGRqBvJi8I+JY=
+"@es-joy/jsdoccomment@0.9.0-alpha.1":
+  version "0.9.0-alpha.1"
+  resolved "https://registry.nlark.com/@es-joy/jsdoccomment/download/@es-joy/jsdoccomment-0.9.0-alpha.1.tgz#f48bd162e185ec7f9f222273a282d10e52fe52f7"
+  integrity sha1-9IvRYuGF7H+fIiJzooLRDlL+Uvc=
   dependencies:
-    comment-parser "1.1.6-beta.1"
+    comment-parser "1.1.6-beta.0"
     esquery "^1.4.0"
     jsdoc-type-pratt-parser "1.0.4"
 
@@ -512,10 +512,10 @@
   resolved "https://registry.nlark.com/@types/minimist/download/@types/minimist-1.2.2.tgz#ee771e2ba4b3dc5b372935d549fd9617bf345b8c"
   integrity sha1-7nceK6Sz3Fs3KTXVSf2WF780W4w=
 
-"@types/node@*", "@types/node@^16.4.0":
-  version "16.4.0"
-  resolved "https://registry.nlark.com/@types/node/download/@types/node-16.4.0.tgz#2c219eaa3b8d1e4d04f4dd6e40bc68c7467d5272"
-  integrity sha1-LCGeqjuNHk0E9N1uQLxox0Z9UnI=
+"@types/node@*", "@types/node@^16.4.1":
+  version "16.4.1"
+  resolved "https://registry.nlark.com/@types/node/download/@types/node-16.4.1.tgz#9fad171a5b701613ee8a6f4ece3c88b1034b1b03"
+  integrity sha1-n60XGltwFhPuim9OzjyIsQNLGwM=
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -1159,11 +1159,6 @@ comment-parser@1.1.6-beta.0:
   resolved "https://registry.nlark.com/comment-parser/download/comment-parser-1.1.6-beta.0.tgz#57e503b18d0a5bd008632dcc54b1f95c2fffe8f6"
   integrity sha1-V+UDsY0KW9AIYy3MVLH5XC//6PY=
 
-comment-parser@1.1.6-beta.1:
-  version "1.1.6-beta.1"
-  resolved "https://registry.nlark.com/comment-parser/download/comment-parser-1.1.6-beta.1.tgz#17a698f1566b88db9991aa83f49f5a872713c0d1"
-  integrity sha1-F6aY8VZriNuZkaqD9J9ahycTwNE=
-
 common-ancestor-path@^1.0.1:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/common-ancestor-path/download/common-ancestor-path-1.0.1.tgz#4f7d2d1394d91b7abdf51871c62f71eadb0182a7"
@@ -1600,7 +1595,7 @@ deepmerge@^4.2.2:
 
 default-browser-id@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.nlark.com/default-browser-id/download/default-browser-id-2.0.0.tgz#01ecce371a71e85f15a17177e7863047e73dbe7d"
+  resolved "https://registry.npm.taobao.org/default-browser-id/download/default-browser-id-2.0.0.tgz#01ecce371a71e85f15a17177e7863047e73dbe7d"
   integrity sha1-AezONxpx6F8VoXF354YwR+c9vn0=
   dependencies:
     bplist-parser "^0.1.0"
@@ -1624,7 +1619,7 @@ delayed-stream@~1.0.0:
 
 delegates@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npm.taobao.org/delegates/download/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
+  resolved "https://registry.nlark.com/delegates/download/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
   integrity sha1-hMbhWbgZBP3KWaDvRM2HDTElD5o=
 
 depd@^1.1.2:
@@ -1838,12 +1833,12 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.nlark.com/eslint-config-prettier/download/eslint-config-prettier-8.3.0.tgz#f7471b20b6fe8a9a9254cc684454202886a2dd7a"
   integrity sha1-90cbILb+ipqSVMxoRFQgKIai3Xo=
 
-eslint-plugin-jsdoc@^35.5.0:
-  version "35.5.0"
-  resolved "https://registry.nlark.com/eslint-plugin-jsdoc/download/eslint-plugin-jsdoc-35.5.0.tgz#5be39a44c0165ec0fbbe87bd905c7ad2fa1fec21"
-  integrity sha1-W+OaRMAWXsD7voe9kFx60vof7CE=
+eslint-plugin-jsdoc@^35.5.1:
+  version "35.5.1"
+  resolved "https://registry.nlark.com/eslint-plugin-jsdoc/download/eslint-plugin-jsdoc-35.5.1.tgz#45932ee22669bbe06c97b82b936d56361efad370"
+  integrity sha1-RZMu4iZpu+Bsl7grk21WNh7603A=
   dependencies:
-    "@es-joy/jsdoccomment" "^0.9.0-alpha.1"
+    "@es-joy/jsdoccomment" "0.9.0-alpha.1"
     comment-parser "1.1.6-beta.0"
     debug "^4.3.2"
     esquery "^1.4.0"
@@ -2308,7 +2303,7 @@ globby@^11.0.3:
 
 got@^11.1.4:
   version "11.8.2"
-  resolved "https://registry.npm.taobao.org/got/download/got-11.8.2.tgz#7abb3959ea28c31f3576f1576c1effce23f33599"
+  resolved "https://registry.nlark.com/got/download/got-11.8.2.tgz#7abb3959ea28c31f3576f1576c1effce23f33599"
   integrity sha1-ers5Weoowx81dvFXbB7/ziPzNZk=
   dependencies:
     "@sindresorhus/is" "^4.0.0"
@@ -2620,7 +2615,7 @@ is-lambda@^1.0.1:
 
 is-module@^1.0.0:
   version "1.0.0"
-  resolved "https://registry.npm.taobao.org/is-module/download/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
+  resolved "https://registry.nlark.com/is-module/download/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
   integrity sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE=
 
 is-number@^7.0.0:
@@ -2874,10 +2869,10 @@ linkify-it@^3.0.1:
   dependencies:
     uc.micro "^1.0.1"
 
-lint-staged@^11.0.1:
-  version "11.0.1"
-  resolved "https://registry.nlark.com/lint-staged/download/lint-staged-11.0.1.tgz#1b8ae8ed5a52ed87252db95fe008c2618c85f55a"
-  integrity sha1-G4ro7VpS7YclLblf4AjCYYyF9Vo=
+lint-staged@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.nlark.com/lint-staged/download/lint-staged-11.1.0.tgz#a21d67ffe4516e907635adeaf6d6450d8cffb4e4"
+  integrity sha1-oh1n/+RRbpB2Na3q9tZFDYz/tOQ=
   dependencies:
     chalk "^4.1.1"
     cli-truncate "^2.1.0"
@@ -2896,9 +2891,9 @@ lint-staged@^11.0.1:
     stringify-object "^3.3.0"
 
 listr2@^3.8.2:
-  version "3.10.0"
-  resolved "https://registry.nlark.com/listr2/download/listr2-3.10.0.tgz#58105a53ed7fa1430d1b738c6055ef7bb006160f"
-  integrity sha1-WBBaU+1/oUMNG3OMYFXve7AGFg8=
+  version "3.11.0"
+  resolved "https://registry.nlark.com/listr2/download/listr2-3.11.0.tgz#9771b02407875aa78e73d6e0ff6541bbec0aaee9"
+  integrity sha1-l3GwJAeHWqeOc9bg/2VBu+wKruk=
   dependencies:
     cli-truncate "^2.1.0"
     colorette "^1.2.2"
@@ -3857,7 +3852,7 @@ process-nextick-args@~2.0.0:
 
 progress@^2.0.0:
   version "2.0.3"
-  resolved "https://registry.npm.taobao.org/progress/download/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
+  resolved "https://registry.nlark.com/progress/download/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha1-foz42PW48jnBvGi+tOt4Vn1XLvg=
 
 promise-all-reject-late@^1.0.0:

@@ -78,9 +78,8 @@ export class MarkdownElement extends UpdatingElement {
         ) {
             src = new URL(this.src ?? document.location.href, document.baseURI);
             const doc = String(this.srcdoc ?? '');
-            const rendered = md[this.mode === 'inline' ? 'renderInlineToIncrementalDOM' : 'renderToIncrementalDOM'](
-                doc,
-            );
+            const rendered =
+                md[this.mode === 'inline' ? 'renderInlineToIncrementalDOM' : 'renderToIncrementalDOM'](doc);
             this.__frontMatter = fm;
             src = undefined;
             fm = undefined;

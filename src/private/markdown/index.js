@@ -15,7 +15,7 @@ import * as markdownItMark from 'markdown-it-mark';
 import * as markdownItImsize from './imsize';
 import * as markdownItMultimdTable from 'markdown-it-multimd-table';
 import * as markdownItCenterText from 'markdown-it-center-text';
-import * as markdownItAnchor from 'markdown-it-anchor';
+import markdownItAnchor from 'markdown-it-anchor';
 import * as markdownItFrontMatter from 'markdown-it-front-matter';
 import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
 import * as markdownItEmbedMedia from './embed-media';
@@ -272,11 +272,9 @@ export default function (options) {
             markdownItAnchor,
             {
                 slugify: slugify,
-                permalink: true,
-                permalinkSpace: false,
-                permalinkSymbol: '',
-                permalinkHref: (slug) => md.normalizeLink(`#${slug}`),
-                permalinkAttrs: (slug) => ({ 'aria-label': slug }),
+                permalink: markdownItAnchor.permalink.ariaHidden({
+                    symbol: '',
+                }),
             },
         ],
         [markdownItFrontMatter, options.frontMatter],
