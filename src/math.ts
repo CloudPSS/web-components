@@ -2,8 +2,8 @@ import katex from 'katex/dist/katex.mjs';
 import { escapeHtml } from 'markdown-it/lib/common/utils';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { resolve, style as cfgStyle } from './config';
-import styles from './math.styles';
 import { loadStyle } from './private/utils';
+import styles from './math.scss.style.js';
 
 const katexVersion: string = katex.version || '^0.12';
 const katexCss = resolve('katex', katexVersion, 'dist/katex.css');

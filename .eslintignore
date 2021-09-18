@@ -1,7 +1,9 @@
-
 /publish
+/scripts
 /*.js
 .*.{js,ts}
+
+*.style.js
 
 # packages
 /node_modules/

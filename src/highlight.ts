@@ -1,11 +1,11 @@
 import { resolve, style, theme } from './config';
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import { Subscription } from 'rxjs';
-import styles from './highlight.styles';
 import { loadStyle } from './private/utils';
 import Prism from 'prismjs';
 import PrismComponents from 'prismjs/components';
 import autoloader from './private/prism-autoloader';
+import styles from './highlight.scss.style.js';
 
 autoloader.languages_path = resolvePrism('components/');
 

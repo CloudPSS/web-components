@@ -7,11 +7,5 @@ overrides:
   - files:
       - '*.js'
       - '*.ts'
-      - '*.jsx'
-      - '*.tsx'
     options:
       tabWidth: 4
-  - files: '*.vue'
-    options:
-      tabWidth: 4
-      printWidth: 160

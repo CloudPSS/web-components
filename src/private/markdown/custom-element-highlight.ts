@@ -4,14 +4,11 @@ import { slugify, sourceLineIncremental } from './utils';
 import { elementVoid } from 'incremental-dom';
 import { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incremental-dom';
 
-import '../../chart';
-import '../../mermaid';
-import '../../highlight';
-
 /**
  * 高亮
  */
 const code_block: IncrementalRenderRule = (tokens, idx, _options, _env, slf) => {
+    void import('../../highlight');
     return () => {
         const token = tokens[idx];
         elementVoid(
@@ -46,6 +43,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
 
         switch (lang) {
             case 'mermaid':
+                void import('../../mermaid');
                 elementVoid(
                     'cwe-mermaid',
                     title || code,
@@ -57,6 +55,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 );
                 return;
             case 'chart':
+                void import('../../chart');
                 elementVoid(
                     'cwe-chart',
                     title || code,
@@ -68,6 +67,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 );
                 return;
             default: {
+                void import('../../highlight');
                 const langAttr = lang ? ['language', lang] : [];
                 elementVoid(
                     'cwe-highlight',

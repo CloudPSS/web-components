@@ -8,7 +8,7 @@ import VimeoService from './private/embed-media/VimeoService';
 import VineService from './private/embed-media/VineService';
 import YoukuService from './private/embed-media/YoukuService';
 import YouTubeService from './private/embed-media/YouTubeService';
-import styles from './embed-media.styles';
+import styles from './embed-media.scss.style.js';
 
 /**
  * 媒体组件

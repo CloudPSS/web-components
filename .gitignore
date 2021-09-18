@@ -1,6 +1,7 @@
 # compiled output
 /publish/
 *.tsbuildinfo
+*.style.js
 
 # packages
 /node_modules/

@@ -1,9 +1,9 @@
 import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
 import markdownIt from './private/markdown';
-import styles from './markdown.styles';
 import { style } from './config';
 import * as IncrementalDOM from 'incremental-dom';
 import { postRender } from './private/markdown/post-render';
+import styles from './markdown.scss.style.js';
 
 let fm: string | undefined;
 let src: URL | undefined;
