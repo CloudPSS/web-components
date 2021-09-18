@@ -39,5 +39,3 @@ export default css\`${result}\`;
 }
 
 main();
-
-processor.process();

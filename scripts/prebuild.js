@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const execa = require('execa');
 
 // DO NOT DELETE THIS FILE
 // This file is used by build system to build a clean npm package with the compiled js files in the root of the package.
@@ -8,6 +9,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 
 async function main() {
+    await execa.node(require.resolve('./build-styles'));
+
     const source = await fs.readFile(path.resolve(ROOT, './package.json'), 'utf-8');
     const sourceObj = JSON.parse(source);
     sourceObj.scripts = undefined;

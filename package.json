@@ -19,6 +19,7 @@
     "prepare": "husky install",
     "start": "snowpack dev",
     "clean": "rimraf publish",
+    "build:styles": "node scripts/build-styles.js",
     "prebuild": "yarn clean && node scripts/prebuild.js",
     "build": "tsc --project publish",
     "postbuild": "node scripts/postbuild.js",
