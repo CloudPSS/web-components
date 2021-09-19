@@ -3,6 +3,7 @@
 :host {
   line-height: 1.6;
   display: block;
+  overflow: auto;
 
   @media print {
     background: white;

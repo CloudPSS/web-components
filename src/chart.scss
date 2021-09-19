@@ -1,6 +1,7 @@
 :host {
   display: block;
   margin: 1em 0;
+  overflow: auto;
 }
 
 #container {
@@ -8,6 +9,7 @@
   flex-flow: column;
   place-content: center;
   place-items: center;
+  min-width: 300px;
 }
 
 #error:empty {
