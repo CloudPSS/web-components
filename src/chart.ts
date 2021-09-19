@@ -5,13 +5,13 @@ import {
     LitElement,
     query,
     CSSResultArray,
-    css,
     TemplateResult,
     html,
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { style } from './config';
+import styles from './chart.scss.style.js';
 
 Chart.register(...registerables);
 
@@ -24,20 +24,7 @@ export class ChartElement extends LitElement {
      * @inheritdoc
      */
     static get styles(): CSSResultArray {
-        return [
-            css`
-                :host {
-                    display: block;
-                    margin: 1em 0;
-                }
-                canvas {
-                    max-width: 800px;
-                    width: 100%;
-                    height: auto;
-                    margin: auto;
-                }
-            `,
-        ];
+        return [styles];
     }
     constructor() {
         super();

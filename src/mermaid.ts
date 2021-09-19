@@ -3,7 +3,6 @@ import { tap, share, map, distinctUntilChanged, delay, throttleTime, mapTo } fro
 import mermaid from 'mermaid';
 import type mermaidAPI from 'mermaid/mermaidAPI';
 import {
-    css,
     CSSResultArray,
     customElement,
     html,
@@ -15,6 +14,7 @@ import {
 } from 'lit-element';
 import { nothing } from 'lit-html';
 import { style, theme } from './config';
+import styles from './mermaid.scss.style.js';
 
 let t: mermaidAPI.Theme = 'default';
 
@@ -40,26 +40,7 @@ export class MermaidElement extends LitElement {
      * @inheritdoc
      */
     static get styles(): CSSResultArray {
-        return [
-            css`
-                :host {
-                    display: block;
-                    margin: 1em 0;
-                    overflow: auto;
-                    white-space: pre-line;
-                }
-                :host(.resizing) {
-                    overflow: hidden;
-                }
-                svg {
-                    width: auto;
-                    height: auto;
-                    display: block;
-                    margin: auto;
-                    white-space: initial;
-                }
-            `,
-        ];
+        return [styles];
     }
     constructor() {
         super();
@@ -80,8 +61,8 @@ export class MermaidElement extends LitElement {
         super.connectedCallback();
         this.subs[0] = undefined;
         this.subs.push(
-            resizeStart.subscribe(() => this.classList.add('resizing')),
-            resizeEnd.subscribe(() => this.classList.remove('resizing')),
+            resizeStart.subscribe(() => this.setAttribute('resizing', '')),
+            resizeEnd.subscribe(() => this.removeAttribute('resizing')),
         );
     }
     /**
