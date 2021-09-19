@@ -1,7 +1,7 @@
 import type MarkdownIt from 'markdown-it';
 import { unescapeAll } from 'markdown-it/lib/common/utils';
 import { slugify, sourceLineIncremental } from './utils';
-import { elementVoid } from 'incremental-dom';
+import { elementClose, elementOpen, elementVoid, text } from 'incremental-dom';
 import { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incremental-dom';
 
 /**
@@ -54,18 +54,33 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                     ...htmlAttr,
                 );
                 return;
-            case 'chart':
+            case 'chart': {
                 void import('../../chart');
-                elementVoid(
-                    'cwe-chart',
-                    title || code,
-                    [],
-                    ...sourceLineIncremental(token),
-                    'config',
-                    code,
-                    ...htmlAttr,
-                );
+                let config;
+                let error = '';
+                try {
+                    config = JSON.stringify(JSON.parse(code));
+                } catch (ex) {
+                    // invalid config
+                    error = (ex as Error).message || String(ex);
+                }
+                if (config) {
+                    elementVoid(
+                        'cwe-chart',
+                        title || code,
+                        [],
+                        ...sourceLineIncremental(token),
+                        'config',
+                        config,
+                        ...htmlAttr,
+                    );
+                } else {
+                    elementOpen('p', title || code, [], ...sourceLineIncremental(token), ...htmlAttr);
+                    text(`Invalid chart config: ${error}`);
+                    elementClose('p');
+                }
                 return;
+            }
             default: {
                 void import('../../highlight');
                 const langAttr = lang ? ['language', lang] : [];
