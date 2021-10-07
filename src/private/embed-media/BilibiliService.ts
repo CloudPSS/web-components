@@ -7,7 +7,7 @@ export default class BilibiliService extends VideoServiceBase {
     /**
      * @inheritdoc
      */
-    extractVideoID(reference: string): string {
+    override extractVideoID(reference: string): string {
         const match =
             /https?:\/\/(?:www\.|player\.)?bilibili.com\/(?:player.html\?aid=|player.html\?bvid=|video\/)([a-z0-9]+)/i.exec(
                 reference,
@@ -19,7 +19,7 @@ export default class BilibiliService extends VideoServiceBase {
     /**
      * @inheritdoc
      */
-    getVideoUrl(videoID: string): string {
+    override getVideoUrl(videoID: string): string {
         const id = /^(av|bv|)(.*)$/i.exec(videoID);
         if (!id) throw new Error('Invalid video id');
         let idArg;

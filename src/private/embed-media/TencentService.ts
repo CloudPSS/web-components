@@ -7,14 +7,14 @@ export default class TencentService extends VideoServiceBase {
     /**
      * @inheritdoc
      */
-    extractVideoID(reference: string): string {
+    override extractVideoID(reference: string): string {
         const match = /x\/page\/([a-z0-9+])/i.exec(reference);
         return match && typeof match[1] === 'string' ? match[1] : reference;
     }
     /**
      * @inheritdoc
      */
-    getVideoUrl(videoID: string): string {
+    override getVideoUrl(videoID: string): string {
         return `//v.qq.com/txp/iframe/player.html?vid=${videoID}&auto=0`;
     }
 }

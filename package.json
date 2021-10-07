@@ -17,6 +17,7 @@
   },
   "scripts": {
     "prepare": "husky install",
+    "postinstall": "patch-package",
     "start": "vite",
     "clean": "rimraf publish",
     "build:styles": "node scripts/build-styles.js",
@@ -73,6 +74,7 @@
     "fs-extra": "^10.0.0",
     "husky": "^7.0.2",
     "lint-staged": "^11.2.0",
+    "patch-package": "^6.4.7",
     "postcss": "^8.3.9",
     "postcss-preset-env": "^6.7.0",
     "prettier": "^2.4.1",

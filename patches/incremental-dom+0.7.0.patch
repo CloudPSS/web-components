@@ -1,0 +1,13 @@
+diff --git a/node_modules/incremental-dom/src/nodes.ts b/node_modules/incremental-dom/src/nodes.ts
+index db8cfe3..17913c1 100644
+--- a/node_modules/incremental-dom/src/nodes.ts
++++ b/node_modules/incremental-dom/src/nodes.ts
+@@ -40,7 +40,7 @@ function getNamespaceForTag(tag: string, parent: Node | null) {
+     return null;
+   }
+ 
+-  return parent.namespaceURI;
++  return (parent as Element).namespaceURI;
+ }
+ 
+ /**
