@@ -8,7 +8,6 @@ import {
     TemplateResult,
     html,
 } from 'lit-element';
-import { nothing } from 'lit-html';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { style } from './config';
 import styles from './chart.scss.style.js';
@@ -23,7 +22,7 @@ export class ChartElement extends LitElement {
     /**
      * @inheritdoc
      */
-    static get styles(): CSSResultArray {
+    static override get styles(): CSSResultArray {
         return [styles];
     }
     constructor() {
@@ -40,7 +39,7 @@ export class ChartElement extends LitElement {
     /**
      * @inheritdoc
      */
-    render(): TemplateResult {
+    protected override render(): TemplateResult {
         const customStyle = style(this);
         return html`<div id="container">
                 <canvas></canvas>
@@ -50,7 +49,7 @@ export class ChartElement extends LitElement {
                 ? html`<style>
                       ${customStyle}
                   </style>`
-                : nothing}`;
+                : undefined}`;
     }
 
     /**
@@ -73,7 +72,7 @@ export class ChartElement extends LitElement {
     /**
      * @inheritdoc
      */
-    updated(changedProperties: PropertyValues): void {
+    protected override updated(changedProperties: PropertyValues): void {
         super.updated(changedProperties);
         this.createChart();
     }
@@ -81,7 +80,7 @@ export class ChartElement extends LitElement {
     /**
      * @inheritdoc
      */
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this.createChart();
     }
@@ -89,7 +88,7 @@ export class ChartElement extends LitElement {
     /**
      * @inheritdoc
      */
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
         this.__chart?.destroy();
         delete this.__chart;

@@ -69,7 +69,7 @@ export class HighlightElement extends UpdatingElement {
     /** 订阅主题变更 */
     private watchTheme?: Subscription;
     /** @inheritdoc */
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this.watchTheme = theme.subscribe((t) => {
             const style = this.prismStyle;
@@ -79,7 +79,7 @@ export class HighlightElement extends UpdatingElement {
         });
     }
     /** @inheritdoc */
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
         this.watchTheme?.unsubscribe();
         this.watchTheme = undefined;
@@ -90,7 +90,7 @@ export class HighlightElement extends UpdatingElement {
      *
      * @inheritdoc
      */
-    async performUpdate(): Promise<unknown> {
+    protected override async performUpdate(): Promise<unknown> {
         const l = setTimeout(() => {
             this.elCode.textContent = this.srcdoc ?? '';
         }, 50);
@@ -101,7 +101,7 @@ export class HighlightElement extends UpdatingElement {
     /**
      * @inheritdoc
      */
-    update(changedProperties: PropertyValues): void {
+    protected override update(changedProperties: PropertyValues): void {
         super.update(changedProperties);
         if (changedProperties.has('prismStyle')) {
             const style = this.prismStyle;

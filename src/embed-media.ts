@@ -18,7 +18,7 @@ export class EmbedMediaElement extends LitElement {
     /**
      * @inheritdoc
      */
-    static get styles(): CSSResultArray {
+    static override get styles(): CSSResultArray {
         return super.styles ? [super.styles, styles] : [styles];
     }
     constructor() {
@@ -38,14 +38,14 @@ export class EmbedMediaElement extends LitElement {
     /**
      * @inheritdoc
      */
-    connectedCallback(): void {
+    override connectedCallback(): void {
         EmbedMediaElement.__observe.observe(this);
         super.connectedCallback();
     }
     /**
      * @inheritdoc
      */
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
         EmbedMediaElement.__observe.unobserve(this);
         this.intersecting = false;
@@ -68,7 +68,7 @@ export class EmbedMediaElement extends LitElement {
     /**
      * @inheritdoc
      */
-    render(): TemplateResult {
+    protected override render(): TemplateResult {
         if (this.intersecting) {
             this.load = true;
         }

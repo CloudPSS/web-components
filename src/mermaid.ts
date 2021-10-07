@@ -12,7 +12,6 @@ import {
     query,
     TemplateResult,
 } from 'lit-element';
-import { nothing } from 'lit-html';
 import { style, theme } from './config';
 import styles from './mermaid.scss.style.js';
 
@@ -39,7 +38,7 @@ export class MermaidElement extends LitElement {
     /**
      * @inheritdoc
      */
-    static get styles(): CSSResultArray {
+    static override get styles(): CSSResultArray {
         return [styles];
     }
     constructor() {
@@ -57,7 +56,7 @@ export class MermaidElement extends LitElement {
     /**
      * @inheritdoc
      */
-    connectedCallback(): void {
+    override connectedCallback(): void {
         super.connectedCallback();
         this.subs[0] = undefined;
         this.subs.push(
@@ -68,20 +67,20 @@ export class MermaidElement extends LitElement {
     /**
      * @inheritdoc
      */
-    render(): TemplateResult {
+    protected override render(): TemplateResult {
         const customStyle = style(this);
         return html`<div id="container"></div>
             ${customStyle
                 ? html`<style>
                       ${customStyle}
                   </style>`
-                : nothing}`;
+                : undefined}`;
     }
 
     /**
      * @inheritdoc
      */
-    updated(changedProperties: PropertyValues): void {
+    protected override updated(changedProperties: PropertyValues): void {
         super.updated(changedProperties);
         this.subs[0]?.unsubscribe();
         const render = (): void => {
@@ -118,7 +117,7 @@ export class MermaidElement extends LitElement {
     /**
      * @inheritdoc
      */
-    disconnectedCallback(): void {
+    override disconnectedCallback(): void {
         super.disconnectedCallback();
         this.subs.splice(0).forEach((s) => s?.unsubscribe());
     }

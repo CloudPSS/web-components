@@ -108,7 +108,7 @@ export class MathElement extends UpdatingElement {
     /**
      * @inheritdoc
      */
-    async update(changedProperties: PropertyValues): Promise<void> {
+    protected override async update(changedProperties: PropertyValues): Promise<void> {
         super.update(changedProperties);
         const lang = this.language;
         const langDef = lang ? (languages[lang] as Language) : undefined;

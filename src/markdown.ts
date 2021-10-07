@@ -67,7 +67,7 @@ export class MarkdownElement extends UpdatingElement {
     /**
      * @inheritdoc
      */
-    update(changedProperties: PropertyValues): void {
+    protected override update(changedProperties: PropertyValues): void {
         super.update(changedProperties);
 
         if (
