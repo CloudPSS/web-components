@@ -17,15 +17,14 @@ async function main() {
     sourceObj.devDependencies = undefined;
     await copy('./src');
     await copy('./tsconfig.json');
-    await copy('./tsconfig.check.json');
     await copy('./README.md');
     await copy('./LICENSE');
-    await fs.remove(path.resolve(ROOT, './publish/tsconfig.tsbuildinfo'));
-    await fs.writeFile(path.resolve(ROOT, './publish/package.json'), JSON.stringify(sourceObj, null, 2), 'utf-8');
+    await fs.remove(path.resolve(ROOT, './dist/tsconfig.tsbuildinfo'));
+    await fs.writeFile(path.resolve(ROOT, './dist/package.json'), JSON.stringify(sourceObj, null, 2), 'utf-8');
 }
 
 async function copy(file) {
-    await fs.copy(path.resolve(ROOT, file), path.resolve(ROOT, './publish/', file));
+    await fs.copy(path.resolve(ROOT, file), path.resolve(ROOT, './dist/', file));
 }
 
 main();

@@ -1,12 +1,16 @@
 # compiled output
-/publish/
+/dist/
+/packages/*/dist/
 *.tsbuildinfo
+
+# generated files
+*.g.*
 *.style.js
 
 # packages
-/node_modules/
-/.pnp.js
-/.pnp/
+node_modules/
+.pnp.js
+.pnp/
 
 # Logs
 logs
@@ -20,8 +24,8 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
-/coverage
-/.nyc_output
+coverage/
+.nyc_output/
 
 # IDEs and editors
 /.idea

@@ -3,7 +3,7 @@
 
   yarn version
   yarn build
-  cd publish
+  cd dist
   npm publish
 
   Pop-Location 

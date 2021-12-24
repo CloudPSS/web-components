@@ -1,11 +1,17 @@
-/publish
-/scripts
-/*.js
-.*.{js,ts}
-
-*.style.js
+# compiled output
+/dist/
+/packages/*/dist/
 
 # packages
-/node_modules/
-/.pnp.js
-/.pnp/
+node_modules/
+.pnp.js
+.pnp/
+
+# config files
+/scripts
+*.config.*
+.*.*
+
+# generated files
+*.g.*
+*.style.js

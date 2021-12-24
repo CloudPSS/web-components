@@ -8,9 +8,8 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 
 async function main() {
-    await fs.remove(path.resolve(ROOT, './publish/tsconfig.tsbuildinfo'));
-    await fs.remove(path.resolve(ROOT, './publish/tsconfig.json'));
-    await fs.remove(path.resolve(ROOT, './publish/tsconfig.check.json'));
+    await fs.remove(path.resolve(ROOT, './dist/tsconfig.tsbuildinfo'));
+    await fs.remove(path.resolve(ROOT, './dist/tsconfig.json'));
 }
 
 main();
