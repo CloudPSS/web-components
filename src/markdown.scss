@@ -373,7 +373,7 @@ caption {
 }
 
 hr {
-  margin: 0.5em -2px;
+  margin: 0.5em 0;
   padding: 0 2px;
   border: none;
   border-bottom: 1px solid var(--p-cwe-markdown-divider-color);
@@ -398,7 +398,7 @@ a.footnote-ref {
 
 footer.footnotes {
   border-top: 1px solid var(--p-cwe-markdown-divider-color);
-  margin: 3em -8px 1em;
+  margin: 3em 0 1em;
   padding: 0 8px;
 }
 
