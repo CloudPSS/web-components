@@ -30,6 +30,39 @@ const resizeStart: Observable<void> = fromEvent(window, 'resize').pipe(mapTo(und
 const resizeAction = resizeStart.pipe(throttleTime(300, undefined, { leading: true, trailing: true }));
 const resizeEnd = resizeAction.pipe(delay(200));
 
+/** 插入样式 */
+function insertRootStyle(): void {
+    if (document.getElementById('mermaid-root-style') != null) return;
+
+    const rootStyle = document.createElement('style');
+    rootStyle.id = 'mermaid-root-style';
+    rootStyle.textContent = `
+div.mermaidTooltip {
+  position: absolute;
+  text-align: center;
+  max-width: 200px;
+  padding: 2px;
+  font-family: "trebuchet ms", verdana, arial, sans-serif;
+  font-size: 12px;
+  background: hsl(80, 100%, 96.2745098039%);
+  border: 1px solid #aaaa33;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 100;
+}
+:root {
+  --mermaid-font-family: "trebuchet ms", verdana, arial, sans-serif;
+}
+`;
+    if (!document.head) {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.head.appendChild(rootStyle);
+        });
+    } else {
+        document.head.appendChild(rootStyle);
+    }
+}
+
 /**
  * mermaid 流程图组件
  */
@@ -52,12 +85,13 @@ export class MermaidElement extends LitElement {
     @property({ reflect: true }) theme?: mermaidAPI.Theme;
 
     /** 容器 */
-    @query('#container') elContainer!: HTMLDivElement;
+    @query('#container', true) elContainer!: HTMLDivElement;
     /**
      * @inheritdoc
      */
     override connectedCallback(): void {
         super.connectedCallback();
+        insertRootStyle();
         this.subs[0] = undefined;
         this.subs.push(
             resizeStart.subscribe(() => this.setAttribute('resizing', '')),
@@ -104,12 +138,13 @@ export class MermaidElement extends LitElement {
                 `mermaid_${Math.floor(Math.random() * 10000000000)}`,
                 this.config ?? '',
                 (svg, func) => {
-                    this.elContainer.innerHTML = svg;
-                    func?.(this.elContainer);
-                    container.remove();
+                    const el = this.elContainer;
+                    el.innerHTML = svg;
+                    func?.(el);
                 },
                 container,
             );
+            container.remove();
         };
         this.subs[0] = merge(resizeAction, tSub).subscribe(() => requestAnimationFrame(render));
         render();
