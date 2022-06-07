@@ -103,7 +103,7 @@ export class MermaidElement extends LitElement {
      */
     protected override render(): TemplateResult {
         const customStyle = style(this);
-        return html`<div id="container"></div>
+        return html`<div class="container"></div>
             ${customStyle ? html`<style class="custom-style" .textContent=${customStyle}></style>` : undefined}`;
     }
 
