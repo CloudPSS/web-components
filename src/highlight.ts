@@ -1,5 +1,5 @@
 import { resolve, style, theme } from './config';
-import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
+import { CSSResultArray, customElement, property, PropertyValues, ReactiveElement } from 'lit-element';
 import { Subscription } from 'rxjs';
 import { loadStyle } from './private/utils';
 import Prism from 'prismjs';
@@ -40,23 +40,36 @@ function loadPrismStyle(el: HTMLLinkElement, theme: string): Promise<void> {
  * 高亮组件
  */
 @customElement('cwe-highlight')
-export class HighlightElement extends UpdatingElement {
+export class HighlightElement extends ReactiveElement {
     constructor() {
         super();
-        const renderRoot = this.attachShadow({ mode: 'open' });
-        renderRoot.innerHTML = `<pre><code></code></pre><link rel="stylesheet" />
-        <style></style>`;
-        this.elCode = renderRoot.querySelector('code') as HTMLElement;
-        this.elStyle = renderRoot.querySelector('link') as HTMLLinkElement;
-        this.elBaseStyle = renderRoot.querySelector('style') as HTMLStyleElement;
-        this.elBaseStyle.textContent = style(this) + '\n' + styles.cssText;
+        const renderRoot = this.createRenderRoot();
+        this.elCode = document.createElement('code');
+        this.elStyle = document.createElement('link');
+        this.elStyle.rel = 'stylesheet';
+        const pre = document.createElement('pre');
+        pre.appendChild(this.elCode);
+        renderRoot.appendChild(pre);
+        renderRoot.appendChild(this.elStyle);
+
+        const customStyle = style(this);
+        if (customStyle) {
+            const s = document.createElement('style');
+            s.classList.add('custom-style');
+            s.textContent = customStyle;
+            renderRoot.appendChild(s);
+        }
+    }
+    /**
+     * @inheritdoc
+     */
+    static override get styles(): CSSResultArray {
+        return [styles];
     }
     /** 代码元素 */
     private readonly elCode: HTMLElement;
     /** 样式元素 */
     private readonly elStyle: HTMLLinkElement;
-    /** 样式元素 */
-    private readonly elBaseStyle: HTMLStyleElement;
 
     /** 语言 */
     @property({ reflect: true })

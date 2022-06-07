@@ -15,6 +15,12 @@ export default class TencentService extends VideoServiceBase {
      * @inheritdoc
      */
     override getVideoUrl(videoID: string): string {
-        return `//v.qq.com/txp/iframe/player.html?vid=${videoID}&auto=0`;
+        return `https://v.qq.com/txp/iframe/player.html?vid=${videoID}&auto=0`;
+    }
+    /**
+     * @inheritdoc
+     */
+    override getVideoHref(videoID: string): string {
+        return `https://v.qq.com/x/page/${videoID}.html`;
     }
 }

@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Parser } from 'htmlparser2/lib/Parser';
+import { Parser } from 'htmlparser2';
 import { sourceLineIncremental } from '../../utils';
 import type * as IncrementalDom from 'incremental-dom';
 import type Token from 'markdown-it/lib/token';

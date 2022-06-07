@@ -16,6 +16,9 @@ export default class VideoServiceBase<T extends object = object> {
     getVideoUrl(videoID: string): string {
         throw new Error('not implemented');
     }
+    getVideoHref(videoID: string): string {
+        return this.getVideoUrl(videoID);
+    }
     getEmbedCode(videoID: string) {
         const videoSrc = this.getVideoUrl(videoID);
 

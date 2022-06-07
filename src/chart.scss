@@ -4,7 +4,7 @@
   overflow: auto;
 }
 
-#container {
+.container {
   display: flex;
   flex-flow: column;
   place-content: center;
@@ -12,7 +12,7 @@
   min-width: 300px;
 }
 
-#error:empty {
+.error:empty {
   display: none;
 }
 

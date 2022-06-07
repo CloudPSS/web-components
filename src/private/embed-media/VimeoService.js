@@ -18,7 +18,11 @@ class VimeoService extends VideoServiceBase {
     }
 
     getVideoUrl(videoID) {
-        return `//player.vimeo.com/video/${videoID}`;
+        return `https://player.vimeo.com/video/${videoID}`;
+    }
+
+    getVideoHref(videoID) {
+        return `https://vimeo.com/${videoID}`;
     }
 }
 

@@ -5,18 +5,23 @@
   break-inside: avoid;
 }
 
-#container {
+.container {
   margin: auto;
-  display: flex;
+  display: block;
+  position: relative;
+  padding-bottom: calc(100% / (var(--cwe-media-ratio, 16 / 9)));
   width: 100%;
-  max-width: 720px;
+  max-width: var(--cwe-max-width, 960px);
 
   @media print {
     display: none;
   }
 
   * {
-    flex: auto;
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    width: 100%;
   }
 }
 
@@ -24,7 +29,7 @@ iframe {
   border: none;
 }
 
-#info {
+.info {
   text-indent: -2em;
   padding-left: 2em;
   text-decoration: underline;

@@ -16,7 +16,10 @@ class VineService extends VideoServiceBase {
     }
 
     getVideoUrl(videoID) {
-        return `//vine.co/v/${videoID}/embed/${this.options.embed || 'simple'}`;
+        return `https://vine.co/v/${videoID}/embed/${this.options.embed || 'simple'}`;
+    }
+    getVideoHref(videoID) {
+        return `https://vine.co/v/${videoID}`;
     }
 }
 

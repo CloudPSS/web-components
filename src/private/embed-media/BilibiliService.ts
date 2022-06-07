@@ -35,4 +35,11 @@ export default class BilibiliService extends VideoServiceBase {
         if (!idArg) throw new Error('Invalid video id');
         return `//player.bilibili.com/player.html?${idArg}&as_wide=1&high_quality=1&danmaku=0`;
     }
+
+    /**
+     * @inheritdoc
+     */
+    override getVideoHref(videoID: string): string {
+        return `https://www.bilibili.com/video/${videoID}`;
+    }
 }

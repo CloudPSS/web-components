@@ -65,6 +65,12 @@ export class EmbedMediaElement extends LitElement {
     get src(): string | undefined {
         return this.__src;
     }
+    /** 媒体链接 */
+    private __href?: string;
+    /** 媒体链接 */
+    get href(): string | undefined {
+        return this.__href;
+    }
     /**
      * @inheritdoc
      */
@@ -80,6 +86,7 @@ export class EmbedMediaElement extends LitElement {
                     ? this.renderTemplate(
                           new URL(service.getVideoUrl(this.srcid), this.baseURI).href,
                           service.getEmbedCode(this.srcid),
+                          new URL(service.getVideoHref(this.srcid), this.baseURI).href,
                       )
                     : this.renderTemplate();
             }
@@ -90,8 +97,7 @@ export class EmbedMediaElement extends LitElement {
     /**
      * 骨架
      */
-    private renderTemplate(src?: string, data?: unknown): TemplateResult {
-        this.__src = src ? src : undefined;
+    private renderTemplate(src?: string, data?: unknown, href?: string): TemplateResult {
         if (src) {
             this.setAttribute('src', src);
             this.__src = src;
@@ -100,8 +106,17 @@ export class EmbedMediaElement extends LitElement {
             this.__src = undefined;
             src = '';
         }
-        return html`<div id="container" aria-labelledby="info">${data}</div>
-            <div id="info">${src}</div>`;
+        if (href) {
+            this.setAttribute('href', href);
+            this.__href = href;
+        } else {
+            this.removeAttribute('href');
+            this.__href = undefined;
+            href = '';
+        }
+        const random = Math.random().toString(36).slice(2);
+        return html`<div class="container" aria-labelledby="info-${random}">${data}</div>
+            <div id="info-${random}" class="info">${href}</div>`;
     }
 
     /** 注册的服务 */

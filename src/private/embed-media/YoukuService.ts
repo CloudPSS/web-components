@@ -15,6 +15,12 @@ export default class YoukuService extends VideoServiceBase {
      * @inheritdoc
      */
     override getVideoUrl(videoID: string): string {
-        return `//player.youku.com/embed/${videoID}`;
+        return `https://player.youku.com/embed/${videoID}`;
+    }
+    /**
+     * @inheritdoc
+     */
+    override getVideoHref(videoID: string): string {
+        return `https://v.youku.com/v_show/id_${videoID}.html`;
     }
 }

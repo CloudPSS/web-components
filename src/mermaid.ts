@@ -85,7 +85,7 @@ export class MermaidElement extends LitElement {
     @property({ reflect: true }) theme?: mermaidAPI.Theme;
 
     /** 容器 */
-    @query('#container', true) elContainer!: HTMLDivElement;
+    @query('.container', true) elContainer!: HTMLDivElement;
     /**
      * @inheritdoc
      */
@@ -104,11 +104,7 @@ export class MermaidElement extends LitElement {
     protected override render(): TemplateResult {
         const customStyle = style(this);
         return html`<div id="container"></div>
-            ${customStyle
-                ? html`<style>
-                      ${customStyle}
-                  </style>`
-                : undefined}`;
+            ${customStyle ? html`<style class="custom-style" .textContent=${customStyle}></style>` : undefined}`;
     }
 
     /**

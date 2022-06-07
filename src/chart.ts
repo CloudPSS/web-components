@@ -31,7 +31,7 @@ export class ChartElement extends LitElement {
     /** 渲染元素 */
     @query('canvas') private readonly elCanvas!: HTMLCanvasElement;
     /** 渲染元素 */
-    @query('#error') private readonly elError!: HTMLParagraphElement;
+    @query('.error') private readonly elError!: HTMLParagraphElement;
     /** 图表配置 */
     @property({ reflect: true, type: Object }) config?: ChartConfiguration;
     /** 表格 */
@@ -41,15 +41,11 @@ export class ChartElement extends LitElement {
      */
     protected override render(): TemplateResult {
         const customStyle = style(this);
-        return html`<div id="container">
+        return html`<div class="container">
                 <canvas></canvas>
-                <p id="error"></p>
+                <p class="error"></p>
             </div>
-            ${customStyle
-                ? html`<style>
-                      ${customStyle}
-                  </style>`
-                : undefined}`;
+            ${customStyle ? html`<style class="custom-style" .textContent=${customStyle}></style>` : undefined}`;
     }
 
     /**

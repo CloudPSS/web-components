@@ -16,7 +16,11 @@ class YouTubeService extends VideoServiceBase {
     }
 
     getVideoUrl(videoID) {
-        return `//www.youtube.com/embed/${videoID}`;
+        return `https://www.youtube.com/embed/${videoID}`;
+    }
+
+    getVideoHref(videoID) {
+        return `https://www.youtube.com/watch?v=${videoID}`;
     }
 }
 

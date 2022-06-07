@@ -24,6 +24,9 @@ class PreziService extends VideoServiceBase {
             'landing_sign=1kD6c0N6aYpMUS0wxnQjxzSqZlEB8qNFdxtdjYhwSuI'
         );
     }
+    getVideoHref(videoID) {
+        return 'https://prezi.com/' + videoID;
+    }
 }
 
 export default PreziService;
