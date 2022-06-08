@@ -15,10 +15,10 @@ import {
 import { style, theme } from './config';
 import styles from './mermaid.scss.style.js';
 
-let t: mermaidAPI.Theme = 'default';
+let t = 'default' as mermaidAPI.Theme;
 
 const tSub = theme.pipe(
-    map((v) => (v === 'dark' ? 'dark' : 'default')),
+    map((v) => (v === 'dark' ? 'dark' : 'default') as mermaidAPI.Theme),
     distinctUntilChanged(),
     tap((v) => (t = v)),
     share(),
