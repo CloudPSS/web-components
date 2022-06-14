@@ -11,6 +11,7 @@ import * as markdownItMath from './math';
 import * as markdownItDeflist from 'markdown-it-deflist';
 import * as markdownItAbbr from 'markdown-it-abbr';
 import * as markdownItIns from 'markdown-it-ins';
+import * as markdownItKbd from 'markdown-it-kbd';
 import * as markdownItMark from 'markdown-it-mark';
 import * as markdownItImsize from './imsize';
 import * as markdownItMultimdTable from 'markdown-it-multimd-table';
@@ -257,6 +258,7 @@ export default function (options) {
         [markdownItDeflist],
         [markdownItAbbr],
         [markdownItIns],
+        [markdownItKbd],
         [markdownItMark],
         [markdownItImsize],
         [
