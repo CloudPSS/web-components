@@ -14,6 +14,7 @@ export default defineConfig({
         litCss(),
     ],
     build: {
+        target: 'esnext',
         sourcemap: true,
         minify: false,
         manifest: true,
