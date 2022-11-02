@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import checker from 'vite-plugin-checker';
 import litCss from './plugins/lit-css';
 import dts from 'vite-plugin-dts';
 import glob from 'fast-glob';
@@ -6,6 +7,7 @@ import glob from 'fast-glob';
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
+        checker({ typescript: true }),
         dts({
             exclude: ['src/types/**/*.d.ts'],
         }),
