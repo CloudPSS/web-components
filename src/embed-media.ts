@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { CSSResultArray, customElement, html, state, LitElement, property, TemplateResult } from 'lit-element';
-import BilibiliService from './private/embed-media/BilibiliService';
-import PreziService from './private/embed-media/PreziService';
-import TencentService from './private/embed-media/TencentService';
-import VideoServiceBase from './private/embed-media/VideoServiceBase';
-import VimeoService from './private/embed-media/VimeoService';
-import VineService from './private/embed-media/VineService';
-import YoukuService from './private/embed-media/YoukuService';
-import YouTubeService from './private/embed-media/YouTubeService';
-import styles from './embed-media.scss.style.js';
+import { CSSResultArray, html, LitElement, TemplateResult } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import BilibiliService from './private/embed-media/BilibiliService.js';
+import PreziService from './private/embed-media/PreziService.js';
+import TencentService from './private/embed-media/TencentService.js';
+import VideoServiceBase from './private/embed-media/VideoServiceBase.js';
+import VimeoService from './private/embed-media/VimeoService.js';
+import VineService from './private/embed-media/VineService.js';
+import YoukuService from './private/embed-media/YoukuService.js';
+import YouTubeService from './private/embed-media/YouTubeService.js';
+import styles from './embed-media.scss';
 
 /**
  * 媒体组件

@@ -1,24 +1,15 @@
 import { Subscription, merge, Observable, fromEvent } from 'rxjs';
 import { tap, share, map, distinctUntilChanged, delay, throttleTime, mapTo } from 'rxjs/operators';
-import mermaid from 'mermaid';
-import type mermaidAPI from 'mermaid/mermaidAPI';
-import {
-    CSSResultArray,
-    customElement,
-    html,
-    LitElement,
-    property,
-    PropertyValues,
-    query,
-    TemplateResult,
-} from 'lit-element';
-import { style, theme } from './config';
-import styles from './mermaid.scss.style.js';
+import mermaid, { type MermaidConfig } from 'mermaid';
+import { CSSResultArray, html, LitElement, PropertyValues, TemplateResult } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
+import { style, theme } from './config.js';
+import styles from './mermaid.scss';
 
-let t = 'default' as mermaidAPI.Theme;
+let t: MermaidConfig['theme'] = 'default';
 
 const tSub = theme.pipe(
-    map((v) => (v === 'dark' ? 'dark' : 'default') as mermaidAPI.Theme),
+    map((v) => (v === 'dark' ? 'dark' : 'default') as MermaidConfig['theme']),
     distinctUntilChanged(),
     tap((v) => (t = v)),
     share(),
@@ -82,7 +73,7 @@ export class MermaidElement extends LitElement {
     /** 图表配置 */
     @property({ reflect: true }) config?: string;
     /** 主题 */
-    @property({ reflect: true }) theme?: mermaidAPI.Theme;
+    @property({ reflect: true }) theme?: MermaidConfig['theme'];
 
     /** 容器 */
     @query('.container', true) elContainer!: HTMLDivElement;

@@ -1,10 +1,10 @@
 /* eslint-disable */
 import { Parser } from 'htmlparser2';
-import { sourceLineIncremental } from '../../utils';
+import { sourceLineIncremental } from '../../utils.js';
 import type * as IncrementalDom from 'incremental-dom';
-import type Token from 'markdown-it/lib/token';
+import type Token from 'markdown-it/lib/token.js';
 import type MarkdownIt from 'markdown-it';
-import type { IncrementalRenderer } from '..';
+import type { IncrementalRenderer } from '../index.js';
 
 /**
  * incremental-dom 渲染

@@ -1,5 +1,5 @@
 import Prism from 'prismjs';
-import PrismComponents from 'prismjs/components';
+import PrismComponents from 'prismjs/components.js';
 
 /**
  * @type {Object<string, string | string[]>}

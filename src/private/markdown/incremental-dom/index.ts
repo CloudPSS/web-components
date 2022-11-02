@@ -1,10 +1,10 @@
 /* eslint-disable */
 import MarkdownIt from 'markdown-it';
-import type Renderer from 'markdown-it/lib/renderer';
+import type Renderer from 'markdown-it/lib/renderer.js';
 import type * as IncrementalDom from 'incremental-dom';
-import Token from 'markdown-it/lib/token';
-import renderer, { IncrementalRendererMixin } from './mixins/renderer';
-import rules from './mixins/rules';
+import Token from 'markdown-it/lib/token.js';
+import renderer, { IncrementalRendererMixin } from './mixins/renderer.js';
+import rules from './mixins/rules.js';
 /**
  * @inheritdoc
  */

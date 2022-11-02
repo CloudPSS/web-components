@@ -3,19 +3,25 @@
 
 'use strict';
 
-import VideoServiceBase from './VideoServiceBase';
+import VideoServiceBase from './VideoServiceBase.js';
 
-class PreziService extends VideoServiceBase {
-    getDefaultOptions() {
+/**
+ * PreziService
+ */
+class PreziService extends VideoServiceBase<{ width: number; height: number }> {
+    /** @inheritdoc */
+    override getDefaultOptions(): { width: number; height: number } {
         return { width: 550, height: 400 };
     }
 
-    extractVideoID(reference) {
-        let match = reference.match(/^https:\/\/prezi.com\/(.[^/]+)/);
+    /** @inheritdoc */
+    override extractVideoID(reference: string): string {
+        const match = /^https:\/\/prezi.com\/(.[^/]+)/.exec(reference);
         return match ? match[1] : reference;
     }
 
-    getVideoUrl(videoID) {
+    /** @inheritdoc */
+    override getVideoUrl(videoID: string): string {
         return (
             'https://prezi.com/embed/' +
             videoID +
@@ -24,7 +30,8 @@ class PreziService extends VideoServiceBase {
             'landing_sign=1kD6c0N6aYpMUS0wxnQjxzSqZlEB8qNFdxtdjYhwSuI'
         );
     }
-    getVideoHref(videoID) {
+    /** @inheritdoc */
+    override getVideoHref(videoID: string): string {
         return 'https://prezi.com/' + videoID;
     }
 }

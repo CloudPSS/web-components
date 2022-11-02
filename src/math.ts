@@ -1,9 +1,10 @@
 import katex from 'katex/dist/katex.mjs';
-import { escapeHtml } from 'markdown-it/lib/common/utils';
-import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
-import { resolve, style as cfgStyle } from './config';
-import { loadStyle } from './private/utils';
-import styles from './math.scss.style.js';
+import { escapeHtml } from 'markdown-it/lib/common/utils.js';
+import { PropertyValues, UpdatingElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import { resolve, style as cfgStyle } from './config.js';
+import { loadStyle } from './private/utils.js';
+import styles from './math.scss';
 
 const katexVersion: string = katex.version || '^0.12';
 const katexCss = resolve('katex', katexVersion, 'dist/katex.css');

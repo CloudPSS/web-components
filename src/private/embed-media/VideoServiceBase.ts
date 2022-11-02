@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Copyright (c) Rotorz Limited and portions by original markdown-it-video authors
 // Licensed under the MIT license. See LICENSE file in the project root.
-import { html } from 'lit-element';
+import { html } from 'lit';
 
 export default class VideoServiceBase<T extends object = object> {
     constructor(readonly options: T = {} as T) {

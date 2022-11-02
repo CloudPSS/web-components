@@ -16,7 +16,7 @@ export function loadPlugin(plugin: unknown): PluginWithParams {
  */
 export function extend(plugin: unknown, load: (md: MarkdownIt, usePlugin: () => void) => void): PluginWithParams {
     const p = loadPlugin(plugin);
-    return (md, ...params) => {
+    return (md, ...params: unknown[]) => {
         load(md, () => {
             md.use(p, ...params);
         });
@@ -33,7 +33,7 @@ export function slugify(s: string): string {
 /**
  * 生成 data-source-line 属性
  */
-export function sourceLine(token: import('markdown-it/lib/token')): string {
+export function sourceLine(token: import('markdown-it/lib/token.js')): string {
     if (token.map) return ` data-source-line="${token.map[0] + 1}"`;
     return '';
 }
@@ -41,7 +41,7 @@ export function sourceLine(token: import('markdown-it/lib/token')): string {
 /**
  * 生成 data-source-line 属性
  */
-export function sourceLineIncremental(token: import('markdown-it/lib/token')): unknown[] {
+export function sourceLineIncremental(token: import('markdown-it/lib/token.js')): unknown[] {
     if (token.map) return ['data-source-line', token.map[0] + 1];
     return [];
 }

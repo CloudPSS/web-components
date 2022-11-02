@@ -1,4 +1,4 @@
-import { slugify } from './utils';
+import { slugify } from './utils.js';
 
 /**
  * 一些必要的处理

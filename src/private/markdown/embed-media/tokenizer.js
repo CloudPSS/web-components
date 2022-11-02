@@ -30,7 +30,7 @@ function advanceToSymbol(state, endLine, symbol, pointer) {
 }
 
 /**
- * @type {import('markdown-it/lib/parser_block').RuleBlock}
+ * @type {import('markdown-it/lib/parser_block.js').RuleBlock}
  */
 function tokenizer(state, startLine, endLine, silent) {
     let startPos = state.bMarks[startLine] + state.tShift[startLine];

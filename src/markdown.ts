@@ -1,9 +1,10 @@
-import { customElement, property, PropertyValues, UpdatingElement } from 'lit-element';
-import markdownIt from './private/markdown';
-import { style } from './config';
+import { PropertyValues, UpdatingElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import markdownIt from './private/markdown/index.js';
+import { style } from './config.js';
 import * as IncrementalDOM from 'incremental-dom';
-import { postRender } from './private/markdown/post-render';
-import styles from './markdown.scss.style.js';
+import { postRender } from './private/markdown/post-render.js';
+import styles from './markdown.scss';
 
 let fm: string | undefined;
 let src: URL | undefined;

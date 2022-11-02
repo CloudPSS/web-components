@@ -1,16 +1,8 @@
-import {
-    customElement,
-    property,
-    PropertyValues,
-    LitElement,
-    query,
-    CSSResultArray,
-    TemplateResult,
-    html,
-} from 'lit-element';
+import { PropertyValues, LitElement, CSSResultArray, TemplateResult, html } from 'lit';
+import { customElement, property, query } from 'lit/decorators.js';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
-import { style } from './config';
-import styles from './chart.scss.style.js';
+import { style } from './config.js';
+import styles from './chart.scss';
 
 Chart.register(...registerables);
 

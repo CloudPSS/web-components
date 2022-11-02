@@ -1,11 +1,12 @@
-import { resolve, style, theme } from './config';
-import { CSSResultArray, customElement, property, PropertyValues, ReactiveElement } from 'lit-element';
+import { resolve, style, theme } from './config.js';
+import { CSSResultArray, PropertyValues, ReactiveElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import { Subscription } from 'rxjs';
-import { loadStyle } from './private/utils';
+import { loadStyle } from './private/utils.js';
 import Prism from 'prismjs';
-import PrismComponents from 'prismjs/components';
-import autoloader from './private/prism-autoloader';
-import styles from './highlight.scss.style.js';
+import PrismComponents from 'prismjs/components.js';
+import autoloader from './private/prism-autoloader.js';
+import styles from './highlight.scss';
 
 autoloader.languages_path = resolvePrism('components/');
 

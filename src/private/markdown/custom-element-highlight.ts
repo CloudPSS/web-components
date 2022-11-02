@@ -1,14 +1,14 @@
 import type MarkdownIt from 'markdown-it';
-import { unescapeAll } from 'markdown-it/lib/common/utils';
-import { slugify, sourceLineIncremental } from './utils';
+import { unescapeAll } from 'markdown-it/lib/common/utils.js';
+import { slugify, sourceLineIncremental } from './utils.js';
 import { elementClose, elementOpen, elementVoid, text } from 'incremental-dom';
-import { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incremental-dom';
+import { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incremental-dom/index.js';
 
 /**
  * 高亮
  */
 const code_block: IncrementalRenderRule = (tokens, idx, _options, _env, slf) => {
-    void import('../../highlight');
+    void import('../../highlight.js');
     return () => {
         const token = tokens[idx];
         elementVoid(
@@ -43,7 +43,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
 
         switch (lang) {
             case 'mermaid':
-                void import('../../mermaid');
+                void import('../../mermaid.js');
                 elementVoid(
                     'cwe-mermaid',
                     title || code,
@@ -55,7 +55,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 );
                 return;
             case 'chart': {
-                void import('../../chart');
+                void import('../../chart.js');
                 let config;
                 let error = '';
                 try {
@@ -82,7 +82,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 return;
             }
             default: {
-                void import('../../highlight');
+                void import('../../highlight.js');
                 const langAttr = lang ? ['language', lang] : [];
                 elementVoid(
                     'cwe-highlight',

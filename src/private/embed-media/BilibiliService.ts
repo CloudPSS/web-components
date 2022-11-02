@@ -1,4 +1,4 @@
-import VideoServiceBase from './VideoServiceBase';
+import VideoServiceBase from './VideoServiceBase.js';
 
 /**
  * BilibiliService
