@@ -1,4 +1,4 @@
-import { PropertyValues, UpdatingElement } from 'lit';
+import { PropertyValues, ReactiveElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import markdownIt from './private/markdown/index.js';
 import { style } from './config.js';
@@ -31,7 +31,7 @@ md.validateLink = () => true;
  * @event navigate
  */
 @customElement('cwe-markdown')
-export class MarkdownElement extends UpdatingElement {
+export class MarkdownElement extends ReactiveElement {
     constructor() {
         super();
         const root = this.attachShadow({ mode: 'open' });

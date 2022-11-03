@@ -1,6 +1,6 @@
 import katex from 'katex/dist/katex.mjs';
 import { escapeHtml } from 'markdown-it/lib/common/utils.js';
-import { PropertyValues, UpdatingElement } from 'lit';
+import { PropertyValues, ReactiveElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { resolve, style as cfgStyle } from './config.js';
 import { loadStyle } from './private/utils.js';
@@ -54,7 +54,7 @@ type MathMode = 'inline' | 'display';
  * 公式组件
  */
 @customElement('cwe-math')
-export class MathElement extends UpdatingElement {
+export class MathElement extends ReactiveElement {
     constructor() {
         super();
         const root = this.attachShadow({ mode: 'open' });

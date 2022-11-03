@@ -8,6 +8,7 @@ node_modules/
 .pnp/
 
 # config files
+/plugin
 /scripts
 *.config.*
 .*.*

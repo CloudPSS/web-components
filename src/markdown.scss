@@ -429,7 +429,7 @@ a.footnote-backref {
   margin: 4px;
 
   &::before {
-    content: '↩\\fe0e';
+    content: '↩\fe0e';
   }
 
   @media print {
