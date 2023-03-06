@@ -104,13 +104,13 @@ export class MermaidElement extends LitElement {
     protected override updated(changedProperties: PropertyValues): void {
         super.updated(changedProperties);
         this.subs[0]?.unsubscribe();
-        const render = (): void => {
+        const render = async (): Promise<void> => {
             const config = this.config ?? '';
             const theme = this.theme ?? t;
             mermaid.initialize({ theme });
             try {
                 this.elContainer.classList.remove('error');
-                mermaid.parse(config);
+                await mermaid.parse(config);
             } catch (ex) {
                 const e = ex as Error & { str: string };
                 this.elContainer.textContent = e.str || e.message || String(e);
@@ -121,20 +121,22 @@ export class MermaidElement extends LitElement {
             container.style.width = `${this.clientWidth}px`;
             container.id = `mermaid_temp_${Math.floor(Math.random() * 10000000000)}`;
             document.body.append(container);
-            mermaid.render(
+            const { svg, bindFunctions } = await mermaid.render(
                 `mermaid_${Math.floor(Math.random() * 10000000000)}`,
                 this.config ?? '',
-                (svg, func) => {
-                    const el = this.elContainer;
-                    el.innerHTML = svg;
-                    func?.(el);
-                },
                 container,
             );
+            const el = this.elContainer;
+            el.innerHTML = svg;
+            bindFunctions?.(el);
             container.remove();
         };
-        this.subs[0] = merge(resizeAction, tSub).subscribe(() => requestAnimationFrame(render));
-        render();
+        this.subs[0] = merge(resizeAction, tSub).subscribe(() =>
+            requestAnimationFrame(() => {
+                void render();
+            }),
+        );
+        void render();
     }
     /**
      * @inheritdoc
