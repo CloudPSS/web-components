@@ -426,7 +426,7 @@ li.footnote-item {
 a.footnote-backref {
   user-select: none;
   display: inline-block;
-  margin: 4px;
+  margin: 0 4px;
 
   &::before {
     content: '↩\fe0e';
