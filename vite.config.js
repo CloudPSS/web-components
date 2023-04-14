@@ -6,13 +6,7 @@ import glob from 'fast-glob';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [
-        checker({ typescript: true }),
-        dts({
-            exclude: ['src/types/**/*.d.ts'],
-        }),
-        litCss(),
-    ],
+    plugins: [checker({ typescript: true }), dts(), litCss()],
     build: {
         target: 'esnext',
         sourcemap: true,
