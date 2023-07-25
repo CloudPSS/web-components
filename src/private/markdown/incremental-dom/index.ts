@@ -34,29 +34,26 @@ export type IncrementalRenderRule = (
     slf: IncrementalRenderer,
 ) => () => void;
 
-export interface IncrementalMarkdownIt extends MarkdownIt {
-    renderToIncrementalDOM(src: string, env?: unknown): () => void;
-    renderInlineToIncrementalDOM(src: string, env?: unknown): () => void;
-    readonly IncrementalDOMRenderer: IncrementalRenderer;
+export interface IncrementalMarkdownIt extends Omit<MarkdownIt, 'render' | 'renderInline'> {
+    render(src: string, env?: unknown): () => void;
+    renderInline(src: string, env?: unknown): () => void;
 }
 
-export default function (md: IncrementalMarkdownIt, target: typeof IncrementalDom) {
+export default function (md: IncrementalMarkdownIt, target: unknown) {
     const incrementalDOM: typeof IncrementalDom = !target && window ? Reflect.get(window, 'IncrementalDOM') : target;
     const mixin = renderer(incrementalDOM);
 
-    Object.defineProperty(md, 'IncrementalDOMRenderer', {
-        get() {
-            const extended = Object.assign(Object.create(Object.getPrototypeOf(md.renderer)), md.renderer, mixin);
+    const incrementalRenderer = Object.assign(
+        Object.create(Object.getPrototypeOf(md.renderer)),
+        md.renderer,
+        mixin,
+    ) as IncrementalRenderer;
+    incrementalRenderer.rules = { ...incrementalRenderer.rules, ...rules(incrementalDOM) };
 
-            extended.rules = { ...extended.rules, ...rules(incrementalDOM) };
-
-            return extended;
-        },
-    });
-
-    md.renderToIncrementalDOM = (src, env = {}) =>
-        md.IncrementalDOMRenderer.render(md.parse(src, env), md.options, env);
-
-    md.renderInlineToIncrementalDOM = (src, env = {}) =>
-        md.IncrementalDOMRenderer.render(md.parseInline(src, env), md.options, env);
+    md.render = function (src, env = {}) {
+        return incrementalRenderer.render(this.parse(src, env), this.options, env);
+    };
+    md.renderInline = function (src, env = {}) {
+        return incrementalRenderer.render(this.parseInline(src, env), this.options, env);
+    };
 }

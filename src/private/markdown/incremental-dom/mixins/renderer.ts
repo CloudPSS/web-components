@@ -28,9 +28,8 @@ export type IncrementalRenderRule = (
     slf: IncrementalRenderer,
 ) => () => void;
 
-export default function (
-    incrementalDom: typeof IncrementalDom,
-): IncrementalRendererMixin & ThisType<IncrementalRenderer> {
+export default function (target: unknown): IncrementalRendererMixin & ThisType<IncrementalRenderer> {
+    const incrementalDom = target as typeof IncrementalDom;
     const autoClosingStack: IncrementalDom.NameOrCtorDef[][] = [];
 
     const autoClosing = (): void => {

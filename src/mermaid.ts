@@ -1,5 +1,5 @@
-import { Subscription, merge, Observable, fromEvent } from 'rxjs';
-import { tap, share, map, distinctUntilChanged, delay, throttleTime, mapTo } from 'rxjs/operators';
+import { Subscription, merge, fromEvent } from 'rxjs';
+import { tap, share, map, distinctUntilChanged, delay, throttleTime } from 'rxjs/operators';
 import mermaid, { type MermaidConfig } from 'mermaid';
 import { CSSResultArray, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
@@ -17,13 +17,13 @@ const tSub = theme.pipe(
 /**
  * 元素大小变化
  */
-const resizeStart: Observable<void> = fromEvent(window, 'resize').pipe(mapTo(undefined), share());
+const resizeStart = fromEvent(window, 'resize').pipe(share());
 const resizeAction = resizeStart.pipe(throttleTime(300, undefined, { leading: true, trailing: true }));
 const resizeEnd = resizeAction.pipe(delay(200));
 
 /** 插入样式 */
 function insertRootStyle(): void {
-    if (document.getElementById('mermaid-root-style') != null) return;
+    if (document.querySelector('#mermaid-root-style') != null) return;
 
     const rootStyle = document.createElement('style');
     rootStyle.id = 'mermaid-root-style';
@@ -47,10 +47,10 @@ div.mermaidTooltip {
 `;
     if (!document.head) {
         document.addEventListener('DOMContentLoaded', () => {
-            document.head.appendChild(rootStyle);
+            document.head.append(rootStyle);
         });
     } else {
-        document.head.appendChild(rootStyle);
+        document.head.append(rootStyle);
     }
 }
 
@@ -119,10 +119,10 @@ export class MermaidElement extends LitElement {
             }
             const container = document.createElement('div');
             container.style.width = `${this.clientWidth}px`;
-            container.id = `mermaid_temp_${Math.floor(Math.random() * 10000000000)}`;
+            container.id = `mermaid_temp_${Math.floor(Math.random() * 10_000_000_000)}`;
             document.body.append(container);
             const { svg, bindFunctions } = await mermaid.render(
-                `mermaid_${Math.floor(Math.random() * 10000000000)}`,
+                `mermaid_${Math.floor(Math.random() * 10_000_000_000)}`,
                 this.config ?? '',
                 container,
             );

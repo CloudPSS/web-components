@@ -2,8 +2,8 @@
 import type * as IncrementalDom from 'incremental-dom';
 import type { IncrementalRenderRuleRecord } from '../index.js';
 
-export default function (incrementalDom: typeof IncrementalDom): IncrementalRenderRuleRecord {
-    const { elementClose, elementOpen, elementVoid, text } = incrementalDom;
+export default function (target: unknown): IncrementalRenderRuleRecord {
+    const { elementClose, elementOpen, elementVoid, text } = target as typeof IncrementalDom;
 
     return {
         code_inline(tokens, idx, options, env, slf) {

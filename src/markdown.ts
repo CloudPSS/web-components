@@ -43,6 +43,8 @@ const defaultRenderer: MarkdownRenderer = (options = {}) => {
 export class MarkdownElement extends ReactiveElement {
     static renderer = defaultRenderer;
 
+    static patcher: (node: Element | DocumentFragment, template: () => void) => Node = IncrementalDOM.patch<void>;
+
     constructor() {
         super();
         const root = this.attachShadow({ mode: 'open' });
@@ -95,11 +97,10 @@ export class MarkdownElement extends ReactiveElement {
                 frontMatter: (fm) => (frontMatter = fm),
                 documentSrc: src,
             });
-            const rendered =
-                md[this.mode === 'inline' ? 'renderInlineToIncrementalDOM' : 'renderToIncrementalDOM'](doc);
+            const rendered = md[this.mode === 'inline' ? 'renderInline' : 'render'](doc);
             this.__frontMatter = frontMatter;
 
-            IncrementalDOM.patch(this.elArticle, rendered);
+            ((this.constructor as typeof MarkdownElement).patcher ?? IncrementalDOM.patch)(this.elArticle, rendered);
             postRender(this.elArticle);
             this.dispatchEvent(new CustomEvent('render'));
         }
