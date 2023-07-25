@@ -37,6 +37,24 @@ function loadPrismStyle(el: HTMLLinkElement, theme: string): Promise<void> {
     return loadStyle(el, src);
 }
 
+const langMap = new Map<string, string>();
+const langTitleMap = new Map<string, string>();
+for (const [key, def] of Object.entries(PrismComponents.languages as Record<string, Language>)) {
+    const title = def.title ?? key;
+    langMap.set(key, key);
+    langMap.set(title.toLowerCase(), key);
+    langTitleMap.set(key, title);
+
+    const aliases = Array.isArray(def.alias) ? def.alias : def.alias ? [def.alias] : [];
+    const aliasTitles = def.aliasTitles ?? {};
+    for (const alias of aliases) {
+        const aliasTitle = aliasTitles[alias] ?? title;
+        langMap.set(alias.toLowerCase(), key);
+        langMap.set(aliasTitle.toLowerCase(), key);
+        langTitleMap.set(alias.toLowerCase(), aliasTitle);
+    }
+}
+
 /**
  * 高亮组件
  */
@@ -49,16 +67,16 @@ export class HighlightElement extends ReactiveElement {
         this.elStyle = document.createElement('link');
         this.elStyle.rel = 'stylesheet';
         const pre = document.createElement('pre');
-        pre.appendChild(this.elCode);
-        renderRoot.appendChild(pre);
-        renderRoot.appendChild(this.elStyle);
+        pre.append(this.elCode);
+        renderRoot.append(pre);
+        renderRoot.append(this.elStyle);
 
         const customStyle = style(this);
         if (customStyle) {
             const s = document.createElement('style');
             s.classList.add('custom-style');
             s.textContent = customStyle;
-            renderRoot.appendChild(s);
+            renderRoot.append(s);
         }
     }
     /**
@@ -72,9 +90,28 @@ export class HighlightElement extends ReactiveElement {
     /** 样式元素 */
     private readonly elStyle: HTMLLinkElement;
 
+    static readonly languages = PrismComponents.languages as Record<string, Language>;
     /** 语言 */
-    @property({ reflect: true })
-    language?: string | null;
+    private _language?: string;
+    /** 语言 */
+    @property()
+    get language(): string | undefined {
+        return this._language;
+    }
+    set language(value: string | undefined) {
+        const oldValue = this._language;
+        if (typeof value == 'string') {
+            value = value.toLowerCase();
+            value = langTitleMap.get(value) ?? value;
+        } else {
+            value = undefined;
+        }
+        if (oldValue === value) return;
+        this._language = value;
+        this.requestUpdate('language', oldValue);
+        if (value) this.setAttribute('language', value);
+        else this.removeAttribute('language');
+    }
     /** 代码段 */
     @property({ reflect: true }) srcdoc?: string;
     /** prism 样式表名字 */
@@ -100,19 +137,6 @@ export class HighlightElement extends ReactiveElement {
     }
 
     /**
-     * Wait prism.js to initialize.
-     *
-     * @inheritdoc
-     */
-    protected override async performUpdate(): Promise<unknown> {
-        const l = setTimeout(() => {
-            this.elCode.textContent = this.srcdoc ?? '';
-        }, 50);
-        clearTimeout(l);
-        return super.performUpdate();
-    }
-
-    /**
      * @inheritdoc
      */
     protected override update(changedProperties: PropertyValues): void {
@@ -124,42 +148,18 @@ export class HighlightElement extends ReactiveElement {
             }
         }
         if (changedProperties.has('language') || changedProperties.has('srcdoc')) {
-            let lang = this.language ?? '';
-            lang = lang.toLowerCase();
-
-            let langData: Language | undefined;
-            let langKey: string | undefined;
-            for (const langDef in PrismComponents.languages) {
-                const currentData = PrismComponents.languages[langDef] as Language;
-                if (!currentData?.title) continue;
-                if (lang === langDef) {
-                    langKey = langDef;
-                    langData = currentData;
-                    break;
-                }
-                if (
-                    currentData.alias &&
-                    (Array.isArray(currentData.alias) ? currentData.alias.includes(lang) : currentData.alias === lang)
-                ) {
-                    langKey = langDef;
-                    langData = currentData;
-                    break;
-                }
-            }
-            const langTitle = langData?.aliasTitles?.[lang] ?? langData?.title ?? this.language ?? '';
-            if (langTitle) this.language = langTitle;
             const code = this.srcdoc ?? '';
-            if (langKey) {
-                const k = langKey;
+            const lang = this.language && langMap.get(this.language.toLowerCase());
+            if (lang) {
                 this.elCode.setAttribute('language', lang);
-                const highlighter = Prism.languages[k];
+                const highlighter = Prism.languages[lang];
                 if (highlighter) {
-                    this.elCode.innerHTML = Prism.highlight(code, Prism.languages[k], lang);
+                    this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
                 } else {
                     this.elCode.textContent = code;
 
                     autoloader.loadLanguages(lang, () => {
-                        this.elCode.innerHTML = Prism.highlight(code, Prism.languages[k], lang);
+                        this.elCode.innerHTML = Prism.highlight(code, Prism.languages[lang], lang);
                     });
                 }
             } else {

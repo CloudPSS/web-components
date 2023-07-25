@@ -1,4 +1,5 @@
-/* eslint-disable */
+/* eslint-disable jsdoc/require-jsdoc */
+
 import { Parser } from 'htmlparser2';
 import { sourceLineIncremental } from '../../utils.js';
 import type * as IncrementalDom from 'incremental-dom';
@@ -32,7 +33,7 @@ export default function (
 ): IncrementalRendererMixin & ThisType<IncrementalRenderer> {
     const autoClosingStack: IncrementalDom.NameOrCtorDef[][] = [];
 
-    const autoClosing = () => {
+    const autoClosing = (): void => {
         const stack = autoClosingStack.shift();
         if (!stack) return;
 
@@ -41,22 +42,22 @@ export default function (
 
     const { attr, elementOpenEnd, elementVoid, text } = incrementalDom;
 
-    const elementOpen: typeof IncrementalDom['elementOpen'] = (tag, ...args) => {
+    const elementOpen: (typeof IncrementalDom)['elementOpen'] = (tag, ...args) => {
         if (autoClosingStack.length > 0) autoClosingStack[0].push(tag);
         return incrementalDom.elementOpen(tag, ...args);
     };
 
-    const elementOpenStart: typeof IncrementalDom['elementOpenStart'] = (tag) => {
+    const elementOpenStart: (typeof IncrementalDom)['elementOpenStart'] = (tag) => {
         if (autoClosingStack.length > 0) autoClosingStack[0].push(tag);
         return incrementalDom.elementOpenStart(tag);
     };
 
-    const elementClose: typeof IncrementalDom['elementClose'] = (tag) => {
+    const elementClose: (typeof IncrementalDom)['elementClose'] = (tag) => {
         if (autoClosingStack.length > 0) autoClosingStack[0].pop();
         return incrementalDom.elementClose(tag);
     };
 
-    const sanitizeName = (name: string) => name.replace(/[^-:\w]/g, '');
+    const sanitizeName = (name: string): string => name.replace(/[^-:\w]/g, '');
 
     const iDOMParser = new Parser(
         {
@@ -76,7 +77,7 @@ export default function (
         },
     );
 
-    const wrapIncrementalDOM = (html: string | (() => void)) => {
+    const wrapIncrementalDOM = (html: string | (() => void)): void => {
         if (typeof html === 'function') return html();
         if (typeof html === 'string') {
             if (!html) return;
@@ -88,7 +89,7 @@ export default function (
     return {
         renderAttrsToArray(token: Token): string[] {
             if (!token.attrs) return [];
-            return token.attrs.reduce((v, a) => v.concat(a), [] as string[]);
+            return token.attrs.flat();
         },
 
         renderInline(tokens: Token[], options: MarkdownIt.Options, env: unknown) {
@@ -129,7 +130,7 @@ export default function (
 
                     if (type === 'inline') {
                         if (current.children) this.renderInline(current.children, options, env)();
-                    } else if (this.rules[type] != undefined) {
+                    } else if (this.rules[type] != null) {
                         wrapIncrementalDOM(this.rules[type]!(tokens, i, options, env, this));
                     } else {
                         this.renderToken(tokens, i, options, env)();

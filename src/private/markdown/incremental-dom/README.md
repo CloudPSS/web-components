@@ -35,7 +35,7 @@ IncrementalDOM.patch(document.getElementById('target'), md.renderToIncrementalDO
 Define as `window.markdownitIncrementalDOM`.
 
 ```html
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <script src="https://cdn.jsdelivr.net/npm/incremental-dom@0.6.0/dist/incremental-dom-min.js"></script>

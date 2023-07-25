@@ -26,7 +26,7 @@ import * as markdownItIncrementalDOM from './incremental-dom';
 import { markdownCustomElementHighlight } from './custom-element-highlight';
 
 /**
- * @param {markdownIt.Options & {frontMatter: (fm:string)=>void}} options
+ * @param {markdownIt.Options & {frontMatter?: (fm:string)=>void}} options
  */
 export default function (options) {
     options = Object.assign(

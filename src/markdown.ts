@@ -1,37 +1,49 @@
 import { PropertyValues, ReactiveElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import type MarkdownIt from 'markdown-it';
 import markdownIt from './private/markdown/index.js';
+import type * as markdownItIncrementalDOM from './private/markdown/incremental-dom';
+import { postRender } from './private/markdown/post-render.js';
 import { style } from './config.js';
 import * as IncrementalDOM from 'incremental-dom';
-import { postRender } from './private/markdown/post-render.js';
 import styles from './markdown.scss';
 
-let fm: string | undefined;
-let src: URL | undefined;
-const md = markdownIt({
-    frontMatter: (value) => {
-        fm = value;
-    },
-});
-const normalizeLink = md.normalizeLink.bind(md);
-md.normalizeLink = (url: string): string => {
-    if (!src) return normalizeLink(url);
-    const u = new URL(url, src);
-    if (u.origin === src?.origin) {
-        u.pathname.replace(/(\/index)?\.md$/i, '');
-    }
-    return normalizeLink(u.href);
+/** Markdown 选项 */
+export interface MarkdownRenderOptions extends MarkdownIt.Options {
+    /** 读取到 frontMatter 的回调 */
+    frontMatter?: (fm: string) => void;
+    /** 文档路径，用于解析文档中的相对路径链接 */
+    documentSrc?: URL;
+}
+
+/** Markdown 渲染 */
+export type MarkdownRenderer = (options?: MarkdownRenderOptions) => markdownItIncrementalDOM.IncrementalMarkdownIt;
+
+const defaultRenderer: MarkdownRenderer = (options = {}) => {
+    const src = options.documentSrc;
+    const md = markdownIt(options);
+    const normalizeLink = md.normalizeLink.bind(md);
+    md.normalizeLink = (url: string): string => {
+        if (!src) return normalizeLink(url);
+        const u = new URL(url, src);
+        if (u.origin === src?.origin) {
+            u.pathname.replace(/(\/index)?\.md$/i, '');
+        }
+        return normalizeLink(u.href);
+    };
+    md.validateLink = () => true;
+    return md;
 };
-md.validateLink = () => true;
 
 /**
  * Markdown 组件
- *
  * @event render
  * @event navigate
  */
 @customElement('cwe-markdown')
 export class MarkdownElement extends ReactiveElement {
+    static renderer = defaultRenderer;
+
     constructor() {
         super();
         const root = this.attachShadow({ mode: 'open' });
@@ -77,13 +89,16 @@ export class MarkdownElement extends ReactiveElement {
             changedProperties.has('mode') ||
             changedProperties.size === 0
         ) {
-            src = new URL(this.src ?? document.location.href, document.baseURI);
+            let frontMatter: string | undefined;
+            const src = new URL(this.src ?? document.location.href, document.baseURI);
             const doc = String(this.srcdoc ?? '');
+            const md = ((this.constructor as typeof MarkdownElement).renderer ?? defaultRenderer)({
+                frontMatter: (fm) => (frontMatter = fm),
+                documentSrc: src,
+            });
             const rendered =
                 md[this.mode === 'inline' ? 'renderInlineToIncrementalDOM' : 'renderToIncrementalDOM'](doc);
-            this.__frontMatter = fm;
-            src = undefined;
-            fm = undefined;
+            this.__frontMatter = frontMatter;
 
             IncrementalDOM.patch(this.elArticle, rendered);
             postRender(this.elArticle);

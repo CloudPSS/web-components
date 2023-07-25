@@ -133,7 +133,9 @@ code {
 
 kbd {
   box-shadow: 0 2px 2px 1px var(--p-cwe-markdown-code-border-color);
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 
   &:hover {
     box-shadow: 0 1px 2px 0px var(--p-cwe-markdown-code-border-color);
