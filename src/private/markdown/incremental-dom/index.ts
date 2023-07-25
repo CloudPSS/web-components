@@ -35,8 +35,8 @@ export type IncrementalRenderRule = (
 ) => () => void;
 
 export interface IncrementalMarkdownIt extends MarkdownIt {
-    renderToIncrementalDOM(src: string, env?: unknown): (a: unknown) => void;
-    renderInlineToIncrementalDOM(src: string, env?: unknown): (a: unknown) => void;
+    renderToIncrementalDOM(src: string, env?: unknown): () => void;
+    renderInlineToIncrementalDOM(src: string, env?: unknown): () => void;
     readonly IncrementalDOMRenderer: IncrementalRenderer;
 }
 

@@ -2,7 +2,7 @@ import { PropertyValues, ReactiveElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type MarkdownIt from 'markdown-it';
 import markdownIt from './private/markdown/index.js';
-import type * as markdownItIncrementalDOM from './private/markdown/incremental-dom';
+import type { IncrementalMarkdownIt } from './private/markdown/incremental-dom';
 import { postRender } from './private/markdown/post-render.js';
 import { style } from './config.js';
 import * as IncrementalDOM from 'incremental-dom';
@@ -15,9 +15,8 @@ export interface MarkdownRenderOptions extends MarkdownIt.Options {
     /** 文档路径，用于解析文档中的相对路径链接 */
     documentSrc?: URL;
 }
-
 /** Markdown 渲染 */
-export type MarkdownRenderer = (options?: MarkdownRenderOptions) => markdownItIncrementalDOM.IncrementalMarkdownIt;
+export type MarkdownRenderer = (options?: MarkdownRenderOptions) => IncrementalMarkdownIt;
 
 const defaultRenderer: MarkdownRenderer = (options = {}) => {
     const src = options.documentSrc;
@@ -37,8 +36,8 @@ const defaultRenderer: MarkdownRenderer = (options = {}) => {
 
 /**
  * Markdown 组件
- * @event render
- * @event navigate
+ * @event render 渲染完成时触发
+ * @event navigate 点击链接时触发，可以通过 `event.detail` 获取链接地址
  */
 @customElement('cwe-markdown')
 export class MarkdownElement extends ReactiveElement {
@@ -142,7 +141,7 @@ export class MarkdownElement extends ReactiveElement {
             }
             const targetItem = this.elArticle.querySelector(
                 '#' +
-                    [...decodeURIComponent(targetHash).slice(1)]
+                    [...String(decodeURIComponent(targetHash).slice(1))]
                         .map((c) => '\\' + (c.codePointAt(0) ?? 0).toString(16).padStart(6, '0'))
                         .join(''),
             );
@@ -168,7 +167,7 @@ export class MarkdownElement extends ReactiveElement {
             .map((h) => {
                 return {
                     id: h.id,
-                    title: h.innerText,
+                    title: h.textContent ?? '',
                     level: Number.parseInt(h.tagName.slice(1)),
                     element: h,
                 };
@@ -187,7 +186,7 @@ export class MarkdownElement extends ReactiveElement {
      * 文本内容
      */
     get text(): string {
-        return this.elArticle.innerText;
+        return this.elArticle.textContent ?? '';
     }
 
     /**

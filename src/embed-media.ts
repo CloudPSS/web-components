@@ -4,12 +4,14 @@ import { customElement, property, state } from 'lit/decorators.js';
 import BilibiliService from './private/embed-media/BilibiliService.js';
 import PreziService from './private/embed-media/PreziService.js';
 import TencentService from './private/embed-media/TencentService.js';
-import VideoServiceBase from './private/embed-media/VideoServiceBase.js';
+import VideoService from './private/embed-media/VideoServiceBase.js';
 import VimeoService from './private/embed-media/VimeoService.js';
 import VineService from './private/embed-media/VineService.js';
 import YoukuService from './private/embed-media/YoukuService.js';
 import YouTubeService from './private/embed-media/YouTubeService.js';
 import styles from './embed-media.scss';
+
+export { VideoService };
 
 /**
  * 媒体组件
@@ -83,7 +85,7 @@ export class EmbedMediaElement extends LitElement {
             const service = EmbedMediaElement.services[this.service];
             if (service) {
                 this.srcid = service.extractVideoID(this.srcid);
-                return this.load
+                return this.srcid && this.load
                     ? this.renderTemplate(
                           new URL(service.getVideoUrl(this.srcid), this.baseURI).href,
                           service.getEmbedCode(this.srcid),
@@ -121,7 +123,7 @@ export class EmbedMediaElement extends LitElement {
     }
 
     /** 注册的服务 */
-    static services: Record<string, VideoServiceBase | undefined> = {
+    static readonly services: Record<string, VideoService | undefined> = {
         youtube: new YouTubeService(),
         vimeo: new VimeoService(),
         vine: new VineService(),

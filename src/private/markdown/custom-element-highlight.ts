@@ -2,7 +2,7 @@ import type MarkdownIt from 'markdown-it';
 import { unescapeAll } from 'markdown-it/lib/common/utils.js';
 import { slugify, sourceLineIncremental } from './utils.js';
 import { elementClose, elementOpen, elementVoid, text } from 'incremental-dom';
-import { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incremental-dom/index.js';
+import type { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incremental-dom/index.js';
 
 /**
  * 高亮

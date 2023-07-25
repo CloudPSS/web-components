@@ -20,7 +20,7 @@
   "typesVersions": {
     ">=4.2": {
       "*": [
-        "dist/types/*"
+        "dist/*.d.ts"
       ]
     }
   },
