@@ -59,7 +59,7 @@ export default function (options) {
                             incrementalDOM.elementOpen('details', '', [], ...sourceLineIncremental(token));
                             if (summary) {
                                 incrementalDOM.elementOpen('summary', '', []);
-                                md.renderInlineToIncrementalDOM(summary, {
+                                md.renderInline(summary, {
                                     ...env,
                                     footnotes: null,
                                 })();
@@ -97,7 +97,7 @@ export default function (options) {
                             );
                             if (summary) {
                                 incrementalDOM.elementOpen('summary', '', []);
-                                md.renderInlineToIncrementalDOM(summary, {
+                                md.renderInline(summary, {
                                     ...env,
                                     footnotes: null,
                                 })();
@@ -276,6 +276,8 @@ export default function (options) {
                 slugify: slugify,
                 permalink: markdownItAnchor.permalink.ariaHidden({
                     symbol: '',
+                    space: false,
+                    renderHref: (slug, { md }) => md.normalizeLink(`#${slug}`),
                 }),
             },
         ],
