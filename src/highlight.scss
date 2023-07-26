@@ -20,6 +20,7 @@ pre {
   --p-cwe-highlight-hint-font-family: var(--cwe-highlight-hint-font-family, system-ui, sans-serif);
 
   white-space: pre;
+  scrollbar-width: thin;
   @media print {
     white-space: pre-wrap;
   }

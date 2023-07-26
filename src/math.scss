@@ -1,6 +1,7 @@
 :host {
   display: inline;
   user-select: all;
+  scrollbar-width: thin;
 }
 
 :host([mode='display']) {
