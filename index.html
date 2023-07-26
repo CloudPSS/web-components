@@ -51,7 +51,11 @@ $$ \sum_{i=1}^n a_i = 0 $$
 
 > 行内公式：$\sin{x}$  
 > 行间公式：:arrow_left: ==注意行间公式需要**独行书写**==
-> $$ \sum_{{i=1}}^n a_i = 0 $$
+> $$ \begin{array}{ccc}
+1&3&\Theta \\
+{\frac{{dy}}{{dx}}}&\lim_{\delta x \to 0}& \pm \\
+{\sum\limits_1^3 2 }&x& \ne 
+\end{array} \theta \sum_{i=1}^n a_i = 0 P=\frac{u^3}{(u_R^3-u_{ci}^3 )}P_R-\frac{u_{ci}^3}{(u_R^3-u_ci^3 )}P_R\qquad(u_ci≤u≤u_R) $$
 > ... :arrow_left: ==同理，行间公式结束后也需要换行==
 > 对于渲染错误的公式 $\error$，可以鼠标悬浮其上查看错误信息。
 
@@ -821,16 +825,18 @@ info 2
 
 '
     ></cwe-markdown>
-    <script>
-      customElements.whenDefined('cwe-markdown').then(() => {
-        const src = document.querySelector('cwe-markdown').srcdoc;
-        const src2 = src.slice(0, 50) + 'x\n\n' + src.slice(50);
-        document.addEventListener('click', () => {
-          console.log('refersh');
-          const c = document.querySelector('cwe-markdown').srcdoc;
-          document.querySelector('cwe-markdown').srcdoc = c === src ? src2 : src;
-        });
-      }, 1000);
+    <script type="module">
+      import { theme } from './src/config.ts';
+      theme.next('dark');
+      // customElements.whenDefined('cwe-markdown').then(() => {
+      //   const src = document.querySelector('cwe-markdown').srcdoc;
+      //   const src2 = src.slice(0, 50) + 'x\n\n' + src.slice(50);
+      //   document.addEventListener('click', () => {
+      //     console.log('refersh');
+      //     const c = document.querySelector('cwe-markdown').srcdoc;
+      //     document.querySelector('cwe-markdown').srcdoc = c === src ? src2 : src;
+      //   });
+      // });
     </script>
   </body>
 </html>

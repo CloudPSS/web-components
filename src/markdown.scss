@@ -151,6 +151,7 @@ kbd {
   code,
   kbd,
   pre,
+  cwe-highlight,
   samp {
     background-color: #fff !important;
     color: #000 !important;
@@ -158,10 +159,6 @@ kbd {
 
   [is='md-container']:before {
     display: none;
-  }
-
-  cwe-highlight {
-    border: 1px solid var(--p-cwe-markdown-code-background-color);
   }
 }
 

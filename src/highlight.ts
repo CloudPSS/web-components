@@ -64,12 +64,20 @@ export class HighlightElement extends ReactiveElement {
         super();
         const renderRoot = this.createRenderRoot();
         this.elCode = document.createElement('code');
-        this.elStyle = document.createElement('link');
-        this.elStyle.rel = 'stylesheet';
         const pre = document.createElement('pre');
         pre.append(this.elCode);
         renderRoot.append(pre);
+
+        this.elStyle = document.createElement('link');
+        this.elStyle.rel = 'stylesheet';
+        this.elStyle.media = 'screen';
         renderRoot.append(this.elStyle);
+
+        const elPrintStyle = document.createElement('link');
+        elPrintStyle.rel = 'stylesheet';
+        elPrintStyle.media = 'print';
+        void loadPrismStyle(elPrintStyle, 'prism-coy');
+        renderRoot.append(elPrintStyle);
 
         const customStyle = style(this);
         if (customStyle) {

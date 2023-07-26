@@ -64,11 +64,18 @@ export class MathElement extends ReactiveElement {
         this.elContent.classList.add('cwe-content');
         root.append(this.elStyles, this.elContent);
         const link = document.createElement('link');
-        this.elStyles.appendChild(link);
+        this.elStyles.append(link);
         void loadStyle(link, katexCss);
         const elStyle = document.createElement('style');
         elStyle.textContent = cfgStyle(this) + '\n' + styles.cssText;
-        this.elStyles.appendChild(elStyle);
+        this.elStyles.append(elStyle);
+
+        this.addEventListener('copy', (ev) => {
+            if (ev.clipboardData && this.srcdoc) {
+                ev.clipboardData.setData('text/plain', this.srcdoc);
+                ev.preventDefault();
+            }
+        });
     }
 
     /** 样式 */
@@ -116,7 +123,7 @@ export class MathElement extends ReactiveElement {
 
         const source = this.srcdoc?.trim() ?? '';
 
-        if (!langDef || langDef.render == null) {
+        if (langDef?.render == null) {
             this.elContent.innerHTML = `<span class="error">Unsupported language ${lang ?? ''}</span>`;
             return;
         }

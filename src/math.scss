@@ -5,8 +5,8 @@
 
 :host([mode='display']) {
   display: block;
-  overflow: auto;
-  margin: 0.8em 0;
+  overflow: auto hidden;
+  margin: 1em 0;
 }
 
 .cwe-styles {
@@ -15,6 +15,22 @@
 
 .cwe-content {
   display: contents;
+}
+
+.katex-display {
+  margin: 0;
+
+  @media print {
+    > .katex {
+      white-space: normal;
+    }
+    .katex-html > .base {
+      margin: 0.4em 0;
+    }
+    .katex-html {
+      margin: -0.4em 0;
+    }
+  }
 }
 
 .error {
