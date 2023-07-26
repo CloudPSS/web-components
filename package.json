@@ -47,6 +47,8 @@
     "extends": "@cloudpss"
   },
   "dependencies": {
+    "@types/chart.js": "^2.9.37",
+    "@types/markdown-it": "^12.2.2",
     "chart.js": "^4.3.1",
     "htmlparser2": "^9.0.0",
     "incremental-dom": "^0.7.0",
@@ -79,10 +81,7 @@
     "@cloudpss/lint-staged-config": "^1.5.5",
     "@cloudpss/prettier-config": "^1.5.5",
     "@cloudpss/tsconfig": "^1.5.5",
-    "@types/chart.js": "^2.9.37",
     "@types/katex": "^0.16.1",
-    "@types/linkify-it": "^3.0.2",
-    "@types/markdown-it": "^12.2.2",
     "@types/node": "^20.4.5",
     "@types/prismjs": "^1.26.0",
     "cssnano": "^6.0.1",
