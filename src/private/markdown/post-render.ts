@@ -5,7 +5,7 @@ import { slugify } from './utils.js';
  */
 export function postRender(el: HTMLElement | DocumentFragment): void {
     el.querySelectorAll<HTMLTableCaptionElement>('table > caption').forEach((e) => {
-        (e.parentElement as HTMLTableElement).id = slugify(e.textContent ?? '');
+        e.parentElement!.id = slugify(e.textContent ?? '');
     });
     el.querySelectorAll<HTMLElement>('figure > figcaption').forEach((e) => {
         e.parentElement!.id = slugify(e.textContent ?? '');
