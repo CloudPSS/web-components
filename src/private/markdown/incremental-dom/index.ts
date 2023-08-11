@@ -1,10 +1,13 @@
-/* eslint-disable */
 import MarkdownIt from 'markdown-it';
 import type Renderer from 'markdown-it/lib/renderer.js';
 import type * as IncrementalDom from 'incremental-dom';
 import Token from 'markdown-it/lib/token.js';
 import renderer, { IncrementalRendererMixin } from './mixins/renderer.js';
 import rules from './mixins/rules.js';
+
+/** incremental-dom 渲染结果 */
+export type IncrementalTemplate = () => void;
+
 /**
  * @inheritdoc
  */
@@ -32,28 +35,36 @@ export type IncrementalRenderRule = (
     options: MarkdownIt.Options,
     env: unknown,
     slf: IncrementalRenderer,
-) => () => void;
+) => IncrementalTemplate;
 
-export interface IncrementalMarkdownIt extends Omit<MarkdownIt, 'render' | 'renderInline'> {
-    render(src: string, env?: unknown): () => void;
-    renderInline(src: string, env?: unknown): () => void;
+/** incremental-dom MarkdownIt */
+export interface IncrementalMarkdownIt extends Omit<MarkdownIt, 'render' | 'renderInline' | 'renderer'> {
+    /** @inheritdoc */
+    render(src: string, env?: unknown): IncrementalTemplate;
+    /** @inheritdoc */
+    renderInline(src: string, env?: unknown): IncrementalTemplate;
+    /** @inheritdoc */
+    renderer: IncrementalRenderer;
 }
 
-export default function (md: IncrementalMarkdownIt, target: unknown) {
+/** 创建 IncrementalMarkdownIt */
+export default function (markdownIt: MarkdownIt, target: unknown): IncrementalMarkdownIt {
+    const md = markdownIt as unknown as IncrementalMarkdownIt;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const incrementalDOM: typeof IncrementalDom = !target && window ? Reflect.get(window, 'IncrementalDOM') : target;
     const mixin = renderer(incrementalDOM);
 
+    const originalRenderer = markdownIt.renderer;
     const incrementalRenderer = Object.assign(
-        Object.create(Object.getPrototypeOf(md.renderer)),
+        Object.create(Object.getPrototypeOf(originalRenderer) as Renderer),
         md.renderer,
         mixin,
     ) as IncrementalRenderer;
     incrementalRenderer.rules = { ...incrementalRenderer.rules, ...rules(incrementalDOM) };
 
-    md.render = function (src, env = {}) {
-        return incrementalRenderer.render(this.parse(src, env), this.options, env);
-    };
-    md.renderInline = function (src, env = {}) {
-        return incrementalRenderer.render(this.parseInline(src, env), this.options, env);
-    };
+    Object.defineProperties(md, {
+        renderer: { value: incrementalRenderer, configurable: true, writable: true },
+        originalRenderer: { value: originalRenderer, configurable: true, writable: true },
+    });
+    return md;
 }

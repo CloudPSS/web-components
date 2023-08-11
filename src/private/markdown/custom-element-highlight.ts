@@ -8,8 +8,8 @@ import type { IncrementalRenderRule, IncrementalRenderRuleRecord } from './incre
  * 高亮
  */
 const code_block: IncrementalRenderRule = (tokens, idx, _options, _env, slf) => {
-    void import('../../highlight.js');
     return () => {
+        void import('../../highlight.js');
         const token = tokens[idx];
         elementVoid(
             'cwe-highlight',
@@ -46,7 +46,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 void import('../../mermaid.js');
                 elementVoid(
                     'cwe-mermaid',
-                    title || code,
+                    `mermaid-${title}`,
                     [],
                     ...sourceLineIncremental(token),
                     'config',
@@ -67,7 +67,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 if (config) {
                     elementVoid(
                         'cwe-chart',
-                        title || code,
+                        `chart-${title}`,
                         [],
                         ...sourceLineIncremental(token),
                         'config',
@@ -75,7 +75,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                         ...htmlAttr,
                     );
                 } else {
-                    elementOpen('p', title || code, [], ...sourceLineIncremental(token), ...htmlAttr);
+                    elementOpen('p', `chart-${title}`, [], ...sourceLineIncremental(token), ...htmlAttr);
                     text(`Invalid chart config: ${error}`);
                     elementClose('p');
                 }
@@ -86,7 +86,7 @@ const fence: IncrementalRenderRule = (tokens, idx, _options, _env, _slf) => {
                 const langAttr = lang ? ['language', lang] : [];
                 elementVoid(
                     'cwe-highlight',
-                    title || code,
+                    `fence-${lang}-${title}`,
                     [],
                     ...sourceLineIncremental(token),
                     'srcdoc',
