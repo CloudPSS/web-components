@@ -6,7 +6,7 @@ const styleCache = new Map<string, string>();
 export async function loadStyle(el: HTMLLinkElement | undefined, src: string, useBlob = true): Promise<void> {
     if (!el) {
         el = document.createElement('link');
-        document.head.appendChild(el);
+        document.head.append(el);
     }
     el.rel = 'stylesheet';
     el.crossOrigin = 'anonymous';
