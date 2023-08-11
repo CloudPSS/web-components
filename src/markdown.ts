@@ -112,7 +112,8 @@ export class MarkdownElement extends ReactiveElement {
                     md.options,
                     env,
                 );
-                this.__frontMatter = String(tokens.find((t) => t.type === 'front_matter')?.meta ?? '');
+                const fmToken = tokens.find((t) => t.type === 'front_matter');
+                this.__frontMatter = fmToken ? String(fmToken.meta ?? '') : undefined;
                 patcher(this.elArticle, template);
             } finally {
                 md.options.documentSrc = originalSrc;
