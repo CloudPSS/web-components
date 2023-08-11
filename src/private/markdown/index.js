@@ -1,50 +1,49 @@
 import markdownIt from 'markdown-it';
+import * as incrementalDOM from 'incremental-dom';
 import { extend, loadPlugin, slugify, sourceLineIncremental } from './utils';
 
 import '../../math';
 
-import * as markdownItEmoji from 'markdown-it-emoji';
-import * as markdownItSub from 'markdown-it-sub';
-import * as markdownItSup from 'markdown-it-sup';
-import * as markdownItFootnote from 'markdown-it-footnote';
-import * as markdownItMath from './math';
-import * as markdownItDeflist from 'markdown-it-deflist';
-import * as markdownItAbbr from 'markdown-it-abbr';
-import * as markdownItIns from 'markdown-it-ins';
-import * as markdownItKbd from 'markdown-it-kbd';
-import * as markdownItMark from 'markdown-it-mark';
-import * as markdownItImsize from './imsize';
-import * as markdownItMultimdTable from 'markdown-it-multimd-table';
-import * as markdownItCenterText from 'markdown-it-center-text';
+import markdownItEmoji from 'markdown-it-emoji';
+import markdownItSub from 'markdown-it-sub';
+import markdownItSup from 'markdown-it-sup';
+import markdownItFootnote from 'markdown-it-footnote';
+import markdownItMath from './math';
+import markdownItDeflist from 'markdown-it-deflist';
+import markdownItAbbr from 'markdown-it-abbr';
+import markdownItIns from 'markdown-it-ins';
+import markdownItKbd from 'markdown-it-kbd';
+import markdownItMark from 'markdown-it-mark';
+import markdownItImsize from './imsize';
+import markdownItMultimdTable from 'markdown-it-multimd-table';
+import markdownItCenterText from 'markdown-it-center-text';
 import markdownItAnchor from 'markdown-it-anchor';
-import * as markdownItFrontMatter from 'markdown-it-front-matter';
-import * as markdownItImplicitFigures from 'markdown-it-implicit-figures';
-import * as markdownItEmbedMedia from './embed-media';
-import * as markdownItContainer from 'markdown-it-container';
-import * as incrementalDOM from 'incremental-dom';
-import * as markdownItIncrementalDOM from './incremental-dom';
+import markdownItFrontMatter from 'markdown-it-front-matter';
+import markdownItImplicitFigures from 'markdown-it-implicit-figures';
+import markdownItEmbedMedia from './embed-media';
+import markdownItContainer from 'markdown-it-container';
+import markdownItIncrementalDOM from './incremental-dom';
 import { markdownCustomElementHighlight } from './custom-element-highlight';
 
 /**
- * @param {markdownIt.Options & {frontMatter?: (fm:string)=>void}} options
+ * 创建 markdownIt
+ * @param {import('./incremental-dom').IncrementalMarkdownRenderOptions} options 选项
+ * @returns {import('./incremental-dom').IncrementalMarkdownIt} markdownIt
  */
 export default function (options) {
     options = Object.assign(
         {
             html: true,
             typographer: true,
-            frontMatter: () => {},
         },
         options,
     );
-    /** @type { markdownItIncrementalDOM.IncrementalMarkdownIt } */
+    /** @type {import('./incremental-dom').IncrementalMarkdownIt} */
     let md = markdownIt(options);
 
-    /** @type {Array<[string, {
-     *      validate?(params:string): boolean;
-     *      render?: markdownItIncrementalDOM.IncrementalRenderRule;
-     *      marker?: string;
-     * }]>} */
+    /**
+     * @type {Array<[string, { validate?(params:string): boolean; render?: import('./incremental-dom').IncrementalRenderRule; marker?: string; }]>}
+     */
     const containers = [
         [
             'summary',
@@ -52,7 +51,7 @@ export default function (options) {
                 render: (tokens, idx, opt, env /*, slf*/) => {
                     return () => {
                         const token = tokens[idx];
-                        const m = token.info.trim().match(/^\S+\s+(.*)$/);
+                        const m = /^\S+\s+(.*)$/.exec(token.info.trim());
                         const summary = m?.[1];
 
                         if (token.nesting === 1) {
@@ -76,12 +75,12 @@ export default function (options) {
             name,
             {
                 /**
-                 * @type {markdownItIncrementalDOM.IncrementalRenderRule}
+                 * @type {import('./incremental-dom').IncrementalRenderRule}
                  */
                 render: (tokens, idx, opt, env /*, slf*/) => {
                     return () => {
                         const token = tokens[idx];
-                        const m = token.info.trim().match(/^\S+\s+(.*)$/);
+                        const m = /^\S+\s+(.*)$/.exec(token.info.trim());
                         const summary = m?.[1];
 
                         if (token.nesting === 1) {
@@ -111,6 +110,7 @@ export default function (options) {
             },
         ]),
     ];
+
     /** @type {[import('markdown-it').PluginWithParams, ...any][]} */
     const plugins = [
         [markdownItEmoji],
@@ -281,7 +281,12 @@ export default function (options) {
                 }),
             },
         ],
-        [markdownItFrontMatter, options.frontMatter],
+        [
+            markdownItFrontMatter,
+            (rawMeta) => {
+                md.options.frontMatter?.(rawMeta);
+            },
+        ],
         [markdownItImplicitFigures, { figcaption: true }],
         [markdownItEmbedMedia],
         ...containers.map((v) => [markdownItContainer, ...v]),
