@@ -76,5 +76,19 @@ export default function (markdownIt: MarkdownIt, target: unknown): IncrementalMa
         renderer: { value: incrementalRenderer, configurable: true, writable: true },
         originalRenderer: { value: originalRenderer, configurable: true, writable: true },
     });
+
+    const normalizeLink = md.normalizeLink.bind(md);
+    md.normalizeLink = function (url: string): string {
+        const documentSrc = this.options.documentSrc;
+        if (!documentSrc) return normalizeLink(url);
+        const u = new URL(url, documentSrc);
+        if (u.origin === documentSrc?.origin) {
+            u.pathname.replace(/(\/index)?\.md$/i, '');
+        }
+        return normalizeLink(u.href);
+    };
+
+    md.validateLink = () => true;
+
     return md;
 }

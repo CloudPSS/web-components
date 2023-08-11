@@ -20,21 +20,11 @@ export type {
     IncrementalMarkdownIt,
 } from './private/markdown/incremental-dom';
 
+export { IncrementalDOM };
+
 /** 默认的 Markdown 渲染器 */
-function createRenderer(options: IncrementalMarkdownRenderOptions = {}): IncrementalMarkdownIt {
-    const md = markdownIt(options);
-    const normalizeLink = md.normalizeLink.bind(md);
-    md.normalizeLink = function (url: string): string {
-        const documentSrc = this.options.documentSrc;
-        if (!documentSrc) return normalizeLink(url);
-        const u = new URL(url, documentSrc);
-        if (u.origin === documentSrc?.origin) {
-            u.pathname.replace(/(\/index)?\.md$/i, '');
-        }
-        return normalizeLink(u.href);
-    };
-    md.validateLink = () => true;
-    return md;
+export function createRenderer(options: IncrementalMarkdownRenderOptions = {}): IncrementalMarkdownIt {
+    return markdownIt(options);
 }
 
 const defaultRenderer = createRenderer();
