@@ -1,38 +1,44 @@
 import { PropertyValues, ReactiveElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type MarkdownIt from 'markdown-it';
 import markdownIt from './private/markdown/index.js';
-import type { IncrementalMarkdownIt } from './private/markdown/incremental-dom';
+import type {
+    IncrementalMarkdownIt,
+    IncrementalTemplate,
+    IncrementalMarkdownRenderOptions,
+} from './private/markdown/incremental-dom';
 import { postRender } from './private/markdown/post-render.js';
 import { style } from './config.js';
 import * as IncrementalDOM from 'incremental-dom';
 import styles from './markdown.scss';
 
-/** Markdown 选项 */
-export interface MarkdownRenderOptions extends MarkdownIt.Options {
-    /** 读取到 frontMatter 的回调 */
-    frontMatter?: (fm: string) => void;
-    /** 文档路径，用于解析文档中的相对路径链接 */
-    documentSrc?: URL;
-}
-/** Markdown 渲染 */
-export type MarkdownRenderer = (options?: MarkdownRenderOptions) => IncrementalMarkdownIt;
+export type {
+    IncrementalTemplate,
+    IncrementalRenderRuleRecord,
+    IncrementalRenderer,
+    IncrementalRenderRule,
+    IncrementalMarkdownRenderOptions,
+    IncrementalMarkdownIt,
+} from './private/markdown/incremental-dom';
 
-const defaultRenderer: MarkdownRenderer = (options = {}) => {
-    const src = options.documentSrc;
+/** 默认的 Markdown 渲染器 */
+function createRenderer(options: IncrementalMarkdownRenderOptions = {}): IncrementalMarkdownIt {
     const md = markdownIt(options);
     const normalizeLink = md.normalizeLink.bind(md);
-    md.normalizeLink = (url: string): string => {
-        if (!src) return normalizeLink(url);
-        const u = new URL(url, src);
-        if (u.origin === src?.origin) {
+    md.normalizeLink = function (url: string): string {
+        const documentSrc = this.options.documentSrc;
+        if (!documentSrc) return normalizeLink(url);
+        const u = new URL(url, documentSrc);
+        if (u.origin === documentSrc?.origin) {
             u.pathname.replace(/(\/index)?\.md$/i, '');
         }
         return normalizeLink(u.href);
     };
     md.validateLink = () => true;
     return md;
-};
+}
+
+const defaultRenderer = createRenderer();
+const defaultPatcher = IncrementalDOM.patch<void>;
 
 /**
  * Markdown 组件
@@ -43,7 +49,7 @@ const defaultRenderer: MarkdownRenderer = (options = {}) => {
 export class MarkdownElement extends ReactiveElement {
     static renderer = defaultRenderer;
 
-    static patcher: (node: Element | DocumentFragment, template: () => void) => Node = IncrementalDOM.patch<void>;
+    static patcher: (node: Element | DocumentFragment, template: IncrementalTemplate) => Node = defaultPatcher;
 
     constructor() {
         super();
@@ -90,17 +96,27 @@ export class MarkdownElement extends ReactiveElement {
             changedProperties.has('mode') ||
             changedProperties.size === 0
         ) {
-            let frontMatter: string | undefined;
             const src = new URL(this.src ?? document.location.href, document.baseURI);
             const doc = String(this.srcdoc ?? '');
-            const md = ((this.constructor as typeof MarkdownElement).renderer ?? defaultRenderer)({
-                frontMatter: (fm) => (frontMatter = fm),
-                documentSrc: src,
-            });
-            const rendered = md[this.mode === 'inline' ? 'renderInline' : 'render'](doc);
-            this.__frontMatter = frontMatter;
 
-            ((this.constructor as typeof MarkdownElement).patcher ?? IncrementalDOM.patch)(this.elArticle, rendered);
+            const md = (this.constructor as typeof MarkdownElement).renderer ?? defaultRenderer;
+            const patcher = (this.constructor as typeof MarkdownElement).patcher ?? defaultPatcher;
+
+            const originalSrc = md.options.documentSrc;
+            try {
+                md.options.documentSrc = src;
+                const env = {};
+                const tokens = md.parse(doc, env);
+                const template = md.renderer[this.mode === 'inline' ? 'renderInline' : 'render'](
+                    tokens,
+                    md.options,
+                    env,
+                );
+                this.__frontMatter = String(tokens.find((t) => t.type === 'front_matter')?.meta ?? '');
+                patcher(this.elArticle, template);
+            } finally {
+                md.options.documentSrc = originalSrc;
+            }
             postRender(this.elArticle);
             this.dispatchEvent(new CustomEvent('render'));
         }
@@ -175,7 +191,7 @@ export class MarkdownElement extends ReactiveElement {
             });
     }
     /** frontMatter */
-    __frontMatter?: string;
+    private __frontMatter?: string;
     /**
      * frontMatter
      */

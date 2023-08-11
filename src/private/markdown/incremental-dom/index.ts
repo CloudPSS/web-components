@@ -37,6 +37,14 @@ export type IncrementalRenderRule = (
     slf: IncrementalRenderer,
 ) => IncrementalTemplate;
 
+/** Markdown 选项 */
+export interface IncrementalMarkdownRenderOptions extends MarkdownIt.Options {
+    /** 读取到 frontMatter 的回调 */
+    frontMatter?: (fm: string) => void;
+    /** 文档路径，用于解析文档中的相对路径链接 */
+    documentSrc?: URL;
+}
+
 /** incremental-dom MarkdownIt */
 export interface IncrementalMarkdownIt extends Omit<MarkdownIt, 'render' | 'renderInline' | 'renderer'> {
     /** @inheritdoc */
@@ -44,7 +52,9 @@ export interface IncrementalMarkdownIt extends Omit<MarkdownIt, 'render' | 'rend
     /** @inheritdoc */
     renderInline(src: string, env?: unknown): IncrementalTemplate;
     /** @inheritdoc */
-    renderer: IncrementalRenderer;
+    readonly renderer: IncrementalRenderer;
+    /** @inheritdoc */
+    readonly options: IncrementalMarkdownRenderOptions;
 }
 
 /** 创建 IncrementalMarkdownIt */
