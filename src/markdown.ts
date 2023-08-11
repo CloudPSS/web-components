@@ -20,15 +20,14 @@ export type {
     IncrementalMarkdownIt,
 } from './private/markdown/incremental-dom';
 
-export { IncrementalDOM };
-
 /** 默认的 Markdown 渲染器 */
 export function createRenderer(options: IncrementalMarkdownRenderOptions = {}): IncrementalMarkdownIt {
     return markdownIt(options);
 }
 
 const defaultRenderer = createRenderer();
-const defaultPatcher = IncrementalDOM.patch<void>;
+const defaultPatcher: (node: Element | DocumentFragment, template: IncrementalTemplate) => Node =
+    IncrementalDOM.patch<void>;
 
 /**
  * Markdown 组件
@@ -38,8 +37,7 @@ const defaultPatcher = IncrementalDOM.patch<void>;
 @customElement('cwe-markdown')
 export class MarkdownElement extends ReactiveElement {
     static renderer = defaultRenderer;
-
-    static patcher: (node: Element | DocumentFragment, template: IncrementalTemplate) => Node = defaultPatcher;
+    static patcher = defaultPatcher;
 
     constructor() {
         super();
