@@ -2,7 +2,7 @@ import { PropertyValues, LitElement, CSSResultArray, TemplateResult, html } from
 import { customElement, property, query } from 'lit/decorators.js';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { style } from './config.js';
-import styles from './chart.scss';
+import styles from './chart.scss?lit';
 
 Chart.register(...registerables);
 

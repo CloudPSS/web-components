@@ -4,7 +4,7 @@ import { PropertyValues, ReactiveElement } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import { resolve, style as cfgStyle } from './config.js';
 import { loadStyle } from './private/utils.js';
-import styles from './math.scss';
+import styles from './math.scss?inline';
 
 const katexVersion: string = katex.version || '^0.12';
 const katexCss = resolve('katex', katexVersion, 'dist/katex.css');
@@ -67,7 +67,7 @@ export class MathElement extends ReactiveElement {
         this.elStyles.append(link);
         void loadStyle(link, katexCss);
         const elStyle = document.createElement('style');
-        elStyle.textContent = cfgStyle(this) + '\n' + styles.cssText;
+        elStyle.textContent = cfgStyle(this) + '\n' + styles;
         this.elStyles.append(elStyle);
 
         this.addEventListener('copy', (ev) => {

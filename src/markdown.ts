@@ -9,7 +9,7 @@ import type {
 import { postRender } from './private/markdown/post-render.js';
 import { style } from './config.js';
 import * as IncrementalDOM from 'incremental-dom';
-import styles from './markdown.scss';
+import styles from './markdown.scss?inline';
 
 export type {
     IncrementalTemplate,
@@ -47,7 +47,7 @@ export class MarkdownElement extends ReactiveElement {
         this.elArticle = document.createElement('article');
         root.append(this.elBaseStyle, this.elUserStyle, this.elArticle);
 
-        this.elBaseStyle.textContent = style(this) + '\n' + styles.cssText;
+        this.elBaseStyle.textContent = style(this) + '\n' + styles;
         this.elArticle.addEventListener('click', this.onClick.bind(this));
     }
 

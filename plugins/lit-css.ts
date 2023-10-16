@@ -38,8 +38,8 @@ export default function litCss(): PluginOption {
             isProduction = !!config.isProduction;
         },
         transform(src, id) {
-            let css;
-            if (id.endsWith('.scss') || id.endsWith('.scss?used')) {
+            let css: string | undefined;
+            if (id.endsWith('.scss?lit')) {
                 const content = cssRE.exec(src) ?? cssDefRE.exec(src);
                 css = content?.[1];
             }
