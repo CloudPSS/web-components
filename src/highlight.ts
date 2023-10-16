@@ -102,7 +102,7 @@ export class HighlightElement extends ReactiveElement {
     /** 语言 */
     private _language?: string;
     /** 语言 */
-    @property()
+    @property({ noAccessor: true })
     get language(): string | undefined {
         return this._language;
     }

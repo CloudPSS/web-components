@@ -9,7 +9,7 @@
   margin: auto;
   display: block;
   position: relative;
-  padding-bottom: calc(100% / (var(--cwe-media-ratio, 16 / 9)));
+  padding-bottom: calc(100% / (var(--cwe-media-ratio, calc(16 / 9))));
   width: 100%;
   max-width: var(--cwe-max-width, 960px);
 
