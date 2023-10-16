@@ -39,7 +39,8 @@ export default function litCss(): PluginOption {
         },
         transform(src, id) {
             let css: string | undefined;
-            if (id.endsWith('.scss?lit')) {
+            const url = new URL('file://' + id);
+            if (url.searchParams.has('lit')) {
                 const content = cssRE.exec(src) ?? cssDefRE.exec(src);
                 css = content?.[1];
             }
