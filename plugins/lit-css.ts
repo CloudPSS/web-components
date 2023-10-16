@@ -38,6 +38,10 @@ export default function litCss(): PluginOption {
             isProduction = !!config.isProduction;
         },
         transform(src, id) {
+            // fast check to skip non-css files
+            if (id.startsWith('\0')) return undefined;
+            if (!id.includes('lit')) return undefined;
+
             let css: string | undefined;
             const url = new URL('file://' + id);
             if (url.searchParams.has('lit')) {
