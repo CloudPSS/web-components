@@ -17,13 +17,6 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "typesVersions": {
-    ">=4.2": {
-      "*": [
-        "dist/*.d.ts"
-      ]
-    }
-  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -35,9 +28,9 @@
     }
   },
   "scripts": {
-    "start": "patch-package && vite",
+    "start": "vite",
     "clean": "rimraf dist",
-    "build": "patch-package && vite build",
+    "build": "vite build",
     "prepare": "husky install",
     "format": "prettier --ignore-path .gitignore --write .",
     "lint": "eslint --ext .js,.ts ."
@@ -65,9 +58,9 @@
     "markdown-it-footnote": "^3.0.3",
     "markdown-it-front-matter": "^0.2.3",
     "markdown-it-implicit-figures": "^0.12.0",
-    "markdown-it-ins": "^3.0.0",
+    "markdown-it-ins": "^3.0.1",
     "markdown-it-kbd": "^2.2.2",
-    "markdown-it-mark": "^3.0.0",
+    "markdown-it-mark": "^3.0.1",
     "markdown-it-multimd-table": "^4.2.3",
     "markdown-it-sub": "^1.0.0",
     "markdown-it-sup": "^1.0.0",
@@ -85,8 +78,8 @@
     "@types/node": "^20.8.6",
     "@types/prismjs": "^1.26.1",
     "cssnano": "^6.0.1",
+    "fast-glob": "^3.3.1",
     "husky": "^8.0.3",
-    "patch-package": "^8.0.0",
     "postcss": "^8.4.31",
     "postcss-preset-env": "^9.2.0",
     "rimraf": "^5.0.5",
@@ -96,5 +89,10 @@
     "vite": "^4.4.11",
     "vite-plugin-checker": "^0.6.2",
     "vite-plugin-dts": "^3.6.0"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "incremental-dom@0.7.0": "patches/incremental-dom@0.7.0.patch"
+    }
   }
 }

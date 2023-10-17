@@ -1,0 +1,13 @@
+diff --git a/src/nodes.ts b/src/nodes.ts
+index db8cfe387ec449c36360871621657b0d58b6a650..17913c11c4a0731a12c0eaa4bf0073df502917cb 100644
+--- a/src/nodes.ts
++++ b/src/nodes.ts
+@@ -40,7 +40,7 @@ function getNamespaceForTag(tag: string, parent: Node | null) {
+     return null;
+   }
+ 
+-  return parent.namespaceURI;
++  return (parent as Element).namespaceURI;
+ }
+ 
+ /**
