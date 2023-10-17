@@ -1,9 +1,10 @@
 & { 
   Push-Location $PSScriptRoot
 
+  pnpm install
   yarn version
-  yarn build
-  npm publish
+  pnpm build
+  npm publish --access public
 
   curl.exe -X PUT "https://registry-direct.npmmirror.com/@cloudpss/web-components/sync"
   
