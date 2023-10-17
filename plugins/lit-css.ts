@@ -3,39 +3,51 @@ import type { PluginOption } from 'vite';
 const cssRE = /^const __vite__css = (".+")$/m;
 const cssDefRE = /^export default (".+")$/m;
 
-const hot = `
-import { supportsAdoptingStyleSheets } from 'lit'
+const makeHmr = (specifier = 'lit') => /* ts */ `
+import { supportsAdoptingStyleSheets } from '${specifier}';
+
 if (import.meta.hot) {
     import.meta.hot.data.instance ??= cssStyle;
     import.meta.hot.accept((newModule) => {
-        console.log(newModule)
-        const result = import.meta.hot.data.instance
+        const result = import.meta.hot.data.instance;
         if (!supportsAdoptingStyleSheets || !result) {
-            return import.meta.hot.invalidate()
+            return import.meta.hot.invalidate();
         }
         if (newModule) {
-            const newResult = newModule.default
-            result.cssText = newResult.cssText
+            const newResult = newModule.default;
+            result.cssText = newResult.cssText;
             if (result._styleSheet) {
-                newResult._styleSheet = result._styleSheet
+                newResult._styleSheet = result._styleSheet;
                 try {
-                    result._styleSheet.replaceSync(newResult.cssText)
+                    result._styleSheet.replaceSync(newResult.cssText);
                 } catch {
                     // ignore css error on replacing
                 }
             }
         }
-    })
-}`;
+    });
+}
+`;
+
+const makeModule = (css: string, hot: boolean, specifier = 'lit') => /* ts */ `
+import { supportsAdoptingStyleSheets, unsafeCSS } from '${specifier}';
+
+const cssStyle = unsafeCSS(${JSON.stringify(css)});
+
+${hot ? makeHmr(specifier) : ''}
+
+export default cssStyle;
+`;
 
 /** 生成 lit CSSResult */
 export default function litCss(): PluginOption {
     let isProduction = false;
     return {
-        name: 'transform-css',
+        name: 'transform-lit-css',
         enforce: 'post',
         configResolved(config) {
             isProduction = !!config.isProduction;
+            console.log(config);
         },
         transform(src, id) {
             // fast check to skip non-css files
@@ -50,11 +62,7 @@ export default function litCss(): PluginOption {
             }
             if (!css) return undefined;
             return {
-                code: `import { unsafeCSS } from 'lit'
-
-const cssStyle = unsafeCSS(${css})
-${!isProduction ? hot : ''}
-export default cssStyle`,
+                code: makeModule(JSON.parse(css), !isProduction),
                 map: null,
             };
         },

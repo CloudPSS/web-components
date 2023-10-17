@@ -11,7 +11,7 @@ export default defineConfig({
         target: 'esnext',
         sourcemap: true,
         minify: false,
-        manifest: true,
+        manifest: false,
         lib: {
             entry: await glob('src/*.ts'),
             formats: ['es'],
