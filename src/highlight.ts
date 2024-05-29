@@ -6,7 +6,7 @@ import { loadStyle } from './private/utils.js';
 import Prism from 'prismjs';
 import PrismComponents from 'prismjs/components.js';
 import autoloader from './private/prism-autoloader.js';
-import styles from './highlight.scss?lit';
+import styles from './highlight.scss?lit&inline';
 
 autoloader.languages_path = resolvePrism('components/');
 

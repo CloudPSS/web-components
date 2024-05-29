@@ -4,7 +4,7 @@ import mermaid, { type MermaidConfig } from 'mermaid';
 import { CSSResultArray, html, LitElement, PropertyValues, TemplateResult } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { style, theme } from './config.js';
-import styles from './mermaid.scss?lit';
+import styles from './mermaid.scss?lit&inline';
 
 let t: MermaidConfig['theme'] = 'default';
 

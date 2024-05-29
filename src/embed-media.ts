@@ -9,7 +9,7 @@ import VimeoService from './private/embed-media/VimeoService.js';
 import VineService from './private/embed-media/VineService.js';
 import YoukuService from './private/embed-media/YoukuService.js';
 import YouTubeService from './private/embed-media/YouTubeService.js';
-import styles from './embed-media.scss?lit';
+import styles from './embed-media.scss?lit&inline';
 
 export { VideoService };
 

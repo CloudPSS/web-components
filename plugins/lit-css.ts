@@ -30,7 +30,7 @@ if (import.meta.hot) {
 `;
 
 const makeModule = (css: string, hot: boolean, specifier = 'lit') => /* ts */ `
-import { supportsAdoptingStyleSheets, unsafeCSS } from '${specifier}';
+import { unsafeCSS } from '${specifier}';
 
 const cssStyle = unsafeCSS(${JSON.stringify(css)});
 

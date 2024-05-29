@@ -827,16 +827,16 @@ info 2
     ></cwe-markdown>
     <script type="module">
       import { theme } from './src/config.ts';
-      theme.next('dark');
-      // customElements.whenDefined('cwe-markdown').then(() => {
-      //   const src = document.querySelector('cwe-markdown').srcdoc;
-      //   const src2 = src.slice(0, 50) + 'x\n\n' + src.slice(50);
-      //   document.addEventListener('click', () => {
-      //     console.log('refersh');
-      //     const c = document.querySelector('cwe-markdown').srcdoc;
-      //     document.querySelector('cwe-markdown').srcdoc = c === src ? src2 : src;
-      //   });
-      // });
+      theme.next('light');
+      customElements.whenDefined('cwe-markdown').then(() => {
+        const src = document.querySelector('cwe-markdown').srcdoc;
+        const src2 = src.slice(0, 50) + 'x\n\n' + src.slice(50);
+        document.addEventListener('click', () => {
+          console.log('refersh');
+          const c = document.querySelector('cwe-markdown').srcdoc;
+          document.querySelector('cwe-markdown').srcdoc = c === src ? src2 : src;
+        });
+      });
     </script>
   </body>
 </html>

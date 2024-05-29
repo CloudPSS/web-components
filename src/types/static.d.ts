@@ -3,8 +3,8 @@ declare module '*.scss?inline' {
     export default cssValue;
 }
 
-declare module '*.scss?lit' {
-    import { CSSResult } from '@lit/reactive-element';
+declare module '*.scss?lit&inline' {
+    import { CSSResult } from 'lit';
     const cssValue: CSSResult;
     export default cssValue;
 }
